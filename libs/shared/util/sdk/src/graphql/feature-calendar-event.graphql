@@ -1,0 +1,81 @@
+
+fragment CalendarEventDetails on CalendarEvent {
+id
+calendarId
+recurringEventId
+isFirstInstance
+title
+description
+start
+end
+allDay
+recurrence
+
+}
+query AdminCalendarEvents($input: AdminListCalendarEventInput) {
+  items: adminCalendarEvents(input: $input) {
+    ...CalendarEventDetails
+  }
+  count: adminCountCalendarEvents(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query AdminCountCalendarEvents($input: AdminListCalendarEventInput) {
+  count: adminCountCalendarEvents(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query AdminCalendarEvent($calendarEventId: String!) {
+  item: adminCalendarEvent(calendarEventId: $calendarEventId) {
+    ...CalendarEventDetails
+  }
+}
+mutation AdminCreateCalendarEvent($input: AdminCreateCalendarEventInput!) {
+  created: adminCreateCalendarEvent(input: $input) {
+    ...CalendarEventDetails
+  }
+}
+mutation AdminUpdateCalendarEvent($calendarEventId: String!, $input: AdminUpdateCalendarEventInput!) {
+  updated: adminUpdateCalendarEvent(calendarEventId: $calendarEventId, input: $input) {
+    ...CalendarEventDetails
+  }
+}
+mutation AdminDeleteCalendarEvent($calendarEventId: String!) {
+  deleted: adminDeleteCalendarEvent(calendarEventId: $calendarEventId) {
+    ...CalendarEventDetails
+  }
+}
+
+query UserCalendarEvents($input: UserListCalendarEventInput) {
+  items: userCalendarEvents(input: $input) {
+    ...CalendarEventDetails
+  }
+  count: userCountCalendarEvents(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query UserCountCalendarEvents($input: UserListCalendarEventInput) {
+  count: userCountCalendarEvents(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query UserCalendarEvent($calendarEventId: String!) {
+  item: userCalendarEvent(calendarEventId: $calendarEventId) {
+    ...CalendarEventDetails
+  }
+}
+mutation UserCreateCalendarEvent($input: UserCreateCalendarEventInput!) {
+  created: userCreateCalendarEvent(input: $input) {
+    ...CalendarEventDetails
+  }
+}
+mutation UserUpdateCalendarEvent($calendarEventId: String!, $input: UserUpdateCalendarEventInput!) {
+  updated: userUpdateCalendarEvent(calendarEventId: $calendarEventId, input: $input) {
+    ...CalendarEventDetails
+  }
+}
+mutation UserDeleteCalendarEvent($calendarEventId: String!) {
+  deleted: userDeleteCalendarEvent(calendarEventId: $calendarEventId) {
+    ...CalendarEventDetails
+  }
+}

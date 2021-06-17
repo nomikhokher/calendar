@@ -1,0 +1,74 @@
+
+fragment CalendarEventExceptionDetails on CalendarEventException {
+id
+eventId
+exdate
+
+}
+query AdminCalendarEventExceptions($input: AdminListCalendarEventExceptionInput) {
+  items: adminCalendarEventExceptions(input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+  count: adminCountCalendarEventExceptions(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query AdminCountCalendarEventExceptions($input: AdminListCalendarEventExceptionInput) {
+  count: adminCountCalendarEventExceptions(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query AdminCalendarEventException($calendarEventExceptionId: String!) {
+  item: adminCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation AdminCreateCalendarEventException($input: AdminCreateCalendarEventExceptionInput!) {
+  created: adminCreateCalendarEventException(input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation AdminUpdateCalendarEventException($calendarEventExceptionId: String!, $input: AdminUpdateCalendarEventExceptionInput!) {
+  updated: adminUpdateCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId, input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation AdminDeleteCalendarEventException($calendarEventExceptionId: String!) {
+  deleted: adminDeleteCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId) {
+    ...CalendarEventExceptionDetails
+  }
+}
+
+query UserCalendarEventExceptions($input: UserListCalendarEventExceptionInput) {
+  items: userCalendarEventExceptions(input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+  count: userCountCalendarEventExceptions(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query UserCountCalendarEventExceptions($input: UserListCalendarEventExceptionInput) {
+  count: userCountCalendarEventExceptions(input: $input) {
+    ...CorePagingDetails
+  }
+}
+query UserCalendarEventException($calendarEventExceptionId: String!) {
+  item: userCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation UserCreateCalendarEventException($input: UserCreateCalendarEventExceptionInput!) {
+  created: userCreateCalendarEventException(input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation UserUpdateCalendarEventException($calendarEventExceptionId: String!, $input: UserUpdateCalendarEventExceptionInput!) {
+  updated: userUpdateCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId, input: $input) {
+    ...CalendarEventExceptionDetails
+  }
+}
+mutation UserDeleteCalendarEventException($calendarEventExceptionId: String!) {
+  deleted: userDeleteCalendarEventException(calendarEventExceptionId: $calendarEventExceptionId) {
+    ...CalendarEventExceptionDetails
+  }
+}

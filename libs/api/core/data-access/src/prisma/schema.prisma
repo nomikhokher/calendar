@@ -1,0 +1,264 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  role      Role
+  developer Boolean  @default(false)
+  username  String   @unique
+  password  String?
+  firstName String?
+  lastName  String?
+  avatarUrl String?
+  location  String?
+  phone     String?
+  bio       String?
+  slug      String?
+  userType  UserType @default(Investor)
+  emails    Email[]  @relation("Email_belongsTo_Owner")
+
+  line1           String?
+  line2           String?
+  city            String?
+  stateOrProvince String?
+  postalCode      String?
+
+  billingAddress String?
+
+  bankAccountNumber String?
+  bankName          String?
+  nameOnBankAccount String?
+  bankRoutingNumber String?
+  wireRoutingNumber String?
+
+  w9Name        String?
+  w9Address     String?
+  w9ssn         String?
+  w9BusinessEin String?
+
+  ssn                  String?
+  driversLicenseState  String?
+  driversLicenseNumber String?
+  dateOfBirth          DateTime?
+  investments          Investment[]   @relation("Investment_User")
+  UserCalendar         UserCalendar[] @relation("UserCalendar_User")
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  name      String
+
+}
+
+enum Role {
+  Admin
+  User
+}
+
+model Email {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  email         String    @unique
+  public        Boolean   @default(false)
+  primary       Boolean   @default(false)
+  verified      Boolean   @default(false)
+  verifyToken   String?
+  verifyExpires DateTime?
+  owner         User      @relation(name: "Email_belongsTo_Owner", fields: [ownerId], references: [id])
+  ownerId       String
+  // Enable when this is resolved https://github.com/prisma/prisma/issues/3387
+  // @@unique([ownerId, primary])
+}
+
+model Investment {
+
+  id                          String          @id @default(cuid())
+  createdAt                   DateTime?       @default(now())
+  updatedAt                   DateTime?       @default(now()) @updatedAt
+  name                        String?
+  userId                      String?
+  type                        String?
+  streetAddress               String?
+  borrowerEntity              String?
+  mainContact                 String?
+  mainContactEmail            String?
+  bank                        String?
+  totalNote                   Float?
+  rate                        Float?
+  termsInMonths               Int?
+  perDiem                     Float?
+  fundDate                    DateTime?
+  maturityDate                DateTime?
+  currentBalance              Float?
+  advanceFromBank             Float?
+  advanceFromFF               Float?
+  advanceToBorrower           Float?
+  totalInterestAccrued        Float?
+  totalInterestPaid           Float?
+  currentInterestOwed         Float?
+  serviceFeeOwed              Float?
+  miscellaneousFeeOutstanding Float?
+  investmentType              InvestmentType?
+
+  user User? @relation(name: "Investment_User", fields: [userId], references: [id])
+
+  transactions Transaction[] @relation("Transaction_Investment")
+}
+
+model Transaction {
+
+  id                String           @id @default(cuid())
+  investmentId      String?
+  createdAt         DateTime?        @default(now())
+  updatedAt         DateTime?        @default(now()) @updatedAt
+  name              String?
+  transactionType   TransactionType?
+  transactionAmount Float?
+  rollingBalance    Float?
+  transactionDate   DateTime?
+  daysOfInterest    Int?
+  interestAccrued   Float?
+  nextAdvanceDate   DateTime?
+
+  investment Investment? @relation(name: "Transaction_Investment", fields: [investmentId], references: [id])
+
+}
+
+enum InvestmentType {
+  LLC_Corporation_Trust
+  Joint_Investor
+  Individual_Investor
+  Limited_Partnership
+  Self_Directed_IRA
+}
+
+enum UserType {
+  Investor
+  Affiliate
+  SuperAffiliate
+}
+
+enum TransactionType {
+  AdvanceFromFF
+}
+
+model Calendar {
+
+  id      String   @id @default(cuid())
+  title   String?
+  color   String?
+  visible Boolean?
+
+
+  CalendarEvent CalendarEvent[] @relation("CalendarEvent_Calendar")
+  UserCalendar  UserCalendar[]  @relation("UserCalendar_Calendar")
+}
+
+model CalendarEvent {
+
+  id               String  @id @default(cuid())
+  calendarId       String?
+  recurringEventId String?
+  isFirstInstance  String?
+  title            String?
+  description      String?
+  start            String?
+  end              String?
+  allDay           String?
+  recurrence       String?
+
+  calendar Calendar? @relation(name: "CalendarEvent_Calendar", fields: [calendarId], references: [id])
+
+}
+
+model CalendarEventException {
+
+  id      String  @id @default(cuid())
+  eventId String?
+  exdate  String?
+
+
+}
+
+model CalendarWeekday {
+  id    String  @id @default(cuid())
+  abbr  String?
+  label String?
+  value String?
+
+
+}
+
+model Setting {
+
+  id        String    @id @default(cuid())
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+
+  dateFormat  DateFormat?
+  timeFormat  TimeFormat?
+  startWeekOn StartWeekOn?
+
+
+}
+
+model UserCalendar {
+
+  id         String    @id @default(cuid())
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @default(now()) @updatedAt
+  name       String?
+  userId     String?
+  calendarId String?
+
+  user     User?     @relation(name: "UserCalendar_User", fields: [userId], references: [id])
+  calendar Calendar? @relation(name: "UserCalendar_Calendar", fields: [calendarId], references: [id])
+
+}
+
+enum CalendarEventPanelMode {
+  view
+  add
+  edit
+}
+
+enum CalendarEventEditMode {
+  single
+  future
+  all
+}
+
+enum DateFormat {
+  DDMMYYYY
+  MMDDYYYY
+  YYYYMMDD
+  ll
+}
+
+enum TimeFormat {
+  Twelve
+  TwentyFour
+}
+
+enum StartWeekOn {
+  Six
+  Zero
+  One
+}
+
+enum CalendarDrawerMode {
+  over
+  side
+}

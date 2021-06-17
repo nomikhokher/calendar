@@ -1,0 +1,552 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AccountCreateEmailInput {
+  email: String!
+}
+
+input AccountUpdatePasswordInput {
+  currentPassword: String!
+  password: String!
+  verified: String!
+}
+
+input AccountUpdateProfileInput {
+  avatarUrl: String
+  bio: String
+  dob: DateTime
+  firstName: String
+  lastName: String
+  location: String
+  phone: String
+}
+
+input AdminCreateCalendarEventExceptionInput {
+  eventId: String
+  exdate: String
+}
+
+input AdminCreateCalendarEventInput {
+  allDay: Boolean
+  calendarId: String
+  description: String
+  end: String
+  isFirstInstance: Boolean
+  recurrence: String
+  recurringEventId: String
+  start: String
+  title: String
+}
+
+input AdminCreateCalendarInput {
+  color: String
+  title: String
+  visible: Boolean
+}
+
+input AdminCreateCalendarWeekdayInput {
+  abbr: String
+  id: String
+  label: String
+  value: String
+}
+
+input AdminCreateSettingInput {
+  dateFormat: DateFormat
+  name: String
+  startWeekOn: StartWeekOn
+  timeFormat: TimeFormat
+}
+
+input AdminCreateUserCalendarInput {
+  calendarId: String
+  name: String
+  userId: String
+}
+
+input AdminCreateUserInput {
+  email: String!
+  firstName: String
+  lastName: String
+  role: Role!
+  username: String
+}
+
+input AdminListCalendarEventExceptionInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminListCalendarEventInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminListCalendarInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminListCalendarWeekdayInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminListSettingInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminListUserCalendarInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input AdminUpdateCalendarEventExceptionInput {
+  eventId: String
+  exdate: String
+  id: String
+}
+
+input AdminUpdateCalendarEventInput {
+  allDay: Boolean
+  calendarId: String
+  description: String
+  end: String
+  id: String
+  isFirstInstance: Boolean
+  recurrence: String
+  recurringEventId: String
+  start: String
+  title: String
+}
+
+input AdminUpdateCalendarInput {
+  color: String
+  id: String
+  title: String
+  visible: Boolean
+}
+
+input AdminUpdateCalendarWeekdayInput {
+  abbr: String
+  id: String
+  label: String
+  value: String
+}
+
+input AdminUpdateSettingInput {
+  dateFormat: DateFormat
+  id: String
+  name: String
+  startWeekOn: StartWeekOn
+  timeFormat: TimeFormat
+}
+
+input AdminUpdateUserCalendarInput {
+  calendarId: String
+  id: String
+  name: String
+  userId: String
+}
+
+input AdminUpdateUserInput {
+  avatarUrl: String
+  bio: String
+  firstName: String
+  lastName: String
+  location: String
+  phone: String
+  role: Role
+  username: String
+}
+
+type AuthToken {
+  """JWT Bearer token"""
+  token: String!
+}
+
+type Calendar {
+  color: String
+  id: String
+  title: String
+  visible: Boolean
+}
+
+type CalendarEvent {
+  allDay: Boolean
+  calendarId: String
+  description: String
+  end: String
+  id: String
+  isFirstInstance: Boolean
+  recurrence: String
+  recurringEventId: String
+  start: String
+  title: String
+}
+
+type CalendarEventException {
+  eventId: String
+  exdate: String
+  id: String
+}
+
+type CalendarWeekday {
+  abbr: String
+  id: String
+  label: String
+  value: String
+}
+
+type CorePaging {
+  limit: Int
+  skip: Int
+  total: Int
+}
+
+input CorePagingInput {
+  limit: Int = 10
+  skip: Int = 0
+}
+
+enum DateFormat {
+  DDMMYYYY
+  MMDDYYYY
+  YYYYMMDD
+  ll
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Email {
+  createdAt: DateTime
+  email: String
+  id: String
+  primary: Boolean
+  public: Boolean
+  updatedAt: DateTime
+  verified: Boolean
+}
+
+type IntercomMessage {
+  payload: JSON
+  scope: String
+  type: String
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  accountCreateEmail(input: AccountCreateEmailInput!): Email
+  accountDeleteEmail(emailId: String!): Email
+  accountMarkEmailPrimary(emailId: String!): Email
+  accountMarkEmailPrivate(emailId: String!): Email
+  accountMarkEmailPublic(emailId: String!): Email
+  accountResetPassword: Boolean
+  accountUpdatePassword(input: AccountUpdatePasswordInput!): Boolean
+  accountUpdateProfile(input: AccountUpdateProfileInput!): User
+  accountUpdateUsername(username: String!): User
+  adminCreateCalendar(input: AdminCreateCalendarInput!): Calendar
+  adminCreateCalendarEvent(input: AdminCreateCalendarEventInput!): CalendarEvent
+  adminCreateCalendarEventException(input: AdminCreateCalendarEventExceptionInput!): CalendarEventException
+  adminCreateCalendarWeekday(input: AdminCreateCalendarWeekdayInput!): CalendarWeekday
+  adminCreateSetting(input: AdminCreateSettingInput!): Setting
+  adminCreateUser(input: AdminCreateUserInput!): User
+  adminCreateUserCalendar(input: AdminCreateUserCalendarInput!): UserCalendar
+  adminDeleteCalendar(calendarId: String!): Calendar
+  adminDeleteCalendarEvent(calendarEventId: String!): CalendarEvent
+  adminDeleteCalendarEventException(calendarEventExceptionId: String!): CalendarEventException
+  adminDeleteCalendarWeekday(calendarWeekdayId: String!): CalendarWeekday
+  adminDeleteSetting(settingId: String!): Setting
+  adminDeleteUser(userId: String!): User
+  adminDeleteUserCalendar(userCalendarId: String!): UserCalendar
+  adminSetUserPassword(password: String!, userId: String!): User
+  adminUpdateCalendar(calendarId: String!, input: AdminUpdateCalendarInput!): Calendar
+  adminUpdateCalendarEvent(calendarEventId: String!, input: AdminUpdateCalendarEventInput!): CalendarEvent
+  adminUpdateCalendarEventException(calendarEventExceptionId: String!, input: AdminUpdateCalendarEventExceptionInput!): CalendarEventException
+  adminUpdateCalendarWeekday(calendarWeekdayId: String!, input: AdminUpdateCalendarWeekdayInput!): CalendarWeekday
+  adminUpdateSetting(input: AdminUpdateSettingInput!, settingId: String!): Setting
+  adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
+  adminUpdateUserCalendar(input: AdminUpdateUserCalendarInput!, userCalendarId: String!): UserCalendar
+  intercomPub(payload: JSON, scope: String, type: String!): IntercomMessage
+  login(input: LoginInput!): AuthToken
+  logout: Boolean
+  register(input: RegisterInput!): AuthToken
+  userCreateCalendar(input: UserCreateCalendarInput!): Calendar
+  userCreateCalendarEvent(input: UserCreateCalendarEventInput!): CalendarEvent
+  userCreateCalendarEventException(input: UserCreateCalendarEventExceptionInput!): CalendarEventException
+  userCreateCalendarWeekday(input: UserCreateCalendarWeekdayInput!): CalendarWeekday
+  userCreateSetting(input: UserCreateSettingInput!): Setting
+  userCreateUserCalendar(input: UserCreateUserCalendarInput!): UserCalendar
+  userDeleteCalendar(calendarId: String!): Calendar
+  userDeleteCalendarEvent(calendarEventId: String!): CalendarEvent
+  userDeleteCalendarEventException(calendarEventExceptionId: String!): CalendarEventException
+  userDeleteCalendarWeekday(calendarWeekdayId: String!): CalendarWeekday
+  userDeleteSetting(settingId: String!): Setting
+  userDeleteUserCalendar(userCalendarId: String!): UserCalendar
+  userUpdateCalendar(calendarId: String!, input: UserUpdateCalendarInput!): Calendar
+  userUpdateCalendarEvent(calendarEventId: String!, input: UserUpdateCalendarEventInput!): CalendarEvent
+  userUpdateCalendarEventException(calendarEventExceptionId: String!, input: UserUpdateCalendarEventExceptionInput!): CalendarEventException
+  userUpdateCalendarWeekday(calendarWeekdayId: String!, input: UserUpdateCalendarWeekdayInput!): CalendarWeekday
+  userUpdateSetting(input: UserUpdateSettingInput!, settingId: String!): Setting
+  userUpdateUserCalendar(input: UserUpdateUserCalendarInput!, userCalendarId: String!): UserCalendar
+}
+
+type Query {
+  accountEmails: [Email!]
+  accountProfile: User
+  accountUsernameAvailable(username: String!): Boolean
+  adminCalendar(calendarId: String!): Calendar
+  adminCalendarEvent(calendarEventId: String!): CalendarEvent
+  adminCalendarEventException(calendarEventExceptionId: String!): CalendarEventException
+  adminCalendarEventExceptions(input: AdminListCalendarEventExceptionInput): [CalendarEventException!]
+  adminCalendarEvents(input: AdminListCalendarEventInput): [CalendarEvent!]
+  adminCalendarWeekday(calendarWeekdayId: String!): CalendarWeekday
+  adminCalendarWeekdays(input: AdminListCalendarWeekdayInput): [CalendarWeekday!]
+  adminCalendars(input: AdminListCalendarInput): [Calendar!]
+  adminCountCalendarEventExceptions(input: AdminListCalendarEventExceptionInput): CorePaging
+  adminCountCalendarEvents(input: AdminListCalendarEventInput): CorePaging
+  adminCountCalendarWeekdays(input: AdminListCalendarWeekdayInput): CorePaging
+  adminCountCalendars(input: AdminListCalendarInput): CorePaging
+  adminCountSettings(input: AdminListSettingInput): CorePaging
+  adminCountUserCalendars(input: AdminListUserCalendarInput): CorePaging
+  adminCountUsers(paging: CorePagingInput): CorePaging
+  adminSetting(settingId: String!): Setting
+  adminSettings(input: AdminListSettingInput): [Setting!]
+  adminUser(userId: String!): User
+  adminUserCalendar(userCalendarId: String!): UserCalendar
+  adminUserCalendars(input: AdminListUserCalendarInput): [UserCalendar!]
+  adminUsers(paging: CorePagingInput): [User!]
+  me: User
+  uptime: Float
+  userCalendar(calendarId: String!): Calendar
+  userCalendarEvent(calendarEventId: String!): CalendarEvent
+  userCalendarEventException(calendarEventExceptionId: String!): CalendarEventException
+  userCalendarEventExceptions(input: UserListCalendarEventExceptionInput): [CalendarEventException!]
+  userCalendarEvents(input: UserListCalendarEventInput): [CalendarEvent!]
+  userCalendarWeekday(calendarWeekdayId: String!): CalendarWeekday
+  userCalendarWeekdays(input: UserListCalendarWeekdayInput): [CalendarWeekday!]
+  userCalendars(input: UserListCalendarInput): [Calendar!]
+  userCountCalendarEventExceptions(input: UserListCalendarEventExceptionInput): CorePaging
+  userCountCalendarEvents(input: UserListCalendarEventInput): CorePaging
+  userCountCalendarWeekdays(input: UserListCalendarWeekdayInput): CorePaging
+  userCountCalendars(input: UserListCalendarInput): CorePaging
+  userCountSettings(input: UserListSettingInput): CorePaging
+  userCountUserCalendars(input: UserListUserCalendarInput): CorePaging
+  userSetting(settingId: String!): Setting
+  userSettings(input: UserListSettingInput): [Setting!]
+  userUserCalendar(userCalendarId: String!): UserCalendar
+  userUserCalendars(input: UserListUserCalendarInput): [UserCalendar!]
+}
+
+input RegisterInput {
+  avatarUrl: String
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+  phone: String
+  username: String
+}
+
+enum Role {
+  Admin
+  User
+}
+
+type Setting {
+  createdAt: DateTime
+  dateFormat: DateFormat
+  id: String
+  name: String
+  startWeekOn: StartWeekOn
+  timeFormat: TimeFormat
+  updatedAt: DateTime
+}
+
+enum StartWeekOn {
+  One
+  Six
+  Zero
+}
+
+type Subscription {
+  intercomSub(scope: String, type: String): IntercomMessage
+}
+
+enum TimeFormat {
+  Twelve
+  TwentyFour
+}
+
+type User {
+  avatarUrl: String
+  bio: String
+  createdAt: DateTime
+  email: String
+  emails: [Email!]
+  firstName: String
+  id: String
+  lastName: String
+  location: String
+  name: String
+  phone: String
+  role: Role
+  updatedAt: DateTime
+  username: String
+}
+
+type UserCalendar {
+  calendarId: String
+  createdAt: DateTime
+  id: String
+  name: String
+  updatedAt: DateTime
+  userId: String
+}
+
+input UserCreateCalendarEventExceptionInput {
+  eventId: String
+  exdate: String
+}
+
+input UserCreateCalendarEventInput {
+  allDay: Boolean
+  calendarId: String
+  description: String
+  end: String
+  isFirstInstance: Boolean
+  recurrence: String
+  recurringEventId: String
+  start: String
+  title: String
+}
+
+input UserCreateCalendarInput {
+  color: String
+  title: String
+  visible: Boolean
+}
+
+input UserCreateCalendarWeekdayInput {
+  abbr: String
+  id: String
+  label: String
+  value: String
+}
+
+input UserCreateSettingInput {
+  dateFormat: DateFormat
+  name: String
+  startWeekOn: StartWeekOn
+  timeFormat: TimeFormat
+}
+
+input UserCreateUserCalendarInput {
+  calendarId: String
+  name: String
+  userId: String
+}
+
+input UserListCalendarEventExceptionInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserListCalendarEventInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserListCalendarInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserListCalendarWeekdayInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserListSettingInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserListUserCalendarInput {
+  limit: Int = 10
+  name: String
+  skip: Int = 0
+}
+
+input UserUpdateCalendarEventExceptionInput {
+  eventId: String
+  exdate: String
+  id: String
+}
+
+input UserUpdateCalendarEventInput {
+  allDay: Boolean
+  calendarId: String
+  description: String
+  end: String
+  id: String
+  isFirstInstance: Boolean
+  recurrence: String
+  recurringEventId: String
+  start: String
+  title: String
+}
+
+input UserUpdateCalendarInput {
+  color: String
+  id: String
+  title: String
+  visible: Boolean
+}
+
+input UserUpdateCalendarWeekdayInput {
+  abbr: String
+  id: String
+  label: String
+  value: String
+}
+
+input UserUpdateSettingInput {
+  dateFormat: DateFormat
+  id: String
+  name: String
+  startWeekOn: StartWeekOn
+  timeFormat: TimeFormat
+}
+
+input UserUpdateUserCalendarInput {
+  calendarId: String
+  id: String
+  name: String
+  userId: String
+}
