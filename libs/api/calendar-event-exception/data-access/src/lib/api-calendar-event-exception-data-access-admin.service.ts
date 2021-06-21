@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 
@@ -14,13 +13,15 @@ export class ApiCalendarEventExceptionDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendarEventException.findMany({
-      where: { exception: { contains: input?.name} },
       take: input?.limit,
       skip: input?.skip,
     })
   }
 
-  async adminCountCalendarEventExceptions(adminId: string, input?: AdminListCalendarEventExceptionInput): Promise<CorePaging> {
+  async adminCountCalendarEventExceptions(
+    adminId: string,
+    input?: AdminListCalendarEventExceptionInput,
+  ): Promise<CorePaging> {
     await this.data.ensureAdminUser(adminId)
 
     const total = await this.data.calendarEventException.count()
@@ -41,22 +42,26 @@ export class ApiCalendarEventExceptionDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendarEventException.create({
-      data: { 
-      eventId: input.eventId,
-      exdate: input.exdate
-},
+      data: {
+        eventId: input.eventId,
+        exdate: input.exdate,
+      },
     })
   }
 
-  async adminUpdateCalendarEventException(adminId: string, calendarEventExceptionId, input: AdminUpdateCalendarEventExceptionInput) {
+  async adminUpdateCalendarEventException(
+    adminId: string,
+    calendarEventExceptionId,
+    input: AdminUpdateCalendarEventExceptionInput,
+  ) {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendarEventException.update({
       where: { id: calendarEventExceptionId },
       data: {
-      eventId: input.eventId,
-      exdate: input.exdate
-},
+        eventId: input.eventId,
+        exdate: input.exdate,
+      },
     })
   }
 
@@ -66,4 +71,3 @@ export class ApiCalendarEventExceptionDataAccessAdminService {
     return this.data.calendarEventException.delete({ where: { id: calendarEventExceptionId } })
   }
 }
-

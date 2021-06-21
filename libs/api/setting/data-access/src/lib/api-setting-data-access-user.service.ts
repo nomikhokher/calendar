@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 import { UserCreateSettingInput } from './dto/user-create-setting.input'
@@ -10,7 +9,6 @@ export class ApiSettingDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userSettings(userId: string, input?: UserListSettingInput) {
-
     return this.data.setting.findMany({
       take: input?.limit,
       skip: input?.skip,
@@ -18,7 +16,6 @@ export class ApiSettingDataAccessUserService {
   }
 
   async userCountSettings(userId: string, input?: UserListSettingInput): Promise<CorePaging> {
-
     const total = await this.data.setting.count()
     return {
       limit: input?.limit,
@@ -28,26 +25,19 @@ export class ApiSettingDataAccessUserService {
   }
 
   async userSetting(userId: string, settingId) {
-
     return this.data.setting.findUnique({ where: { id: settingId } })
   }
 
   async userCreateSetting(userId: string, input: UserCreateSettingInput) {
-
     return this.data.setting.create({
-      data: { 
-      name: input.name
-},
+      data: {},
     })
   }
 
   async userUpdateSetting(userId: string, settingId, input: UserUpdateSettingInput) {
-
     return this.data.setting.update({
       where: { id: settingId },
-      data: {
-      name: input.name
-},
+      data: {},
     })
   }
 
@@ -55,4 +45,3 @@ export class ApiSettingDataAccessUserService {
     return this.data.setting.delete({ where: { id: settingId } })
   }
 }
-

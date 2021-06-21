@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 
@@ -14,7 +13,6 @@ export class ApiCalendarDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendar.findMany({
-      where: { name: { contains: input?.name} },
       take: input?.limit,
       skip: input?.skip,
     })
@@ -41,11 +39,11 @@ export class ApiCalendarDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendar.create({
-      data: { 
-      title: input.title,
-      color: input.color,
-      visible: input.visible
-},
+      data: {
+        title: input.title,
+        color: input.color,
+        visible: input.visible,
+      },
     })
   }
 
@@ -55,10 +53,10 @@ export class ApiCalendarDataAccessAdminService {
     return this.data.calendar.update({
       where: { id: calendarId },
       data: {
-      title: input.title,
-      color: input.color,
-      visible: input.visible
-},
+        title: input.title,
+        color: input.color,
+        visible: input.visible,
+      },
     })
   }
 
@@ -68,4 +66,3 @@ export class ApiCalendarDataAccessAdminService {
     return this.data.calendar.delete({ where: { id: calendarId } })
   }
 }
-

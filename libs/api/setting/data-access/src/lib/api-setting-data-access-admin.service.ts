@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 
@@ -14,7 +13,6 @@ export class ApiSettingDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.setting.findMany({
-      where: { name: { contains: input?.name} },
       take: input?.limit,
       skip: input?.skip,
     })
@@ -41,9 +39,7 @@ export class ApiSettingDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.setting.create({
-      data: { 
-      name: input.name
-},
+      data: {},
     })
   }
 
@@ -52,9 +48,7 @@ export class ApiSettingDataAccessAdminService {
 
     return this.data.setting.update({
       where: { id: settingId },
-      data: {
-      name: input.name
-},
+      data: {},
     })
   }
 
@@ -64,4 +58,3 @@ export class ApiSettingDataAccessAdminService {
     return this.data.setting.delete({ where: { id: settingId } })
   }
 }
-

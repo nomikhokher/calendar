@@ -171,12 +171,12 @@ model CalendarEvent {
   id               String  @id @default(cuid())
   calendarId       String?
   recurringEventId String?
-  isFirstInstance  String?
+  isFirstInstance  Boolean?
   title            String?
   description      String?
   start            String?
   end              String?
-  allDay           String?
+  allDay           Boolean?
   recurrence       String?
 
   calendar Calendar? @relation(name: "CalendarEvent_Calendar", fields: [calendarId], references: [id])
