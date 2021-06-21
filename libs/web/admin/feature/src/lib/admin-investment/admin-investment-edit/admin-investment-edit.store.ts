@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AdminUpdateInvestmentInput, WebCoreDataAccessService, Investment, User } from '@calendar/web/core/data-access'
@@ -6,16 +5,20 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom, pluck } from 'rxjs/operators'
 
 export interface InvestmentUpdateState {
-  errors ?: any
+  errors?: any
   loading?: boolean
-  item?: Investment,
- users?: User[]
+  item?: Investment
+  users?: User[]
   searchTerm?: string
 }
 
 @Injectable()
 export class AdminInvestmentEditStore extends ComponentStore<InvestmentUpdateState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
 
     this.loadInvestmentEffect(route.params.pipe(pluck('investmentId')))
@@ -25,24 +28,20 @@ export class AdminInvestmentEditStore extends ComponentStore<InvestmentUpdateSta
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
   readonly users$ = this.select((s) => s.users)
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
-this.users$,
-    (errors, loading, item, users ) => ({
+  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, this.users$, (errors, loading, item, users) => ({
     errors,
     loading,
     item,
-users
+    users,
   }))
 
-
-
-  readonly filterUsers = this.effect<string>((filter$) => 
+  readonly filterUsers = this.effect<string>((filter$) =>
     filter$.pipe(
       switchMap((term) =>
         this.data.adminUsers().pipe(
           tapResponse(
             (res: any) => {
-              let users = res.data.items;
+              let users = res.data.items
               return this.patchState({ users: users })
             },
             (errors: any) =>
@@ -52,13 +51,10 @@ users
           ),
         ),
       ),
-    )
+    ),
   )
 
-
-    
-
-readonly loadInvestmentEffect = this.effect<string>((investmentId$) =>
+  readonly loadInvestmentEffect = this.effect<string>((investmentId$) =>
     investmentId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((investmentId) =>
@@ -98,5 +94,3 @@ readonly loadInvestmentEffect = this.effect<string>((investmentId$) =>
     ),
   )
 }
-
-

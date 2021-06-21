@@ -17,9 +17,7 @@ import { AdminSettingCreateStore } from './admin-setting-create.store'
 })
 export class AdminSettingCreateComponent {
   readonly vm$ = this.store.vm$
-  fields = [
-    WebUiFormField.input('name', { label: 'Name' }),
-  ]
+  fields = [WebUiFormField.input('name', { label: 'Name' })]
   constructor(private readonly store: AdminSettingCreateStore) {}
 
   createSetting(input) {

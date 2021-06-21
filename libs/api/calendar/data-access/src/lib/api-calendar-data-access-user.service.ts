@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 import { UserCreateCalendarInput } from './dto/user-create-calendar.input'
@@ -10,7 +9,6 @@ export class ApiCalendarDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userCalendars(userId: string, input?: UserListCalendarInput) {
-
     return this.data.calendar.findMany({
       take: input?.limit,
       skip: input?.skip,
@@ -18,7 +16,6 @@ export class ApiCalendarDataAccessUserService {
   }
 
   async userCountCalendars(userId: string, input?: UserListCalendarInput): Promise<CorePaging> {
-
     const total = await this.data.calendar.count()
     return {
       limit: input?.limit,
@@ -28,30 +25,27 @@ export class ApiCalendarDataAccessUserService {
   }
 
   async userCalendar(userId: string, calendarId) {
-
     return this.data.calendar.findUnique({ where: { id: calendarId } })
   }
 
   async userCreateCalendar(userId: string, input: UserCreateCalendarInput) {
-
     return this.data.calendar.create({
-      data: { 
-      title: input.title,
-      color: input.color,
-      visible: input.visible
-},
+      data: {
+        title: input.title,
+        color: input.color,
+        visible: input.visible,
+      },
     })
   }
 
   async userUpdateCalendar(userId: string, calendarId, input: UserUpdateCalendarInput) {
-
     return this.data.calendar.update({
       where: { id: calendarId },
       data: {
-      title: input.title,
-      color: input.color,
-      visible: input.visible
-},
+        title: input.title,
+        color: input.color,
+        visible: input.visible,
+      },
     })
   }
 
@@ -59,4 +53,3 @@ export class ApiCalendarDataAccessUserService {
     return this.data.calendar.delete({ where: { id: calendarId } })
   }
 }
-

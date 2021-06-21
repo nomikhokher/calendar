@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,9 +8,7 @@ import {
   CalendarEventException,
 } from '@calendar/api/calendar-event-exception/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser, GqlAuthAdminGuard,
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthAdminGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -22,7 +19,8 @@ export class ApiCalendarEventExceptionFeatureAdminResolver {
   @Query(() => [CalendarEventException], { nullable: true })
   adminCalendarEventExceptions(
     @CtxUser() admin: User,
-    @Args({ name: 'input', type: () => AdminListCalendarEventExceptionInput, nullable: true }) input?: AdminListCalendarEventExceptionInput,
+    @Args({ name: 'input', type: () => AdminListCalendarEventExceptionInput, nullable: true })
+    input?: AdminListCalendarEventExceptionInput,
   ) {
     return this.service.adminCalendarEventExceptions(admin.id, input)
   }
@@ -30,18 +28,25 @@ export class ApiCalendarEventExceptionFeatureAdminResolver {
   @Query(() => CorePaging, { nullable: true })
   adminCountCalendarEventExceptions(
     @CtxUser() admin: User,
-    @Args({ name: 'input', type: () => AdminListCalendarEventExceptionInput, nullable: true }) input?: AdminListCalendarEventExceptionInput,
+    @Args({ name: 'input', type: () => AdminListCalendarEventExceptionInput, nullable: true })
+    input?: AdminListCalendarEventExceptionInput,
   ) {
     return this.service.adminCountCalendarEventExceptions(admin.id, input)
   }
 
   @Query(() => CalendarEventException, { nullable: true })
-  adminCalendarEventException(@CtxUser() admin: User, @Args('calendarEventExceptionId') calendarEventExceptionId: string) {
+  adminCalendarEventException(
+    @CtxUser() admin: User,
+    @Args('calendarEventExceptionId') calendarEventExceptionId: string,
+  ) {
     return this.service.adminCalendarEventException(admin.id, calendarEventExceptionId)
   }
 
   @Mutation(() => CalendarEventException, { nullable: true })
-  adminCreateCalendarEventException(@CtxUser() admin: User, @Args('input') input: AdminCreateCalendarEventExceptionInput,) {
+  adminCreateCalendarEventException(
+    @CtxUser() admin: User,
+    @Args('input') input: AdminCreateCalendarEventExceptionInput,
+  ) {
     return this.service.adminCreateCalendarEventException(admin.id, input)
   }
 
@@ -55,8 +60,10 @@ export class ApiCalendarEventExceptionFeatureAdminResolver {
   }
 
   @Mutation(() => CalendarEventException, { nullable: true })
-  adminDeleteCalendarEventException(@CtxUser() admin: User, @Args('calendarEventExceptionId') calendarEventExceptionId: string) {
+  adminDeleteCalendarEventException(
+    @CtxUser() admin: User,
+    @Args('calendarEventExceptionId') calendarEventExceptionId: string,
+  ) {
     return this.service.adminDeleteCalendarEventException(admin.id, calendarEventExceptionId)
   }
 }
-

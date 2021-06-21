@@ -1,21 +1,28 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AdminUpdateCalendarEventExceptionInput, WebCoreDataAccessService, CalendarEventException,  } from '@calendar/web/core/data-access'
+import {
+  AdminUpdateCalendarEventExceptionInput,
+  WebCoreDataAccessService,
+  CalendarEventException,
+} from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom, pluck } from 'rxjs/operators'
 
 export interface CalendarEventExceptionUpdateState {
-  errors ?: any
+  errors?: any
   loading?: boolean
-  item?: CalendarEventException,
+  item?: CalendarEventException
 
   searchTerm?: string
 }
 
 @Injectable()
 export class AdminCalendarEventExceptionEditStore extends ComponentStore<CalendarEventExceptionUpdateState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
 
     this.loadCalendarEventExceptionEffect(route.params.pipe(pluck('calendarEventExceptionId')))
@@ -25,21 +32,19 @@ export class AdminCalendarEventExceptionEditStore extends ComponentStore<Calenda
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
 
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
 
-    (errors, loading, item,  ) => ({
-    errors,
-    loading,
-    item,
+    (errors, loading, item) => ({
+      errors,
+      loading,
+      item,
+    }),
+  )
 
-  }))
-
-
-
-
-    
-
-readonly loadCalendarEventExceptionEffect = this.effect<string>((calendarEventExceptionId$) =>
+  readonly loadCalendarEventExceptionEffect = this.effect<string>((calendarEventExceptionId$) =>
     calendarEventExceptionId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((calendarEventExceptionId) =>
@@ -79,5 +84,3 @@ readonly loadCalendarEventExceptionEffect = this.effect<string>((calendarEventEx
     ),
   )
 }
-
-

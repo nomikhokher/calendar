@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 import { UserCreateCalendarEventExceptionInput } from './dto/user-create-calendar-event-exception.input'
@@ -10,15 +9,16 @@ export class ApiCalendarEventExceptionDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userCalendarEventExceptions(userId: string, input?: UserListCalendarEventExceptionInput) {
-
     return this.data.calendarEventException.findMany({
       take: input?.limit,
       skip: input?.skip,
     })
   }
 
-  async userCountCalendarEventExceptions(userId: string, input?: UserListCalendarEventExceptionInput): Promise<CorePaging> {
-
+  async userCountCalendarEventExceptions(
+    userId: string,
+    input?: UserListCalendarEventExceptionInput,
+  ): Promise<CorePaging> {
     const total = await this.data.calendarEventException.count()
     return {
       limit: input?.limit,
@@ -28,28 +28,29 @@ export class ApiCalendarEventExceptionDataAccessUserService {
   }
 
   async userCalendarEventException(userId: string, calendarEventExceptionId) {
-
     return this.data.calendarEventException.findUnique({ where: { id: calendarEventExceptionId } })
   }
 
   async userCreateCalendarEventException(userId: string, input: UserCreateCalendarEventExceptionInput) {
-
     return this.data.calendarEventException.create({
-      data: { 
-      eventId: input.eventId,
-      exdate: input.exdate
-},
+      data: {
+        eventId: input.eventId,
+        exdate: input.exdate,
+      },
     })
   }
 
-  async userUpdateCalendarEventException(userId: string, calendarEventExceptionId, input: UserUpdateCalendarEventExceptionInput) {
-
+  async userUpdateCalendarEventException(
+    userId: string,
+    calendarEventExceptionId,
+    input: UserUpdateCalendarEventExceptionInput,
+  ) {
     return this.data.calendarEventException.update({
       where: { id: calendarEventExceptionId },
       data: {
-      eventId: input.eventId,
-      exdate: input.exdate
-},
+        eventId: input.eventId,
+        exdate: input.exdate,
+      },
     })
   }
 
@@ -57,4 +58,3 @@ export class ApiCalendarEventExceptionDataAccessUserService {
     return this.data.calendarEventException.delete({ where: { id: calendarEventExceptionId } })
   }
 }
-

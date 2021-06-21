@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
@@ -17,4 +16,3 @@ import { AdminCalendarWeekdayDetailComponent } from './admin-calendar-weekday-de
   ],
 })
 export class AdminCalendarWeekdayDetailModule {}
-

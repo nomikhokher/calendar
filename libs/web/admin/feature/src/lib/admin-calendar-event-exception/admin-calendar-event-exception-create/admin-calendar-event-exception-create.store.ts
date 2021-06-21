@@ -1,14 +1,17 @@
-
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { AdminCreateCalendarEventExceptionInput, WebCoreDataAccessService, CalendarEventException,  } from '@calendar/web/core/data-access'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { switchMap,tap } from 'rxjs/operators'
+import {
+  AdminCreateCalendarEventExceptionInput,
+  WebCoreDataAccessService,
+  CalendarEventException,
+} from '@calendar/web/core/data-access'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { switchMap, tap } from 'rxjs/operators'
 
 export interface CalendarEventExceptionCreateState {
   errors?: any
   loading?: boolean
-  item?: CalendarEventException,
+  item?: CalendarEventException
 
   searchTerm?: string
 }
@@ -23,19 +26,17 @@ export class AdminCalendarEventExceptionCreateStore extends ComponentStore<Calen
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
 
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
 
-    (errors, loading, item,  ) => ({
-    errors,
-    loading,
-    item,
-
-  }))
-
-
-
-
-    
+    (errors, loading, item) => ({
+      errors,
+      loading,
+      item,
+    }),
+  )
 
   readonly createCalendarEventExceptionEffect = this.effect<AdminCreateCalendarEventExceptionInput>((input$) =>
     input$.pipe(
@@ -58,5 +59,3 @@ export class AdminCalendarEventExceptionCreateStore extends ComponentStore<Calen
     ),
   )
 }
-
-

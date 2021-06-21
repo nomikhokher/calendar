@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiCoreDataAccessModule } from '@calendar/api/core/data-access'
 
@@ -8,7 +7,15 @@ import { ApiCalendarWeekdayDataAccessPublicService } from './api-calendar-weekda
 
 @Module({
   imports: [ApiCoreDataAccessModule],
-  providers: [ApiCalendarWeekdayDataAccessAdminService, ApiCalendarWeekdayDataAccessUserService, ApiCalendarWeekdayDataAccessPublicService],
-  exports: [ApiCalendarWeekdayDataAccessAdminService, ApiCalendarWeekdayDataAccessUserService, ApiCalendarWeekdayDataAccessPublicService],
+  providers: [
+    ApiCalendarWeekdayDataAccessAdminService,
+    ApiCalendarWeekdayDataAccessUserService,
+    ApiCalendarWeekdayDataAccessPublicService,
+  ],
+  exports: [
+    ApiCalendarWeekdayDataAccessAdminService,
+    ApiCalendarWeekdayDataAccessUserService,
+    ApiCalendarWeekdayDataAccessPublicService,
+  ],
 })
 export class ApiCalendarWeekdayDataAccessModule {}

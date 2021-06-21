@@ -1,21 +1,29 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AdminUpdateCalendarEventInput, WebCoreDataAccessService, CalendarEvent, Calendar } from '@calendar/web/core/data-access'
+import {
+  AdminUpdateCalendarEventInput,
+  WebCoreDataAccessService,
+  CalendarEvent,
+  Calendar,
+} from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom, pluck } from 'rxjs/operators'
 
 export interface CalendarEventUpdateState {
-  errors ?: any
+  errors?: any
   loading?: boolean
-  item?: CalendarEvent,
- calendars?: Calendar[]
+  item?: CalendarEvent
+  calendars?: Calendar[]
   searchTerm?: string
 }
 
 @Injectable()
 export class AdminCalendarEventEditStore extends ComponentStore<CalendarEventUpdateState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
 
     this.loadCalendarEventEffect(route.params.pipe(pluck('calendarEventId')))
@@ -25,24 +33,26 @@ export class AdminCalendarEventEditStore extends ComponentStore<CalendarEventUpd
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
   readonly calendars$ = this.select((s) => s.calendars)
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
-this.calendars$,
-    (errors, loading, item, calendars ) => ({
-    errors,
-    loading,
-    item,
-calendars
-  }))
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
+    this.calendars$,
+    (errors, loading, item, calendars) => ({
+      errors,
+      loading,
+      item,
+      calendars,
+    }),
+  )
 
-
-
-  readonly filterCalendars = this.effect<string>((filter$) => 
+  readonly filterCalendars = this.effect<string>((filter$) =>
     filter$.pipe(
       switchMap((term) =>
-        this.data.adminCalendars({input: { name: term}}).pipe(
+        this.data.adminCalendars({ input: { name: term } }).pipe(
           tapResponse(
             (res: any) => {
-              let calendars = res.data.items;
+              let calendars = res.data.items
               return this.patchState({ calendars: calendars })
             },
             (errors: any) =>
@@ -52,13 +62,10 @@ calendars
           ),
         ),
       ),
-    )
+    ),
   )
 
-
-    
-
-readonly loadCalendarEventEffect = this.effect<string>((calendarEventId$) =>
+  readonly loadCalendarEventEffect = this.effect<string>((calendarEventId$) =>
     calendarEventId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((calendarEventId) =>
@@ -98,5 +105,3 @@ readonly loadCalendarEventEffect = this.effect<string>((calendarEventId$) =>
     ),
   )
 }
-
-

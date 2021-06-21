@@ -1,4 +1,3 @@
-
 export * from './lib/dto/admin-create-calendar-weekday.input'
 export * from './lib/dto/admin-list-calendar-weekday.input'
 export * from './lib/dto/admin-update-calendar-weekday.input'

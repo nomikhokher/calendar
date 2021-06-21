@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,9 +8,7 @@ import {
   Investment,
 } from '@calendar/api/investment/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser, GqlAuthAdminGuard,
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthAdminGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -41,7 +38,7 @@ export class ApiInvestmentFeatureAdminResolver {
   }
 
   @Mutation(() => Investment, { nullable: true })
-  adminCreateInvestment(@CtxUser() admin: User, @Args('input') input: AdminCreateInvestmentInput,) {
+  adminCreateInvestment(@CtxUser() admin: User, @Args('input') input: AdminCreateInvestmentInput) {
     return this.service.adminCreateInvestment(admin.id, input)
   }
 
@@ -59,4 +56,3 @@ export class ApiInvestmentFeatureAdminResolver {
     return this.service.adminDeleteInvestment(admin.id, investmentId)
   }
 }
-

@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiCalendarDataAccessModule } from '@calendar/api/calendar/data-access'
 
@@ -8,10 +7,6 @@ import { ApiCalendarFeatureUserResolver } from './api-calendar-feature-user.reso
 
 @Module({
   imports: [ApiCalendarDataAccessModule],
-  providers: [
-        ApiCalendarFeatureAdminResolver,
-        ApiCalendarFeaturePublicResolver,
-        ApiCalendarFeatureUserResolver
-    ],
+  providers: [ApiCalendarFeatureAdminResolver, ApiCalendarFeaturePublicResolver, ApiCalendarFeatureUserResolver],
 })
 export class ApiCalendarFeatureModule {}

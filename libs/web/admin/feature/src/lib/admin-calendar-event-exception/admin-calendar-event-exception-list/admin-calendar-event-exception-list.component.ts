@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core'
 import { AdminCalendarEventExceptionListStore } from './admin-calendar-event-exception-list.store'
 
@@ -53,4 +52,3 @@ export class AdminCalendarEventExceptionListComponent implements OnInit {
     this.store.loadCalendarEventExceptionsEffect()
   }
 }
-

@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 import { UserCreateCalendarEventInput } from './dto/user-create-calendar-event.input'
@@ -10,7 +9,6 @@ export class ApiCalendarEventDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userCalendarEvents(userId: string, input?: UserListCalendarEventInput) {
-
     return this.data.calendarEvent.findMany({
       take: input?.limit,
       skip: input?.skip,
@@ -18,7 +16,6 @@ export class ApiCalendarEventDataAccessUserService {
   }
 
   async userCountCalendarEvents(userId: string, input?: UserListCalendarEventInput): Promise<CorePaging> {
-
     const total = await this.data.calendarEvent.count()
     return {
       limit: input?.limit,
@@ -28,36 +25,33 @@ export class ApiCalendarEventDataAccessUserService {
   }
 
   async userCalendarEvent(userId: string, calendarEventId) {
-
     return this.data.calendarEvent.findUnique({ where: { id: calendarEventId } })
   }
 
   async userCreateCalendarEvent(userId: string, input: UserCreateCalendarEventInput) {
-
     return this.data.calendarEvent.create({
-      data: { 
-      calendarId: input.calendarId,
-      isFirstInstance: input.isFirstInstance,
-      title: input.title,
-      description: input.description,
-      allDay: input.allDay,
-      recurrence: input.recurrence
-},
+      data: {
+        calendarId: input.calendarId,
+        isFirstInstance: input.isFirstInstance,
+        title: input.title,
+        description: input.description,
+        allDay: input.allDay,
+        recurrence: input.recurrence,
+      },
     })
   }
 
   async userUpdateCalendarEvent(userId: string, calendarEventId, input: UserUpdateCalendarEventInput) {
-
     return this.data.calendarEvent.update({
       where: { id: calendarEventId },
       data: {
-      calendarId: input.calendarId,
-      isFirstInstance: input.isFirstInstance,
-      title: input.title,
-      description: input.description,
-      allDay: input.allDay,
-      recurrence: input.recurrence
-},
+        calendarId: input.calendarId,
+        isFirstInstance: input.isFirstInstance,
+        title: input.title,
+        description: input.description,
+        allDay: input.allDay,
+        recurrence: input.recurrence,
+      },
     })
   }
 
@@ -65,4 +59,3 @@ export class ApiCalendarEventDataAccessUserService {
     return this.data.calendarEvent.delete({ where: { id: calendarEventId } })
   }
 }
-

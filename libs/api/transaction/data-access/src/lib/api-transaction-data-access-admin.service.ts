@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 
@@ -14,7 +13,7 @@ export class ApiTransactionDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.transaction.findMany({
-      where: { name: { contains: input?.name} },
+      where: { name: { contains: input?.name } },
       take: input?.limit,
       skip: input?.skip,
     })
@@ -41,16 +40,16 @@ export class ApiTransactionDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.transaction.create({
-      data: { 
-      investmentId: input.investmentId,
-      name: input.name,
-      transactionAmount: input.transactionAmount,
-      rollingBalance: input.rollingBalance,
-      transactionDate: input.transactionDate,
-      daysOfInterest: input.daysOfInterest,
-      interestAccrued: input.interestAccrued,
-      nextAdvanceDate: input.nextAdvanceDate
-},
+      data: {
+        investmentId: input.investmentId,
+        name: input.name,
+        transactionAmount: input.transactionAmount,
+        rollingBalance: input.rollingBalance,
+        transactionDate: input.transactionDate,
+        daysOfInterest: input.daysOfInterest,
+        interestAccrued: input.interestAccrued,
+        nextAdvanceDate: input.nextAdvanceDate,
+      },
     })
   }
 
@@ -60,15 +59,15 @@ export class ApiTransactionDataAccessAdminService {
     return this.data.transaction.update({
       where: { id: transactionId },
       data: {
-      investmentId: input.investmentId,
-      name: input.name,
-      transactionAmount: input.transactionAmount,
-      rollingBalance: input.rollingBalance,
-      transactionDate: input.transactionDate,
-      daysOfInterest: input.daysOfInterest,
-      interestAccrued: input.interestAccrued,
-      nextAdvanceDate: input.nextAdvanceDate
-},
+        investmentId: input.investmentId,
+        name: input.name,
+        transactionAmount: input.transactionAmount,
+        rollingBalance: input.rollingBalance,
+        transactionDate: input.transactionDate,
+        daysOfInterest: input.daysOfInterest,
+        interestAccrued: input.interestAccrued,
+        nextAdvanceDate: input.nextAdvanceDate,
+      },
     })
   }
 
@@ -78,4 +77,3 @@ export class ApiTransactionDataAccessAdminService {
     return this.data.transaction.delete({ where: { id: transactionId } })
   }
 }
-

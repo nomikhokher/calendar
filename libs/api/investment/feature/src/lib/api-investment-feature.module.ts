@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiInvestmentDataAccessModule } from '@calendar/api/investment/data-access'
 
@@ -8,10 +7,6 @@ import { ApiInvestmentFeatureUserResolver } from './api-investment-feature-user.
 
 @Module({
   imports: [ApiInvestmentDataAccessModule],
-  providers: [
-        ApiInvestmentFeatureAdminResolver,
-        ApiInvestmentFeaturePublicResolver,
-        ApiInvestmentFeatureUserResolver
-    ],
+  providers: [ApiInvestmentFeatureAdminResolver, ApiInvestmentFeaturePublicResolver, ApiInvestmentFeatureUserResolver],
 })
 export class ApiInvestmentFeatureModule {}

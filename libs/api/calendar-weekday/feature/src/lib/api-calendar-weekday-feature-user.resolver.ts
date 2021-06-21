@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,10 +8,7 @@ import {
   CalendarWeekday,
 } from '@calendar/api/calendar-weekday/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser,
-  GqlAuthGuard
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -23,7 +19,8 @@ export class ApiCalendarWeekdayFeatureUserResolver {
   @Query(() => [CalendarWeekday], { nullable: true })
   userCalendarWeekdays(
     @CtxUser() user: User,
-    @Args({ name: 'input', type: () => UserListCalendarWeekdayInput, nullable: true }) input?: UserListCalendarWeekdayInput,
+    @Args({ name: 'input', type: () => UserListCalendarWeekdayInput, nullable: true })
+    input?: UserListCalendarWeekdayInput,
   ) {
     return this.service.userCalendarWeekdays(user.id, input)
   }
@@ -31,7 +28,8 @@ export class ApiCalendarWeekdayFeatureUserResolver {
   @Query(() => CorePaging, { nullable: true })
   userCountCalendarWeekdays(
     @CtxUser() user: User,
-    @Args({ name: 'input', type: () => UserListCalendarWeekdayInput, nullable: true }) input?: UserListCalendarWeekdayInput,
+    @Args({ name: 'input', type: () => UserListCalendarWeekdayInput, nullable: true })
+    input?: UserListCalendarWeekdayInput,
   ) {
     return this.service.userCountCalendarWeekdays(user.id, input)
   }
@@ -42,7 +40,7 @@ export class ApiCalendarWeekdayFeatureUserResolver {
   }
 
   @Mutation(() => CalendarWeekday, { nullable: true })
-  userCreateCalendarWeekday(@CtxUser() user: User, @Args('input') input: UserCreateCalendarWeekdayInput,) {
+  userCreateCalendarWeekday(@CtxUser() user: User, @Args('input') input: UserCreateCalendarWeekdayInput) {
     return this.service.userCreateCalendarWeekday(user.id, input)
   }
 
@@ -60,4 +58,3 @@ export class ApiCalendarWeekdayFeatureUserResolver {
     return this.service.userDeleteCalendarWeekday(user.id, calendarWeekdayId)
   }
 }
-

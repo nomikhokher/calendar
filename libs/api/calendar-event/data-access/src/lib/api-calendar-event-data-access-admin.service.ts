@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common'
 import { ApiCoreDataAccessService, CorePaging, CorePagingInput } from '@calendar/api/core/data-access'
 
@@ -14,7 +13,7 @@ export class ApiCalendarEventDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendarEvent.findMany({
-      where: { description: { contains: input?.name} },
+      where: { description: { contains: input?.name } },
       take: input?.limit,
       skip: input?.skip,
     })
@@ -41,14 +40,14 @@ export class ApiCalendarEventDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.calendarEvent.create({
-      data: { 
-      calendarId: input.calendarId,
-      isFirstInstance: input.isFirstInstance,
-      title: input.title,
-      description: input.description,
-      allDay: input.allDay,
-      recurrence: input.recurrence
-},
+      data: {
+        calendarId: input.calendarId,
+        isFirstInstance: input.isFirstInstance,
+        title: input.title,
+        description: input.description,
+        allDay: input.allDay,
+        recurrence: input.recurrence,
+      },
     })
   }
 
@@ -58,13 +57,13 @@ export class ApiCalendarEventDataAccessAdminService {
     return this.data.calendarEvent.update({
       where: { id: calendarEventId },
       data: {
-      calendarId: input.calendarId,
-      isFirstInstance: input.isFirstInstance,
-      title: input.title,
-      description: input.description,
-      allDay: input.allDay,
-      recurrence: input.recurrence
-},
+        calendarId: input.calendarId,
+        isFirstInstance: input.isFirstInstance,
+        title: input.title,
+        description: input.description,
+        allDay: input.allDay,
+        recurrence: input.recurrence,
+      },
     })
   }
 
@@ -74,4 +73,3 @@ export class ApiCalendarEventDataAccessAdminService {
     return this.data.calendarEvent.delete({ where: { id: calendarEventId } })
   }
 }
-

@@ -1,15 +1,10 @@
-
 import { Component, OnInit } from '@angular/core'
 import { AdminCalendarWeekdayListStore } from './admin-calendar-weekday-list.store'
 
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <ui-page-header
-        title="Calendar Weekday"
-        linkPath="create"
-        linkTitle="Create Calendar Weekday"
-      ></ui-page-header>
+      <ui-page-header title="Calendar Weekday" linkPath="create" linkTitle="Create Calendar Weekday"></ui-page-header>
       <ng-container *ngIf="vm.loading">
         <div class="flex py-36 animate-pulse justify-center align-center">LOADING...</div>
       </ng-container>
@@ -53,4 +48,3 @@ export class AdminCalendarWeekdayListComponent implements OnInit {
     this.store.loadCalendarWeekdaysEffect()
   }
 }
-

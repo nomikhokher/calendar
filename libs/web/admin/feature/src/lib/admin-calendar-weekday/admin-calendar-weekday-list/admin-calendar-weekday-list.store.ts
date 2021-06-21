@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core'
-import { WebCoreDataAccessService, AdminListCalendarWeekdayInput, CalendarWeekday } from '@calendar/web/core/data-access'
+import {
+  WebCoreDataAccessService,
+  AdminListCalendarWeekdayInput,
+  CalendarWeekday,
+} from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom } from 'rxjs/operators'
 

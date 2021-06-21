@@ -1,19 +1,22 @@
-
 import { Injectable } from '@angular/core'
-import { ActivatedRoute,Router } from '@angular/router'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { WebCoreDataAccessService,Investment } from '@calendar/web/core/data-access'
-import { pluck,switchMap, tap } from 'rxjs/operators'
+import { ActivatedRoute, Router } from '@angular/router'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { WebCoreDataAccessService, Investment } from '@calendar/web/core/data-access'
+import { pluck, switchMap, tap } from 'rxjs/operators'
 
 export interface InvestmentDetailState {
-  errors ?: any
+  errors?: any
   loading?: boolean
   item?: Investment
 }
 
 @Injectable()
 export class AdminInvestmentDetailStore extends ComponentStore<InvestmentDetailState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
     this.loadInvestmentEffect(route.params.pipe(pluck('investmentId')))
   }
@@ -45,26 +48,24 @@ export class AdminInvestmentDetailStore extends ComponentStore<InvestmentDetailS
     ),
   )
 
-  readonly deleteInvestmentEffect = this.effect<Investment>(
-    (investment$) =>
-      investment$.pipe(
-        switchMap((investment) =>
-          this.data
-            .adminDeleteInvestment({
-              investmentId: investment.id,
-            })
-            .pipe(
-              tapResponse(
-                (res) => this.router.navigate(['/admin/investments']),
-                (errors: any) =>
-                  this.patchState({
-                    loading: false,
-                    errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
-                  }),
-              ),
+  readonly deleteInvestmentEffect = this.effect<Investment>((investment$) =>
+    investment$.pipe(
+      switchMap((investment) =>
+        this.data
+          .adminDeleteInvestment({
+            investmentId: investment.id,
+          })
+          .pipe(
+            tapResponse(
+              (res) => this.router.navigate(['/admin/investments']),
+              (errors: any) =>
+                this.patchState({
+                  loading: false,
+                  errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
+                }),
             ),
-        ),
+          ),
       ),
+    ),
   )
 }
-

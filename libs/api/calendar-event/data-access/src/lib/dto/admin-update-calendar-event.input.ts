@@ -1,37 +1,34 @@
 import { Field, InputType } from '@nestjs/graphql'
 
-
-
 @InputType()
 export class AdminUpdateCalendarEventInput {
-
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   id?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   calendarId?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   recurringEventId?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   isFirstInstance?: boolean
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   title?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   description?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   start?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   end?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   allDay?: boolean
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   recurrence?: string
 }

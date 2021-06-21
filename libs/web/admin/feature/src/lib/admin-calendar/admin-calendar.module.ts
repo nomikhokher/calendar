@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { RouterModule } from '@angular/router'
 import { NgModule } from '@angular/core'
 
 @NgModule({
@@ -8,12 +8,13 @@ import { NgModule } from '@angular/core'
     RouterModule.forChild([
       {
         path: '',
-        loadChildren: () => import('./admin-calendar-list/admin-calendar-list.module').then((m) => m.AdminCalendarListModule),
+        loadChildren: () =>
+          import('./admin-calendar-list/admin-calendar-list.module').then((m) => m.AdminCalendarListModule),
       },
       {
         path: 'create',
         loadChildren: () =>
-        import('./admin-calendar-create/admin-calendar-create.module').then((m) => m.AdminCalendarCreateModule),
+          import('./admin-calendar-create/admin-calendar-create.module').then((m) => m.AdminCalendarCreateModule),
       },
       {
         path: ':calendarId',
@@ -21,12 +22,12 @@ import { NgModule } from '@angular/core'
           {
             path: '',
             loadChildren: () =>
-            import('./admin-calendar-detail/admin-calendar-detail.module').then((m) => m.AdminCalendarDetailModule),
+              import('./admin-calendar-detail/admin-calendar-detail.module').then((m) => m.AdminCalendarDetailModule),
           },
           {
             path: 'edit',
             loadChildren: () =>
-            import('./admin-calendar-edit/admin-calendar-edit.module').then((m) => m.AdminCalendarEditModule),
+              import('./admin-calendar-edit/admin-calendar-edit.module').then((m) => m.AdminCalendarEditModule),
           },
         ],
       },

@@ -1,19 +1,22 @@
-
 import { Injectable } from '@angular/core'
-import { ActivatedRoute,Router } from '@angular/router'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { WebCoreDataAccessService,CalendarEvent } from '@calendar/web/core/data-access'
-import { pluck,switchMap, tap } from 'rxjs/operators'
+import { ActivatedRoute, Router } from '@angular/router'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { WebCoreDataAccessService, CalendarEvent } from '@calendar/web/core/data-access'
+import { pluck, switchMap, tap } from 'rxjs/operators'
 
 export interface CalendarEventDetailState {
-  errors ?: any
+  errors?: any
   loading?: boolean
   item?: CalendarEvent
 }
 
 @Injectable()
 export class AdminCalendarEventDetailStore extends ComponentStore<CalendarEventDetailState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
     this.loadCalendarEventEffect(route.params.pipe(pluck('calendarEventId')))
   }
@@ -45,26 +48,24 @@ export class AdminCalendarEventDetailStore extends ComponentStore<CalendarEventD
     ),
   )
 
-  readonly deleteCalendarEventEffect = this.effect<CalendarEvent>(
-    (calendarEvent$) =>
-      calendarEvent$.pipe(
-        switchMap((calendarEvent) =>
-          this.data
-            .adminDeleteCalendarEvent({
-              calendarEventId: calendarEvent.id,
-            })
-            .pipe(
-              tapResponse(
-                (res) => this.router.navigate(['/admin/calendar-events']),
-                (errors: any) =>
-                  this.patchState({
-                    loading: false,
-                    errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
-                  }),
-              ),
+  readonly deleteCalendarEventEffect = this.effect<CalendarEvent>((calendarEvent$) =>
+    calendarEvent$.pipe(
+      switchMap((calendarEvent) =>
+        this.data
+          .adminDeleteCalendarEvent({
+            calendarEventId: calendarEvent.id,
+          })
+          .pipe(
+            tapResponse(
+              (res) => this.router.navigate(['/admin/calendar-events']),
+              (errors: any) =>
+                this.patchState({
+                  loading: false,
+                  errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
+                }),
             ),
-        ),
+          ),
       ),
+    ),
   )
 }
-

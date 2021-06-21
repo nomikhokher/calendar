@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiCoreDataAccessModule } from '@calendar/api/core/data-access'
 
@@ -8,7 +7,15 @@ import { ApiCalendarEventDataAccessPublicService } from './api-calendar-event-da
 
 @Module({
   imports: [ApiCoreDataAccessModule],
-  providers: [ApiCalendarEventDataAccessAdminService, ApiCalendarEventDataAccessUserService, ApiCalendarEventDataAccessPublicService],
-  exports: [ApiCalendarEventDataAccessAdminService, ApiCalendarEventDataAccessUserService, ApiCalendarEventDataAccessPublicService],
+  providers: [
+    ApiCalendarEventDataAccessAdminService,
+    ApiCalendarEventDataAccessUserService,
+    ApiCalendarEventDataAccessPublicService,
+  ],
+  exports: [
+    ApiCalendarEventDataAccessAdminService,
+    ApiCalendarEventDataAccessUserService,
+    ApiCalendarEventDataAccessPublicService,
+  ],
 })
 export class ApiCalendarEventDataAccessModule {}

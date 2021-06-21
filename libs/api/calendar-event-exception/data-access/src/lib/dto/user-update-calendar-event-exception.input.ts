@@ -1,16 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql'
 
-
-
 @InputType()
 export class UserUpdateCalendarEventExceptionInput {
-
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   id?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   eventId?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   exdate?: string
 }

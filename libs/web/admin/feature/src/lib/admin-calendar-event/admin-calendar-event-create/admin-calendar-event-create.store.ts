@@ -1,15 +1,19 @@
-
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { AdminCreateCalendarEventInput, WebCoreDataAccessService, CalendarEvent, Calendar } from '@calendar/web/core/data-access'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { switchMap,tap } from 'rxjs/operators'
+import {
+  AdminCreateCalendarEventInput,
+  WebCoreDataAccessService,
+  CalendarEvent,
+  Calendar,
+} from '@calendar/web/core/data-access'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { switchMap, tap } from 'rxjs/operators'
 
 export interface CalendarEventCreateState {
   errors?: any
   loading?: boolean
-  item?: CalendarEvent,
- calendars?: Calendar[]
+  item?: CalendarEvent
+  calendars?: Calendar[]
   searchTerm?: string
 }
 
@@ -23,24 +27,26 @@ export class AdminCalendarEventCreateStore extends ComponentStore<CalendarEventC
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
   readonly calendars$ = this.select((s) => s.calendars)
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
-this.calendars$,
-    (errors, loading, item, calendars ) => ({
-    errors,
-    loading,
-    item,
-calendars
-  }))
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
+    this.calendars$,
+    (errors, loading, item, calendars) => ({
+      errors,
+      loading,
+      item,
+      calendars,
+    }),
+  )
 
-
-
-  readonly filterCalendars = this.effect<string>((filter$) => 
+  readonly filterCalendars = this.effect<string>((filter$) =>
     filter$.pipe(
       switchMap((term) =>
-        this.data.adminCalendars({input: { name: term}}).pipe(
+        this.data.adminCalendars({ input: { name: term } }).pipe(
           tapResponse(
             (res: any) => {
-              let calendars = res.data.items;
+              let calendars = res.data.items
               return this.patchState({ calendars: calendars })
             },
             (errors: any) =>
@@ -50,11 +56,8 @@ calendars
           ),
         ),
       ),
-    )
+    ),
   )
-
-
-    
 
   readonly createCalendarEventEffect = this.effect<AdminCreateCalendarEventInput>((input$) =>
     input$.pipe(
@@ -77,5 +80,3 @@ calendars
     ),
   )
 }
-
-

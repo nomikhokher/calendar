@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiCalendarEventExceptionDataAccessModule } from '@calendar/api/calendar-event-exception/data-access'
 
@@ -9,9 +8,9 @@ import { ApiCalendarEventExceptionFeatureUserResolver } from './api-calendar-eve
 @Module({
   imports: [ApiCalendarEventExceptionDataAccessModule],
   providers: [
-        ApiCalendarEventExceptionFeatureAdminResolver,
-        ApiCalendarEventExceptionFeaturePublicResolver,
-        ApiCalendarEventExceptionFeatureUserResolver
-    ],
+    ApiCalendarEventExceptionFeatureAdminResolver,
+    ApiCalendarEventExceptionFeaturePublicResolver,
+    ApiCalendarEventExceptionFeatureUserResolver,
+  ],
 })
 export class ApiCalendarEventExceptionFeatureModule {}

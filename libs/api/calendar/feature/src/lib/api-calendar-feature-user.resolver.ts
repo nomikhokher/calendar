@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,10 +8,7 @@ import {
   Calendar,
 } from '@calendar/api/calendar/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser,
-  GqlAuthGuard
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -42,7 +38,7 @@ export class ApiCalendarFeatureUserResolver {
   }
 
   @Mutation(() => Calendar, { nullable: true })
-  userCreateCalendar(@CtxUser() user: User, @Args('input') input: UserCreateCalendarInput,) {
+  userCreateCalendar(@CtxUser() user: User, @Args('input') input: UserCreateCalendarInput) {
     return this.service.userCreateCalendar(user.id, input)
   }
 
@@ -60,4 +56,3 @@ export class ApiCalendarFeatureUserResolver {
     return this.service.userDeleteCalendar(user.id, calendarId)
   }
 }
-

@@ -1,21 +1,28 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AdminUpdateCalendarWeekdayInput, WebCoreDataAccessService, CalendarWeekday,  } from '@calendar/web/core/data-access'
+import {
+  AdminUpdateCalendarWeekdayInput,
+  WebCoreDataAccessService,
+  CalendarWeekday,
+} from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom, pluck } from 'rxjs/operators'
 
 export interface CalendarWeekdayUpdateState {
-  errors ?: any
+  errors?: any
   loading?: boolean
-  item?: CalendarWeekday,
+  item?: CalendarWeekday
 
   searchTerm?: string
 }
 
 @Injectable()
 export class AdminCalendarWeekdayEditStore extends ComponentStore<CalendarWeekdayUpdateState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
 
     this.loadCalendarWeekdayEffect(route.params.pipe(pluck('calendarWeekdayId')))
@@ -25,21 +32,19 @@ export class AdminCalendarWeekdayEditStore extends ComponentStore<CalendarWeekda
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
 
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
 
-    (errors, loading, item,  ) => ({
-    errors,
-    loading,
-    item,
+    (errors, loading, item) => ({
+      errors,
+      loading,
+      item,
+    }),
+  )
 
-  }))
-
-
-
-
-    
-
-readonly loadCalendarWeekdayEffect = this.effect<string>((calendarWeekdayId$) =>
+  readonly loadCalendarWeekdayEffect = this.effect<string>((calendarWeekdayId$) =>
     calendarWeekdayId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((calendarWeekdayId) =>
@@ -79,5 +84,3 @@ readonly loadCalendarWeekdayEffect = this.effect<string>((calendarWeekdayId$) =>
     ),
   )
 }
-
-

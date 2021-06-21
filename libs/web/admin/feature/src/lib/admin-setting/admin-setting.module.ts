@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { RouterModule } from '@angular/router'
 import { NgModule } from '@angular/core'
 
 @NgModule({
@@ -8,12 +8,13 @@ import { NgModule } from '@angular/core'
     RouterModule.forChild([
       {
         path: '',
-        loadChildren: () => import('./admin-setting-list/admin-setting-list.module').then((m) => m.AdminSettingListModule),
+        loadChildren: () =>
+          import('./admin-setting-list/admin-setting-list.module').then((m) => m.AdminSettingListModule),
       },
       {
         path: 'create',
         loadChildren: () =>
-        import('./admin-setting-create/admin-setting-create.module').then((m) => m.AdminSettingCreateModule),
+          import('./admin-setting-create/admin-setting-create.module').then((m) => m.AdminSettingCreateModule),
       },
       {
         path: ':settingId',
@@ -21,12 +22,12 @@ import { NgModule } from '@angular/core'
           {
             path: '',
             loadChildren: () =>
-            import('./admin-setting-detail/admin-setting-detail.module').then((m) => m.AdminSettingDetailModule),
+              import('./admin-setting-detail/admin-setting-detail.module').then((m) => m.AdminSettingDetailModule),
           },
           {
             path: 'edit',
             loadChildren: () =>
-            import('./admin-setting-edit/admin-setting-edit.module').then((m) => m.AdminSettingEditModule),
+              import('./admin-setting-edit/admin-setting-edit.module').then((m) => m.AdminSettingEditModule),
           },
         ],
       },

@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
@@ -17,4 +16,3 @@ import { AdminCalendarEventExceptionDetailComponent } from './admin-calendar-eve
   ],
 })
 export class AdminCalendarEventExceptionDetailModule {}
-

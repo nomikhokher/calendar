@@ -22,9 +22,7 @@ import { AdminSettingEditStore } from './admin-setting-edit.store'
 export class AdminSettingEditComponent {
   readonly vm$ = this.store.vm$
   readonly form = new FormGroup({})
-  fields = [
-    WebUiFormField.input('name', { label: 'Name' }),
-  ]
+  fields = [WebUiFormField.input('name', { label: 'Name' })]
 
   constructor(private readonly store: AdminSettingEditStore) {}
 

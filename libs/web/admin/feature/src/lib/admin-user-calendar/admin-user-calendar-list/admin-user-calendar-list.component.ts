@@ -1,15 +1,10 @@
-
 import { Component, OnInit } from '@angular/core'
 import { AdminUserCalendarListStore } from './admin-user-calendar-list.store'
 
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <ui-page-header
-        title="User Calendar"
-        linkPath="create"
-        linkTitle="Create User Calendar"
-      ></ui-page-header>
+      <ui-page-header title="User Calendar" linkPath="create" linkTitle="Create User Calendar"></ui-page-header>
       <ng-container *ngIf="vm.loading">
         <div class="flex py-36 animate-pulse justify-center align-center">LOADING...</div>
       </ng-container>
@@ -53,4 +48,3 @@ export class AdminUserCalendarListComponent implements OnInit {
     this.store.loadUserCalendarsEffect()
   }
 }
-

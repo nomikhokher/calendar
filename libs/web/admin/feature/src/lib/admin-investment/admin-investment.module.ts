@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { RouterModule } from '@angular/router'
 import { NgModule } from '@angular/core'
 
 @NgModule({
@@ -8,12 +8,13 @@ import { NgModule } from '@angular/core'
     RouterModule.forChild([
       {
         path: '',
-        loadChildren: () => import('./admin-investment-list/admin-investment-list.module').then((m) => m.AdminInvestmentListModule),
+        loadChildren: () =>
+          import('./admin-investment-list/admin-investment-list.module').then((m) => m.AdminInvestmentListModule),
       },
       {
         path: 'create',
         loadChildren: () =>
-        import('./admin-investment-create/admin-investment-create.module').then((m) => m.AdminInvestmentCreateModule),
+          import('./admin-investment-create/admin-investment-create.module').then((m) => m.AdminInvestmentCreateModule),
       },
       {
         path: ':investmentId',
@@ -21,12 +22,14 @@ import { NgModule } from '@angular/core'
           {
             path: '',
             loadChildren: () =>
-            import('./admin-investment-detail/admin-investment-detail.module').then((m) => m.AdminInvestmentDetailModule),
+              import('./admin-investment-detail/admin-investment-detail.module').then(
+                (m) => m.AdminInvestmentDetailModule,
+              ),
           },
           {
             path: 'edit',
             loadChildren: () =>
-            import('./admin-investment-edit/admin-investment-edit.module').then((m) => m.AdminInvestmentEditModule),
+              import('./admin-investment-edit/admin-investment-edit.module').then((m) => m.AdminInvestmentEditModule),
           },
         ],
       },

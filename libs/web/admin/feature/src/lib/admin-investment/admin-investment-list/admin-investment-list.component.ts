@@ -1,15 +1,10 @@
-
 import { Component, OnInit } from '@angular/core'
 import { AdminInvestmentListStore } from './admin-investment-list.store'
 
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <ui-page-header
-        title="Investment"
-        linkPath="create"
-        linkTitle="Create Investment"
-      ></ui-page-header>
+      <ui-page-header title="Investment" linkPath="create" linkTitle="Create Investment"></ui-page-header>
       <ng-container *ngIf="vm.loading">
         <div class="flex py-36 animate-pulse justify-center align-center">LOADING...</div>
       </ng-container>
@@ -53,4 +48,3 @@ export class AdminInvestmentListComponent implements OnInit {
     this.store.loadInvestmentsEffect()
   }
 }
-

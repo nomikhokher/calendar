@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,10 +8,7 @@ import {
   Setting,
 } from '@calendar/api/setting/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser,
-  GqlAuthGuard
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -42,7 +38,7 @@ export class ApiSettingFeatureUserResolver {
   }
 
   @Mutation(() => Setting, { nullable: true })
-  userCreateSetting(@CtxUser() user: User, @Args('input') input: UserCreateSettingInput,) {
+  userCreateSetting(@CtxUser() user: User, @Args('input') input: UserCreateSettingInput) {
     return this.service.userCreateSetting(user.id, input)
   }
 
@@ -60,4 +56,3 @@ export class ApiSettingFeatureUserResolver {
     return this.service.userDeleteSetting(user.id, settingId)
   }
 }
-

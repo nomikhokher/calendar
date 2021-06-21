@@ -12,51 +12,46 @@ const routes: Routes = [
     children: [
       // Application routes here
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-{
+      {
         path: 'settings',
-        loadChildren: () =>
-          import('@calendar/web/setting/feature').then((m) => m.WebSettingFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/setting/feature').then((m) => m.WebSettingFeatureModule),
+      },
+      {
         path: 'user-calendars',
-        loadChildren: () =>
-          import('@calendar/web/user-calendar/feature').then((m) => m.WebUserCalendarFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/user-calendar/feature').then((m) => m.WebUserCalendarFeatureModule),
+      },
+      {
         path: 'settings',
-        loadChildren: () =>
-          import('@calendar/web/setting/feature').then((m) => m.WebSettingFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/setting/feature').then((m) => m.WebSettingFeatureModule),
+      },
+      {
         path: 'calendar-weekdays',
         loadChildren: () =>
-          import('@calendar/web/calendar-weekday/feature').then((m) => m.WebCalendarWeekdayFeatureModule)
-        },
-{
+          import('@calendar/web/calendar-weekday/feature').then((m) => m.WebCalendarWeekdayFeatureModule),
+      },
+      {
         path: 'calendar-event-exceptions',
         loadChildren: () =>
-          import('@calendar/web/calendar-event-exception/feature').then((m) => m.WebCalendarEventExceptionFeatureModule)
-        },
-{
+          import('@calendar/web/calendar-event-exception/feature').then(
+            (m) => m.WebCalendarEventExceptionFeatureModule,
+          ),
+      },
+      {
         path: 'calendar-events',
-        loadChildren: () =>
-          import('@calendar/web/calendar-event/feature').then((m) => m.WebCalendarEventFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/calendar-event/feature').then((m) => m.WebCalendarEventFeatureModule),
+      },
+      {
         path: 'calendars',
-        loadChildren: () =>
-          import('@calendar/web/calendar/feature').then((m) => m.WebCalendarFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/calendar/feature').then((m) => m.WebCalendarFeatureModule),
+      },
+      {
         path: 'transactions',
-        loadChildren: () =>
-          import('@calendar/web/transaction/feature').then((m) => m.WebTransactionFeatureModule)
-        },
-{
+        loadChildren: () => import('@calendar/web/transaction/feature').then((m) => m.WebTransactionFeatureModule),
+      },
+      {
         path: 'investments',
-        loadChildren: () =>
-          import('@calendar/web/investment/feature').then((m) => m.WebInvestmentFeatureModule)
-        },
+        loadChildren: () => import('@calendar/web/investment/feature').then((m) => m.WebInvestmentFeatureModule),
+      },
       {
         path: 'about',
         loadChildren: () => import('@calendar/web/about/feature').then((m) => m.WebAboutFeatureModule),

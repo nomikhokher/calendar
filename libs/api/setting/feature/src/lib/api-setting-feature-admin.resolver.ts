@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,9 +8,7 @@ import {
   Setting,
 } from '@calendar/api/setting/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser, GqlAuthAdminGuard,
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthAdminGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -41,7 +38,7 @@ export class ApiSettingFeatureAdminResolver {
   }
 
   @Mutation(() => Setting, { nullable: true })
-  adminCreateSetting(@CtxUser() admin: User, @Args('input') input: AdminCreateSettingInput,) {
+  adminCreateSetting(@CtxUser() admin: User, @Args('input') input: AdminCreateSettingInput) {
     return this.service.adminCreateSetting(admin.id, input)
   }
 
@@ -59,4 +56,3 @@ export class ApiSettingFeatureAdminResolver {
     return this.service.adminDeleteSetting(admin.id, settingId)
   }
 }
-

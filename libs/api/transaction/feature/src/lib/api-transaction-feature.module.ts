@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common'
 import { ApiTransactionDataAccessModule } from '@calendar/api/transaction/data-access'
 
@@ -9,9 +8,9 @@ import { ApiTransactionFeatureUserResolver } from './api-transaction-feature-use
 @Module({
   imports: [ApiTransactionDataAccessModule],
   providers: [
-        ApiTransactionFeatureAdminResolver,
-        ApiTransactionFeaturePublicResolver,
-        ApiTransactionFeatureUserResolver
-    ],
+    ApiTransactionFeatureAdminResolver,
+    ApiTransactionFeaturePublicResolver,
+    ApiTransactionFeatureUserResolver,
+  ],
 })
 export class ApiTransactionFeatureModule {}

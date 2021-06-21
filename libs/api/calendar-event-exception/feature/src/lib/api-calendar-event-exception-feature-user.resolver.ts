@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,10 +8,7 @@ import {
   CalendarEventException,
 } from '@calendar/api/calendar-event-exception/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser,
-  GqlAuthGuard
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -23,7 +19,8 @@ export class ApiCalendarEventExceptionFeatureUserResolver {
   @Query(() => [CalendarEventException], { nullable: true })
   userCalendarEventExceptions(
     @CtxUser() user: User,
-    @Args({ name: 'input', type: () => UserListCalendarEventExceptionInput, nullable: true }) input?: UserListCalendarEventExceptionInput,
+    @Args({ name: 'input', type: () => UserListCalendarEventExceptionInput, nullable: true })
+    input?: UserListCalendarEventExceptionInput,
   ) {
     return this.service.userCalendarEventExceptions(user.id, input)
   }
@@ -31,18 +28,22 @@ export class ApiCalendarEventExceptionFeatureUserResolver {
   @Query(() => CorePaging, { nullable: true })
   userCountCalendarEventExceptions(
     @CtxUser() user: User,
-    @Args({ name: 'input', type: () => UserListCalendarEventExceptionInput, nullable: true }) input?: UserListCalendarEventExceptionInput,
+    @Args({ name: 'input', type: () => UserListCalendarEventExceptionInput, nullable: true })
+    input?: UserListCalendarEventExceptionInput,
   ) {
     return this.service.userCountCalendarEventExceptions(user.id, input)
   }
 
   @Query(() => CalendarEventException, { nullable: true })
-  userCalendarEventException(@CtxUser() user: User, @Args('calendarEventExceptionId') calendarEventExceptionId: string) {
+  userCalendarEventException(
+    @CtxUser() user: User,
+    @Args('calendarEventExceptionId') calendarEventExceptionId: string,
+  ) {
     return this.service.userCalendarEventException(user.id, calendarEventExceptionId)
   }
 
   @Mutation(() => CalendarEventException, { nullable: true })
-  userCreateCalendarEventException(@CtxUser() user: User, @Args('input') input: UserCreateCalendarEventExceptionInput,) {
+  userCreateCalendarEventException(@CtxUser() user: User, @Args('input') input: UserCreateCalendarEventExceptionInput) {
     return this.service.userCreateCalendarEventException(user.id, input)
   }
 
@@ -56,8 +57,10 @@ export class ApiCalendarEventExceptionFeatureUserResolver {
   }
 
   @Mutation(() => CalendarEventException, { nullable: true })
-  userDeleteCalendarEventException(@CtxUser() user: User, @Args('calendarEventExceptionId') calendarEventExceptionId: string) {
+  userDeleteCalendarEventException(
+    @CtxUser() user: User,
+    @Args('calendarEventExceptionId') calendarEventExceptionId: string,
+  ) {
     return this.service.userDeleteCalendarEventException(user.id, calendarEventExceptionId)
   }
 }
-

@@ -1,19 +1,22 @@
-
 import { Injectable } from '@angular/core'
-import { ActivatedRoute,Router } from '@angular/router'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { WebCoreDataAccessService,CalendarEventException } from '@calendar/web/core/data-access'
-import { pluck,switchMap, tap } from 'rxjs/operators'
+import { ActivatedRoute, Router } from '@angular/router'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { WebCoreDataAccessService, CalendarEventException } from '@calendar/web/core/data-access'
+import { pluck, switchMap, tap } from 'rxjs/operators'
 
 export interface CalendarEventExceptionDetailState {
-  errors ?: any
+  errors?: any
   loading?: boolean
   item?: CalendarEventException
 }
 
 @Injectable()
 export class AdminCalendarEventExceptionDetailStore extends ComponentStore<CalendarEventExceptionDetailState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
     this.loadCalendarEventExceptionEffect(route.params.pipe(pluck('calendarEventExceptionId')))
   }
@@ -45,26 +48,24 @@ export class AdminCalendarEventExceptionDetailStore extends ComponentStore<Calen
     ),
   )
 
-  readonly deleteCalendarEventExceptionEffect = this.effect<CalendarEventException>(
-    (calendarEventException$) =>
-      calendarEventException$.pipe(
-        switchMap((calendarEventException) =>
-          this.data
-            .adminDeleteCalendarEventException({
-              calendarEventExceptionId: calendarEventException.id,
-            })
-            .pipe(
-              tapResponse(
-                (res) => this.router.navigate(['/admin/calendar-event-exceptions']),
-                (errors: any) =>
-                  this.patchState({
-                    loading: false,
-                    errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
-                  }),
-              ),
+  readonly deleteCalendarEventExceptionEffect = this.effect<CalendarEventException>((calendarEventException$) =>
+    calendarEventException$.pipe(
+      switchMap((calendarEventException) =>
+        this.data
+          .adminDeleteCalendarEventException({
+            calendarEventExceptionId: calendarEventException.id,
+          })
+          .pipe(
+            tapResponse(
+              (res) => this.router.navigate(['/admin/calendar-event-exceptions']),
+              (errors: any) =>
+                this.patchState({
+                  loading: false,
+                  errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
+                }),
             ),
-        ),
+          ),
       ),
+    ),
   )
 }
-

@@ -1,4 +1,3 @@
-
 export * from './lib/dto/admin-create-investment.input'
 export * from './lib/dto/admin-list-investment.input'
 export * from './lib/dto/admin-update-investment.input'

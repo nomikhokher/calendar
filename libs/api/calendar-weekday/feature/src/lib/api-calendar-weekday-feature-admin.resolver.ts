@@ -1,4 +1,3 @@
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,9 +8,7 @@ import {
   CalendarWeekday,
 } from '@calendar/api/calendar-weekday/data-access'
 import { CorePaging } from '@calendar/api/core/data-access'
-import {
-  CtxUser, GqlAuthAdminGuard,
-} from '@calendar/api/auth/util'
+import { CtxUser, GqlAuthAdminGuard } from '@calendar/api/auth/util'
 import { User } from '@calendar/api/user/data-access'
 
 @Resolver()
@@ -22,7 +19,8 @@ export class ApiCalendarWeekdayFeatureAdminResolver {
   @Query(() => [CalendarWeekday], { nullable: true })
   adminCalendarWeekdays(
     @CtxUser() admin: User,
-    @Args({ name: 'input', type: () => AdminListCalendarWeekdayInput, nullable: true }) input?: AdminListCalendarWeekdayInput,
+    @Args({ name: 'input', type: () => AdminListCalendarWeekdayInput, nullable: true })
+    input?: AdminListCalendarWeekdayInput,
   ) {
     return this.service.adminCalendarWeekdays(admin.id, input)
   }
@@ -30,7 +28,8 @@ export class ApiCalendarWeekdayFeatureAdminResolver {
   @Query(() => CorePaging, { nullable: true })
   adminCountCalendarWeekdays(
     @CtxUser() admin: User,
-    @Args({ name: 'input', type: () => AdminListCalendarWeekdayInput, nullable: true }) input?: AdminListCalendarWeekdayInput,
+    @Args({ name: 'input', type: () => AdminListCalendarWeekdayInput, nullable: true })
+    input?: AdminListCalendarWeekdayInput,
   ) {
     return this.service.adminCountCalendarWeekdays(admin.id, input)
   }
@@ -41,7 +40,7 @@ export class ApiCalendarWeekdayFeatureAdminResolver {
   }
 
   @Mutation(() => CalendarWeekday, { nullable: true })
-  adminCreateCalendarWeekday(@CtxUser() admin: User, @Args('input') input: AdminCreateCalendarWeekdayInput,) {
+  adminCreateCalendarWeekday(@CtxUser() admin: User, @Args('input') input: AdminCreateCalendarWeekdayInput) {
     return this.service.adminCreateCalendarWeekday(admin.id, input)
   }
 
@@ -59,4 +58,3 @@ export class ApiCalendarWeekdayFeatureAdminResolver {
     return this.service.adminDeleteCalendarWeekday(admin.id, calendarWeekdayId)
   }
 }
-

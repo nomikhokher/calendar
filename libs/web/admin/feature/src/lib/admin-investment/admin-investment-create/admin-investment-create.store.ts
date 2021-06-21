@@ -1,15 +1,14 @@
-
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { AdminCreateInvestmentInput, WebCoreDataAccessService, Investment, User } from '@calendar/web/core/data-access'
-import { ComponentStore,tapResponse } from '@ngrx/component-store'
-import { switchMap,tap } from 'rxjs/operators'
+import { ComponentStore, tapResponse } from '@ngrx/component-store'
+import { switchMap, tap } from 'rxjs/operators'
 
 export interface InvestmentCreateState {
   errors?: any
   loading?: boolean
-  item?: Investment,
- users?: User[]
+  item?: Investment
+  users?: User[]
   searchTerm?: string
 }
 
@@ -23,24 +22,20 @@ export class AdminInvestmentCreateStore extends ComponentStore<InvestmentCreateS
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
   readonly users$ = this.select((s) => s.users)
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
-this.users$,
-    (errors, loading, item, users ) => ({
+  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, this.users$, (errors, loading, item, users) => ({
     errors,
     loading,
     item,
-users
+    users,
   }))
 
-
-
-  readonly filterUsers = this.effect<string>((filter$) => 
+  readonly filterUsers = this.effect<string>((filter$) =>
     filter$.pipe(
       switchMap((term) =>
         this.data.adminUsers().pipe(
           tapResponse(
             (res: any) => {
-              let users = res.data.items;
+              let users = res.data.items
               return this.patchState({ users: users })
             },
             (errors: any) =>
@@ -50,11 +45,8 @@ users
           ),
         ),
       ),
-    )
+    ),
   )
-
-
-    
 
   readonly createInvestmentEffect = this.effect<AdminCreateInvestmentInput>((input$) =>
     input$.pipe(
@@ -77,5 +69,3 @@ users
     ),
   )
 }
-
-

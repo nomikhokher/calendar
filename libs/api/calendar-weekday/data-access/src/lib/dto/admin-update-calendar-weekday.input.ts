@@ -1,19 +1,16 @@
 import { Field, InputType } from '@nestjs/graphql'
 
-
-
 @InputType()
 export class AdminUpdateCalendarWeekdayInput {
-
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   id?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   abbr?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   label?: string
 
-  @Field({ nullable: true }) 
+  @Field({ nullable: true })
   value?: string
 }

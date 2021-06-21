@@ -1,21 +1,24 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AdminUpdateCalendarInput, WebCoreDataAccessService, Calendar,  } from '@calendar/web/core/data-access'
+import { AdminUpdateCalendarInput, WebCoreDataAccessService, Calendar } from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap, withLatestFrom, pluck } from 'rxjs/operators'
 
 export interface CalendarUpdateState {
-  errors ?: any
+  errors?: any
   loading?: boolean
-  item?: Calendar,
+  item?: Calendar
 
   searchTerm?: string
 }
 
 @Injectable()
 export class AdminCalendarEditStore extends ComponentStore<CalendarUpdateState> {
-  constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly data: WebCoreDataAccessService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     super({ loading: false })
 
     this.loadCalendarEffect(route.params.pipe(pluck('calendarId')))
@@ -25,21 +28,19 @@ export class AdminCalendarEditStore extends ComponentStore<CalendarUpdateState> 
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
 
-  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, 
+  readonly vm$ = this.select(
+    this.errors$,
+    this.loading$,
+    this.item$,
 
-    (errors, loading, item,  ) => ({
-    errors,
-    loading,
-    item,
+    (errors, loading, item) => ({
+      errors,
+      loading,
+      item,
+    }),
+  )
 
-  }))
-
-
-
-
-    
-
-readonly loadCalendarEffect = this.effect<string>((calendarId$) =>
+  readonly loadCalendarEffect = this.effect<string>((calendarId$) =>
     calendarId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((calendarId) =>
@@ -79,5 +80,3 @@ readonly loadCalendarEffect = this.effect<string>((calendarId$) =>
     ),
   )
 }
-
-
