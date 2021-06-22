@@ -143,5 +143,6 @@ module.exports = {
     '<rootDir>/libs/api/setting/feature',
     '<rootDir>/libs/web/setting/feature',
     '<rootDir>/libs/web/setting/ui',
+    '<rootDir>/libs/web/ui/calendar',
   ],
 }

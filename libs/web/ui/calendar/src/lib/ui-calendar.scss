@@ -1,0 +1,165 @@
+h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b {
+  /* used for event dates/times */
+  margin-right: 3px;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  border-right: 1px solid #d3e2e8;
+}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+}
+
+.fc {
+  /* the calendar root */
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  color: black !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+
+  &:active {
+    border: none !important;
+    outline: none !important;
+  }
+  &:before {
+    border: none !important;
+    outline: none !important;
+  }
+  &:after {
+    border: none !important;
+    outline: none !important;
+  }
+  &:focus {
+    border: none !important;
+    outline: none !important;
+  }
+}
+
+.calender svg.only-show-on-hover {
+  visibility: hidden;
+}
+.calender:hover svg.only-show-on-hover {
+  visibility: visible;
+}
+.personal svg.personal-show-icon {
+  visibility: hidden;
+}
+.personal:hover svg.personal-show-icon {
+  visibility: visible;
+}
+.work svg.work-show-icon {
+  visibility: hidden;
+}
+.work:hover svg.work-show-icon {
+  visibility: visible;
+}
+.appointment svg.appointment-show-icon {
+  visibility: hidden;
+}
+.appointment:hover svg.appointment-show-icon {
+  visibility: visible;
+}
+.setting:hover {
+  background-color: rgb(230, 230, 230);
+  border: none;
+  border-radius: 30px;
+}
+.dots {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+}
+input[type='checkbox'] {
+  border: 2px solid grey;
+  border-radius: 2px;
+  background-color: rgb(202, 202, 202);
+}
+input[type='checkbox']:checked:after {
+  border: 2px solid grey;
+  border-radius: 2px;
+  background-color: rgb(202, 202, 202);
+}
+input[type='checkbox']:focus {
+  border: transparent;
+}
+.backIcon:hover {
+  background-color: rgb(230, 230, 230);
+  border-radius: 50%;
+}
+.upperSetting {
+  border-bottom: 1px solid rgb(230, 230, 230);
+}
+.mat-button-wrapper {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  z-index: 2;
+}
+.mat-icon-button {
+  padding: 0;
+  min-width: 0;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  line-height: 40px;
+  border-radius: 50%;
+}
+
+.mat-icon {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.md-drppicker {
+  width: 500px !important;
+}
+
+.mat-checkbox-label {
+  line-height: inherit;
+  position: relative;
+  top: -3px;
+}
+.fc-scrollgrid-sync-table {
+  background: #f1f5f9 !important;
+}
+.fc-header-toolbar {
+  padding: 10px;
+}

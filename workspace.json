@@ -160,6 +160,174 @@
         }
       }
     },
+    "api-calendar-data-access": {
+      "root": "libs/api/calendar/data-access",
+      "sourceRoot": "libs/api/calendar/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar/data-access"],
+          "options": {
+            "jestConfig": "libs/api/calendar/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-event-data-access": {
+      "root": "libs/api/calendar-event/data-access",
+      "sourceRoot": "libs/api/calendar-event/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-event/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-event/data-access"],
+          "options": {
+            "jestConfig": "libs/api/calendar-event/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-event-exception-data-access": {
+      "root": "libs/api/calendar-event-exception/data-access",
+      "sourceRoot": "libs/api/calendar-event-exception/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-event-exception/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-event-exception/data-access"],
+          "options": {
+            "jestConfig": "libs/api/calendar-event-exception/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-event-exception-feature": {
+      "root": "libs/api/calendar-event-exception/feature",
+      "sourceRoot": "libs/api/calendar-event-exception/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-event-exception/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-event-exception/feature"],
+          "options": {
+            "jestConfig": "libs/api/calendar-event-exception/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-event-feature": {
+      "root": "libs/api/calendar-event/feature",
+      "sourceRoot": "libs/api/calendar-event/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-event/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-event/feature"],
+          "options": {
+            "jestConfig": "libs/api/calendar-event/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-feature": {
+      "root": "libs/api/calendar/feature",
+      "sourceRoot": "libs/api/calendar/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar/feature"],
+          "options": {
+            "jestConfig": "libs/api/calendar/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-weekday-data-access": {
+      "root": "libs/api/calendar-weekday/data-access",
+      "sourceRoot": "libs/api/calendar-weekday/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-weekday/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-weekday/data-access"],
+          "options": {
+            "jestConfig": "libs/api/calendar-weekday/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-calendar-weekday-feature": {
+      "root": "libs/api/calendar-weekday/feature",
+      "sourceRoot": "libs/api/calendar-weekday/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/calendar-weekday/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/calendar-weekday/feature"],
+          "options": {
+            "jestConfig": "libs/api/calendar-weekday/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "api-core-data-access": {
       "root": "libs/api/core/data-access",
       "sourceRoot": "libs/api/core/data-access/src",
@@ -241,6 +409,258 @@
             "linter": "eslint",
             "tsConfig": ["apps/api-e2e/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!apps/api-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "api-investment-data-access": {
+      "root": "libs/api/investment/data-access",
+      "sourceRoot": "libs/api/investment/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/investment/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/investment/data-access"],
+          "options": {
+            "jestConfig": "libs/api/investment/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-investment-feature": {
+      "root": "libs/api/investment/feature",
+      "sourceRoot": "libs/api/investment/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/investment/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/investment/feature"],
+          "options": {
+            "jestConfig": "libs/api/investment/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-setting-data-access": {
+      "root": "libs/api/setting/data-access",
+      "sourceRoot": "libs/api/setting/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/setting/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/setting/data-access"],
+          "options": {
+            "jestConfig": "libs/api/setting/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-setting-feature": {
+      "root": "libs/api/setting/feature",
+      "sourceRoot": "libs/api/setting/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/setting/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/setting/feature"],
+          "options": {
+            "jestConfig": "libs/api/setting/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-settings-data-access": {
+      "root": "libs/api/settings/data-access",
+      "sourceRoot": "libs/api/settings/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/settings/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/settings/data-access"],
+          "options": {
+            "jestConfig": "libs/api/settings/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-settings-feature": {
+      "root": "libs/api/settings/feature",
+      "sourceRoot": "libs/api/settings/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/settings/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/settings/feature"],
+          "options": {
+            "jestConfig": "libs/api/settings/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-transaction-data-access": {
+      "root": "libs/api/transaction/data-access",
+      "sourceRoot": "libs/api/transaction/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/transaction/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/transaction/data-access"],
+          "options": {
+            "jestConfig": "libs/api/transaction/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-transaction-feature": {
+      "root": "libs/api/transaction/feature",
+      "sourceRoot": "libs/api/transaction/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/transaction/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/transaction/feature"],
+          "options": {
+            "jestConfig": "libs/api/transaction/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-transactions-data-access": {
+      "root": "libs/api/transactions/data-access",
+      "sourceRoot": "libs/api/transactions/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/transactions/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/transactions/data-access"],
+          "options": {
+            "jestConfig": "libs/api/transactions/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-transactions-feature": {
+      "root": "libs/api/transactions/feature",
+      "sourceRoot": "libs/api/transactions/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/transactions/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/transactions/feature"],
+          "options": {
+            "jestConfig": "libs/api/transactions/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-user-calendar-data-access": {
+      "root": "libs/api/user-calendar/data-access",
+      "sourceRoot": "libs/api/user-calendar/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/user-calendar/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/user-calendar/data-access"],
+          "options": {
+            "jestConfig": "libs/api/user-calendar/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-user-calendar-feature": {
+      "root": "libs/api/user-calendar/feature",
+      "sourceRoot": "libs/api/user-calendar/feature/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/user-calendar/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/user-calendar/feature"],
+          "options": {
+            "jestConfig": "libs/api/user-calendar/feature/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
@@ -1236,6 +1656,197 @@
         }
       }
     },
+    "web-calendar-event-exception-feature": {
+      "projectType": "library",
+      "root": "libs/web/calendar-event-exception/feature",
+      "sourceRoot": "libs/web/calendar-event-exception/feature/src",
+      "prefix": "calendar-event-exception",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/calendar-event-exception/feature/src/**/*.ts",
+              "libs/web/calendar-event-exception/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-event-exception/feature"],
+          "options": {
+            "jestConfig": "libs/web/calendar-event-exception/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-event-exception-ui": {
+      "projectType": "library",
+      "root": "libs/web/calendar-event-exception/ui",
+      "sourceRoot": "libs/web/calendar-event-exception/ui/src",
+      "prefix": "calendar-event-exception",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/calendar-event-exception/ui/src/**/*.ts",
+              "libs/web/calendar-event-exception/ui/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-event-exception/ui"],
+          "options": {
+            "jestConfig": "libs/web/calendar-event-exception/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-event-feature": {
+      "projectType": "library",
+      "root": "libs/web/calendar-event/feature",
+      "sourceRoot": "libs/web/calendar-event/feature/src",
+      "prefix": "calendar-event",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/calendar-event/feature/src/**/*.ts",
+              "libs/web/calendar-event/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-event/feature"],
+          "options": {
+            "jestConfig": "libs/web/calendar-event/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-event-ui": {
+      "projectType": "library",
+      "root": "libs/web/calendar-event/ui",
+      "sourceRoot": "libs/web/calendar-event/ui/src",
+      "prefix": "calendar-event",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/calendar-event/ui/src/**/*.ts", "libs/web/calendar-event/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-event/ui"],
+          "options": {
+            "jestConfig": "libs/web/calendar-event/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-feature": {
+      "projectType": "library",
+      "root": "libs/web/calendar/feature",
+      "sourceRoot": "libs/web/calendar/feature/src",
+      "prefix": "calendar",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/calendar/feature/src/**/*.ts", "libs/web/calendar/feature/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar/feature"],
+          "options": {
+            "jestConfig": "libs/web/calendar/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-ui": {
+      "projectType": "library",
+      "root": "libs/web/calendar/ui",
+      "sourceRoot": "libs/web/calendar/ui/src",
+      "prefix": "calendar",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/calendar/ui/src/**/*.ts", "libs/web/calendar/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar/ui"],
+          "options": {
+            "jestConfig": "libs/web/calendar/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-weekday-feature": {
+      "projectType": "library",
+      "root": "libs/web/calendar-weekday/feature",
+      "sourceRoot": "libs/web/calendar-weekday/feature/src",
+      "prefix": "calendar-weekday",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/calendar-weekday/feature/src/**/*.ts",
+              "libs/web/calendar-weekday/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-weekday/feature"],
+          "options": {
+            "jestConfig": "libs/web/calendar-weekday/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-calendar-weekday-ui": {
+      "projectType": "library",
+      "root": "libs/web/calendar-weekday/ui",
+      "sourceRoot": "libs/web/calendar-weekday/ui/src",
+      "prefix": "calendar-weekday",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/calendar-weekday/ui/src/**/*.ts",
+              "libs/web/calendar-weekday/ui/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/calendar-weekday/ui"],
+          "options": {
+            "jestConfig": "libs/web/calendar-weekday/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "web-core-data-access": {
       "projectType": "library",
       "root": "libs/web/core/data-access",
@@ -1328,6 +1939,50 @@
         }
       }
     },
+    "web-investment-feature": {
+      "projectType": "library",
+      "root": "libs/web/investment/feature",
+      "sourceRoot": "libs/web/investment/feature/src",
+      "prefix": "investment",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/investment/feature/src/**/*.ts", "libs/web/investment/feature/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/investment/feature"],
+          "options": {
+            "jestConfig": "libs/web/investment/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-investment-ui": {
+      "projectType": "library",
+      "root": "libs/web/investment/ui",
+      "sourceRoot": "libs/web/investment/ui/src",
+      "prefix": "investment",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/investment/ui/src/**/*.ts", "libs/web/investment/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/investment/ui"],
+          "options": {
+            "jestConfig": "libs/web/investment/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "web-layout": {
       "projectType": "library",
       "root": "libs/web/layout",
@@ -1345,6 +2000,94 @@
           "outputs": ["coverage/libs/web/layout"],
           "options": {
             "jestConfig": "libs/web/layout/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-setting-feature": {
+      "projectType": "library",
+      "root": "libs/web/setting/feature",
+      "sourceRoot": "libs/web/setting/feature/src",
+      "prefix": "setting",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/setting/feature/src/**/*.ts", "libs/web/setting/feature/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/setting/feature"],
+          "options": {
+            "jestConfig": "libs/web/setting/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-setting-ui": {
+      "projectType": "library",
+      "root": "libs/web/setting/ui",
+      "sourceRoot": "libs/web/setting/ui/src",
+      "prefix": "setting",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/setting/ui/src/**/*.ts", "libs/web/setting/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/setting/ui"],
+          "options": {
+            "jestConfig": "libs/web/setting/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-settings-feature": {
+      "projectType": "library",
+      "root": "libs/web/settings/feature",
+      "sourceRoot": "libs/web/settings/feature/src",
+      "prefix": "settings",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/settings/feature/src/**/*.ts", "libs/web/settings/feature/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/settings/feature"],
+          "options": {
+            "jestConfig": "libs/web/settings/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-settings-ui": {
+      "projectType": "library",
+      "root": "libs/web/settings/ui",
+      "sourceRoot": "libs/web/settings/ui/src",
+      "prefix": "settings",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/settings/ui/src/**/*.ts", "libs/web/settings/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/settings/ui"],
+          "options": {
+            "jestConfig": "libs/web/settings/ui/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -1379,6 +2122,100 @@
       "prefix": "style",
       "targets": {}
     },
+    "web-transaction-feature": {
+      "projectType": "library",
+      "root": "libs/web/transaction/feature",
+      "sourceRoot": "libs/web/transaction/feature/src",
+      "prefix": "transaction",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/transaction/feature/src/**/*.ts",
+              "libs/web/transaction/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/transaction/feature"],
+          "options": {
+            "jestConfig": "libs/web/transaction/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-transaction-ui": {
+      "projectType": "library",
+      "root": "libs/web/transaction/ui",
+      "sourceRoot": "libs/web/transaction/ui/src",
+      "prefix": "transaction",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/transaction/ui/src/**/*.ts", "libs/web/transaction/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/transaction/ui"],
+          "options": {
+            "jestConfig": "libs/web/transaction/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-transactions-feature": {
+      "projectType": "library",
+      "root": "libs/web/transactions/feature",
+      "sourceRoot": "libs/web/transactions/feature/src",
+      "prefix": "transactions",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/transactions/feature/src/**/*.ts",
+              "libs/web/transactions/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/transactions/feature"],
+          "options": {
+            "jestConfig": "libs/web/transactions/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-transactions-ui": {
+      "projectType": "library",
+      "root": "libs/web/transactions/ui",
+      "sourceRoot": "libs/web/transactions/ui/src",
+      "prefix": "transactions",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/transactions/ui/src/**/*.ts", "libs/web/transactions/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/transactions/ui"],
+          "options": {
+            "jestConfig": "libs/web/transactions/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "web-ui-button": {
       "projectType": "library",
       "root": "libs/web/ui/button",
@@ -1396,6 +2233,28 @@
           "outputs": ["coverage/libs/web/ui/button"],
           "options": {
             "jestConfig": "libs/web/ui/button/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-ui-calendar": {
+      "projectType": "library",
+      "root": "libs/web/ui/calendar",
+      "sourceRoot": "libs/web/ui/calendar/src",
+      "prefix": "ui",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/ui/calendar/src/**/*.ts", "libs/web/ui/calendar/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/ui/calendar"],
+          "options": {
+            "jestConfig": "libs/web/ui/calendar/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -1577,757 +2436,6 @@
         }
       }
     },
-    "api-investment-data-access": {
-      "root": "libs/api/investment/data-access",
-      "sourceRoot": "libs/api/investment/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/investment/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/investment/data-access"],
-          "options": {
-            "jestConfig": "libs/api/investment/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-investment-feature": {
-      "root": "libs/api/investment/feature",
-      "sourceRoot": "libs/api/investment/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/investment/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/investment/feature"],
-          "options": {
-            "jestConfig": "libs/api/investment/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-transactions-data-access": {
-      "root": "libs/api/transactions/data-access",
-      "sourceRoot": "libs/api/transactions/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/transactions/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/transactions/data-access"],
-          "options": {
-            "jestConfig": "libs/api/transactions/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-transactions-feature": {
-      "root": "libs/api/transactions/feature",
-      "sourceRoot": "libs/api/transactions/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/transactions/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/transactions/feature"],
-          "options": {
-            "jestConfig": "libs/api/transactions/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-investment-feature": {
-      "projectType": "library",
-      "root": "libs/web/investment/feature",
-      "sourceRoot": "libs/web/investment/feature/src",
-      "prefix": "investment",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/investment/feature/src/**/*.ts", "libs/web/investment/feature/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/investment/feature"],
-          "options": {
-            "jestConfig": "libs/web/investment/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-investment-ui": {
-      "projectType": "library",
-      "root": "libs/web/investment/ui",
-      "sourceRoot": "libs/web/investment/ui/src",
-      "prefix": "investment",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/investment/ui/src/**/*.ts", "libs/web/investment/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/investment/ui"],
-          "options": {
-            "jestConfig": "libs/web/investment/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-transactions-feature": {
-      "projectType": "library",
-      "root": "libs/web/transactions/feature",
-      "sourceRoot": "libs/web/transactions/feature/src",
-      "prefix": "transactions",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/transactions/feature/src/**/*.ts",
-              "libs/web/transactions/feature/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/transactions/feature"],
-          "options": {
-            "jestConfig": "libs/web/transactions/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-transactions-ui": {
-      "projectType": "library",
-      "root": "libs/web/transactions/ui",
-      "sourceRoot": "libs/web/transactions/ui/src",
-      "prefix": "transactions",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/transactions/ui/src/**/*.ts", "libs/web/transactions/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/transactions/ui"],
-          "options": {
-            "jestConfig": "libs/web/transactions/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-transaction-data-access": {
-      "root": "libs/api/transaction/data-access",
-      "sourceRoot": "libs/api/transaction/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/transaction/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/transaction/data-access"],
-          "options": {
-            "jestConfig": "libs/api/transaction/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-transaction-feature": {
-      "root": "libs/api/transaction/feature",
-      "sourceRoot": "libs/api/transaction/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/transaction/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/transaction/feature"],
-          "options": {
-            "jestConfig": "libs/api/transaction/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-transaction-feature": {
-      "projectType": "library",
-      "root": "libs/web/transaction/feature",
-      "sourceRoot": "libs/web/transaction/feature/src",
-      "prefix": "transaction",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/transaction/feature/src/**/*.ts",
-              "libs/web/transaction/feature/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/transaction/feature"],
-          "options": {
-            "jestConfig": "libs/web/transaction/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-transaction-ui": {
-      "projectType": "library",
-      "root": "libs/web/transaction/ui",
-      "sourceRoot": "libs/web/transaction/ui/src",
-      "prefix": "transaction",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/transaction/ui/src/**/*.ts", "libs/web/transaction/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/transaction/ui"],
-          "options": {
-            "jestConfig": "libs/web/transaction/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-data-access": {
-      "root": "libs/api/calendar/data-access",
-      "sourceRoot": "libs/api/calendar/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar/data-access"],
-          "options": {
-            "jestConfig": "libs/api/calendar/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-feature": {
-      "root": "libs/api/calendar/feature",
-      "sourceRoot": "libs/api/calendar/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar/feature"],
-          "options": {
-            "jestConfig": "libs/api/calendar/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-event-data-access": {
-      "root": "libs/api/calendar-event/data-access",
-      "sourceRoot": "libs/api/calendar-event/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-event/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-event/data-access"],
-          "options": {
-            "jestConfig": "libs/api/calendar-event/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-event-feature": {
-      "root": "libs/api/calendar-event/feature",
-      "sourceRoot": "libs/api/calendar-event/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-event/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-event/feature"],
-          "options": {
-            "jestConfig": "libs/api/calendar-event/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-event-exception-data-access": {
-      "root": "libs/api/calendar-event-exception/data-access",
-      "sourceRoot": "libs/api/calendar-event-exception/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-event-exception/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-event-exception/data-access"],
-          "options": {
-            "jestConfig": "libs/api/calendar-event-exception/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-event-exception-feature": {
-      "root": "libs/api/calendar-event-exception/feature",
-      "sourceRoot": "libs/api/calendar-event-exception/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-event-exception/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-event-exception/feature"],
-          "options": {
-            "jestConfig": "libs/api/calendar-event-exception/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-weekday-data-access": {
-      "root": "libs/api/calendar-weekday/data-access",
-      "sourceRoot": "libs/api/calendar-weekday/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-weekday/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-weekday/data-access"],
-          "options": {
-            "jestConfig": "libs/api/calendar-weekday/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-calendar-weekday-feature": {
-      "root": "libs/api/calendar-weekday/feature",
-      "sourceRoot": "libs/api/calendar-weekday/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/calendar-weekday/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/calendar-weekday/feature"],
-          "options": {
-            "jestConfig": "libs/api/calendar-weekday/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-settings-data-access": {
-      "root": "libs/api/settings/data-access",
-      "sourceRoot": "libs/api/settings/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/settings/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/settings/data-access"],
-          "options": {
-            "jestConfig": "libs/api/settings/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-settings-feature": {
-      "root": "libs/api/settings/feature",
-      "sourceRoot": "libs/api/settings/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/settings/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/settings/feature"],
-          "options": {
-            "jestConfig": "libs/api/settings/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-user-calendar-data-access": {
-      "root": "libs/api/user-calendar/data-access",
-      "sourceRoot": "libs/api/user-calendar/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/user-calendar/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/user-calendar/data-access"],
-          "options": {
-            "jestConfig": "libs/api/user-calendar/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-user-calendar-feature": {
-      "root": "libs/api/user-calendar/feature",
-      "sourceRoot": "libs/api/user-calendar/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/user-calendar/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/user-calendar/feature"],
-          "options": {
-            "jestConfig": "libs/api/user-calendar/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-feature": {
-      "projectType": "library",
-      "root": "libs/web/calendar/feature",
-      "sourceRoot": "libs/web/calendar/feature/src",
-      "prefix": "calendar",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/calendar/feature/src/**/*.ts", "libs/web/calendar/feature/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar/feature"],
-          "options": {
-            "jestConfig": "libs/web/calendar/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-ui": {
-      "projectType": "library",
-      "root": "libs/web/calendar/ui",
-      "sourceRoot": "libs/web/calendar/ui/src",
-      "prefix": "calendar",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/calendar/ui/src/**/*.ts", "libs/web/calendar/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar/ui"],
-          "options": {
-            "jestConfig": "libs/web/calendar/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-event-feature": {
-      "projectType": "library",
-      "root": "libs/web/calendar-event/feature",
-      "sourceRoot": "libs/web/calendar-event/feature/src",
-      "prefix": "calendar-event",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/calendar-event/feature/src/**/*.ts",
-              "libs/web/calendar-event/feature/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-event/feature"],
-          "options": {
-            "jestConfig": "libs/web/calendar-event/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-event-ui": {
-      "projectType": "library",
-      "root": "libs/web/calendar-event/ui",
-      "sourceRoot": "libs/web/calendar-event/ui/src",
-      "prefix": "calendar-event",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/calendar-event/ui/src/**/*.ts", "libs/web/calendar-event/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-event/ui"],
-          "options": {
-            "jestConfig": "libs/web/calendar-event/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-event-exception-feature": {
-      "projectType": "library",
-      "root": "libs/web/calendar-event-exception/feature",
-      "sourceRoot": "libs/web/calendar-event-exception/feature/src",
-      "prefix": "calendar-event-exception",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/calendar-event-exception/feature/src/**/*.ts",
-              "libs/web/calendar-event-exception/feature/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-event-exception/feature"],
-          "options": {
-            "jestConfig": "libs/web/calendar-event-exception/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-event-exception-ui": {
-      "projectType": "library",
-      "root": "libs/web/calendar-event-exception/ui",
-      "sourceRoot": "libs/web/calendar-event-exception/ui/src",
-      "prefix": "calendar-event-exception",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/calendar-event-exception/ui/src/**/*.ts",
-              "libs/web/calendar-event-exception/ui/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-event-exception/ui"],
-          "options": {
-            "jestConfig": "libs/web/calendar-event-exception/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-weekday-feature": {
-      "projectType": "library",
-      "root": "libs/web/calendar-weekday/feature",
-      "sourceRoot": "libs/web/calendar-weekday/feature/src",
-      "prefix": "calendar-weekday",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/calendar-weekday/feature/src/**/*.ts",
-              "libs/web/calendar-weekday/feature/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-weekday/feature"],
-          "options": {
-            "jestConfig": "libs/web/calendar-weekday/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-calendar-weekday-ui": {
-      "projectType": "library",
-      "root": "libs/web/calendar-weekday/ui",
-      "sourceRoot": "libs/web/calendar-weekday/ui/src",
-      "prefix": "calendar-weekday",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/web/calendar-weekday/ui/src/**/*.ts",
-              "libs/web/calendar-weekday/ui/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/calendar-weekday/ui"],
-          "options": {
-            "jestConfig": "libs/web/calendar-weekday/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-settings-feature": {
-      "projectType": "library",
-      "root": "libs/web/settings/feature",
-      "sourceRoot": "libs/web/settings/feature/src",
-      "prefix": "settings",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/settings/feature/src/**/*.ts", "libs/web/settings/feature/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/settings/feature"],
-          "options": {
-            "jestConfig": "libs/web/settings/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-settings-ui": {
-      "projectType": "library",
-      "root": "libs/web/settings/ui",
-      "sourceRoot": "libs/web/settings/ui/src",
-      "prefix": "settings",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/settings/ui/src/**/*.ts", "libs/web/settings/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/settings/ui"],
-          "options": {
-            "jestConfig": "libs/web/settings/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "web-user-calendar-feature": {
       "projectType": "library",
       "root": "libs/web/user-calendar/feature",
@@ -2370,92 +2478,6 @@
           "outputs": ["coverage/libs/web/user-calendar/ui"],
           "options": {
             "jestConfig": "libs/web/user-calendar/ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-setting-data-access": {
-      "root": "libs/api/setting/data-access",
-      "sourceRoot": "libs/api/setting/data-access/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/setting/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/setting/data-access"],
-          "options": {
-            "jestConfig": "libs/api/setting/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-setting-feature": {
-      "root": "libs/api/setting/feature",
-      "sourceRoot": "libs/api/setting/feature/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/setting/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/setting/feature"],
-          "options": {
-            "jestConfig": "libs/api/setting/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-setting-feature": {
-      "projectType": "library",
-      "root": "libs/web/setting/feature",
-      "sourceRoot": "libs/web/setting/feature/src",
-      "prefix": "setting",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/setting/feature/src/**/*.ts", "libs/web/setting/feature/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/setting/feature"],
-          "options": {
-            "jestConfig": "libs/web/setting/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "web-setting-ui": {
-      "projectType": "library",
-      "root": "libs/web/setting/ui",
-      "sourceRoot": "libs/web/setting/ui/src",
-      "prefix": "setting",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/web/setting/ui/src/**/*.ts", "libs/web/setting/ui/src/**/*.html"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/web/setting/ui"],
-          "options": {
-            "jestConfig": "libs/web/setting/ui/jest.config.js",
             "passWithNoTests": true
           }
         }
