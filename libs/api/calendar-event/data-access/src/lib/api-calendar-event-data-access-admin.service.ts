@@ -46,6 +46,8 @@ export class ApiCalendarEventDataAccessAdminService {
         title: input.title,
         description: input.description,
         allDay: input.allDay,
+        start: input.start,
+        end: input.end,
         recurrence: input.recurrence,
       },
     })
@@ -62,6 +64,8 @@ export class ApiCalendarEventDataAccessAdminService {
         title: input.title,
         description: input.description,
         allDay: input.allDay,
+        start: input.start,
+        end: input.end,
         recurrence: input.recurrence,
       },
     })

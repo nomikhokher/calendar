@@ -15,7 +15,13 @@ import { clone, cloneDeep, isEqual, omit } from 'lodash-es'
 import { Calendar } from './calendar.types'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import * as moment from 'moment'
-import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
+import {
+  AdminCreateCalendarEventInput,
+  AdminCreateCalendarInput,
+  AdminUpdateCalendarEventInput,
+  AdminUpdateCalendarInput,
+} from '@calendar/web/core/data-access'
+import { calendarColors } from './calendar-colors'
 
 @Component({
   selector: 'ui-calendar',
@@ -66,6 +72,7 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              (click)="calendarEvent()"
             >
               <path
                 strokeLinecap="round"
@@ -75,11 +82,14 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
               />
             </svg>
           </div>
-          <div class="group flex items-center justify-between mt-2 ng-star-inserted personal" style="">
+          <div
+            class="group flex items-center justify-between mt-2 ng-star-inserted personal"
+            *ngFor="let calendar of calendars"
+          >
             <div class="flex items-center">
-              <input type="checkbox" id="personal" />
-              <span class="dots ml-2 bg-green-500"></span>
-              <label class="ml-2 leading-none" for="personal">Personal</label>
+              <input type="checkbox" [checked]="calendar.visible" (click)="toggleCalendarVisibility(calendar)" />
+              <span class="w-3 h-3 ml-2 rounded-full" [ngClass]="calendar.color && 'bg-' + calendar.color"></span>
+              <span class="ml-2 leading-none">{{ calendar.title }}</span>
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -87,6 +97,7 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              (click)="openEditPanel(calendar)"
             >
               <path
                 strokeLinecap="round"
@@ -96,51 +107,7 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
               />
             </svg>
           </div>
-          <div class="group flex items-center justify-between mt-2 ng-star-inserted work">
-            <div class="flex items-center">
-              <input type="checkbox" id="work" />
-              <span class="dots ml-2 bg-indigo-500"></span>
-              <label class="ml-2 leading-none" for="work">Work</label>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 work-show-icon cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="{2}"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </div>
-          <div
-            class="group flex items-center justify-between mt-2 ng-star-inserted appointment cursor-pointer"
-            style=""
-          >
-            <div class="flex items-center">
-              <input type="checkbox" id="appoitment" />
-              <span class="dots ml-2 bg-pink-500"></span>
-              <label class="ml-2 leading-none" for="appoitment">Appointment</label>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 appointment-show-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="{2}"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </div>
+
           <div class="-mx-4 mt-auto setting" (click)="onSetting()">
             <a class="flex items-center w-full py-3 px-4 rounded-full hover:bg-hover" href="javascript:void(0)">
               <svg
@@ -393,12 +360,17 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
                           [ngClass]="getCalendar(eventForm.get('calendarId').value)?.color"
                         ></span>
                         <span class="ml-3">{{ getCalendar(eventForm.get('calendarId').value)?.title }}</span>
-                        <option *ngFor="let calendar of calendars" [value]="calendar.id">
-                          <div class="inline-flex items-center">
-                            <span class="w-3 h-3 rounded-full" [ngClass]="calendar.color"></span>
-                            <span class="ml-3">{{ calendar.title }}</span>
-                          </div>
-                        </option>
+                        <optgroup *ngFor="let calendar of calendars">
+                          <option [value]="calendar.id">
+                            <div class="inline-flex items-center">
+                              <span
+                                class="w-3 h-3 ml-2 rounded-full"
+                                [style]="'background-color:' + calendar.color + ';'"
+                              ></span>
+                              <span class="ml-3">{{ calendar.title }}</span>
+                            </div>
+                          </option>
+                        </optgroup>
                       </select>
                     </div>
                   </div>
@@ -608,15 +580,156 @@ import { AdminCreateCalendarEventInput } from '@calendar/web/core/data-access'
         </div>
       </div>
     </div>
+
+    <!-- Modal calendar -->
+    <div
+      class="fixed z-10 overflow-y-auto calendar-modal"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <ng-container *ngIf="calendarMode === 'add' || calendarMode === 'edit'">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- This element is to trick the browser into centering the modal contents. -->
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+          <div
+            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          >
+            <div class="bg-white text-black mx-auto p-2">
+              <ng-container *ngIf="calendarMode === 'add'">
+                <p class="text-2xl font-semibold tracking-tight">Add calendar</p>
+              </ng-container>
+              <ng-container *ngIf="calendarMode === 'edit'">
+                <p class="text-2xl font-semibold tracking-tight">Edit calendar</p></ng-container
+              >
+            </div>
+            <form [formGroup]="calendarForm">
+              <div class="bg-white mx-auto p-2">
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  class="w-full text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  [placeholder]="'Calendar title'"
+                  [formControlName]="'title'"
+                />
+              </div>
+
+              <div class="bg-white mx-auto p-2">
+                <div>
+                  <div>
+                    <div class="flex flex-row relative">
+                      <input
+                        id="color-picker"
+                        class="border border-gray-400 p-2 w-full text-base focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm rounded-md "
+                        [(ngModel)]="currentColor"
+                        [formControlName]="'color'"
+                      />
+                      <div
+                        (click)="isOpen = !isOpen"
+                        class="cursor-pointer rounded-full ml-3 my-auto h-10 w-10 flex"
+                        [ngClass]="currentColor && 'bg-' + currentColor"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          [ngClass]="iconColor"
+                          class="h-6 w-6 mx-auto my-auto"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        *ngIf="isOpen"
+                        class="border border-gray-300 origin-top-right absolute right-0 top-full mt-2 rounded-md shadow-lg"
+                      >
+                        <div class="rounded-md bg-white shadow-xs p-2">
+                          <div class="flex">
+                            <ng-container *ngFor="let color of colors">
+                              <div class="">
+                                <ng-container *ngFor="let variant of variants">
+                                  <div
+                                    (click)="selectColor(color, variant)"
+                                    class="cursor-pointer w-6 h-6 rounded-full mx-1 my-1"
+                                    [ngClass]="color && 'bg-' + color + '-' + variant"
+                                  ></div>
+                                </ng-container>
+                              </div>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end mt-2">
+                <button
+                  type="button"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  (click)="closeEditPanel()"
+                >
+                  Cancel
+                </button>
+                <button
+                  *ngIf="calendarMode === 'edit'"
+                  type="button"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  (click)="deleteCalendar(calendarForm.get('id').value)"
+                >
+                  Delete
+                </button>
+                <button
+                  *ngIf="calendarMode === 'edit'"
+                  type="button"
+                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  [color]="'primary'"
+                  (click)="saveCalendar()"
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  *ngIf="calendarMode === 'add'"
+                  [color]="'primary'"
+                  (click)="saveCalendar()"
+                >
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-container>
+    </div>
   `,
 })
 export class WebUiCalendarComponent {
   @ViewChild('fullCalendar') fullCalendar: FullCalendarComponent
-  @Input() fetchEvent: any
+  @Input() fetchEvent?: any
+  @Input() calendars?: any
   @Output() addEventInServserSide = new EventEmitter<any>()
+  @Output() removeEventInServserSide = new EventEmitter<any>()
+  @Output() updateEventInServserSide = new EventEmitter<any>()
+  @Output() addCalendarInServserSide = new EventEmitter<any>()
+  @Output() updateCalendarInServserSide = new EventEmitter<any>()
+  @Output() deleteCalendarInServserSide = new EventEmitter<any>()
 
-  calendars: Calendar[] = calendars
+  calendar: Calendar | null
+  calendarMode: string
+  calendarColors: any = calendarColors
   eventForm: FormGroup
+  calendarForm: FormGroup
   panelMode: string
   event: any
   calendarOptions: CalendarOptions
@@ -644,6 +757,12 @@ export class WebUiCalendarComponent {
     lockStartDate: false,
     closeOnAutoApply: true,
   }
+  calendarVisible = true
+  colors: any[] = ['gray', 'red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink']
+  variants: any[] = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+  currentColor: string = ''
+  iconColor: string = ''
+  isOpen: boolean = false
 
   //selected: any;
   alwaysShowCalendars: boolean
@@ -695,6 +814,14 @@ export class WebUiCalendarComponent {
     }
 
     // Create the event form
+    this.calendarForm = this._formBuilder.group({
+      id: [''],
+      title: [''],
+      color: [''],
+      visible: [true],
+    })
+
+    // Create the calendar form
     this.eventForm = this._formBuilder.group({
       id: [''],
       calendarId: [''],
@@ -717,20 +844,26 @@ export class WebUiCalendarComponent {
     } else {
       localStorage.setItem('panelMode', (this.panelMode = 'add'))
     }
+
+    if (localStorage.getItem('calendarMode')) {
+      this.calendarMode = localStorage.getItem('calendarMode')
+    } else {
+      localStorage.setItem('calendarMode', (this.calendarMode = 'add'))
+    }
+
+    this.initColor()
   }
 
   getCalendar(id): Calendar {
     if (!id) {
       return
     }
-    return this.calendars.find((calendar) => calendar.id === id)
+    return this.fetchEvent.find((calendar) => calendar.id === id)
   }
 
   ngAfterViewInit() {
     this.fullCalendarApi = this.fullCalendar.getApi()
   }
-
-  calendarVisible = true
 
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible
@@ -808,7 +941,7 @@ export class WebUiCalendarComponent {
     // Modify the event before sending it to the server
     newEvent = omit(
       newEvent,
-      ['range', 'calendarId', 'duration', 'id'],
+      ['range', 'duration', 'id'],
       (newEvent.start = start),
       (newEvent.end = end),
       (newEvent.id = createEventId()),
@@ -838,25 +971,13 @@ export class WebUiCalendarComponent {
     // Modify the event before sending it to the server
     newEvent = omit(
       newEvent,
-      ['range', 'recurringEventId', 'calendarId', 'duration', 'recurrence'],
+      ['range', 'duration', 'calendarId'],
       (newEvent.start = start),
       (newEvent.end = end),
-    )
+    ) as AdminUpdateCalendarEventInput
 
-    this.fetchEvent = this.fetchEvent.map((item) => {
-      if (item.id == newEvent.id) {
-        return {
-          ...item,
-          title: newEvent.title,
-          description: newEvent.description,
-          start: newEvent.start,
-          end: newEvent.end,
-          allDay: newEvent.allDay,
-        }
-      }
-      return item
-    })
-
+    const id = this.clickInfo.event._def.publicId as string
+    this.updateEventInServserSide.emit({ calendarEventId: id, input: newEvent })
     this.apiEvt.removeAllEvents()
     this.apiEvt.addEventSource(this.fetchEvent)
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
@@ -877,6 +998,7 @@ export class WebUiCalendarComponent {
   removeEventHandle() {
     this.apiEvt.unselect()
     this.clickInfo.event.remove()
+    this.removeEventInServserSide.emit(this.clickInfo.event._def.publicId)
     this.removeModal()
   }
 
@@ -907,5 +1029,89 @@ export class WebUiCalendarComponent {
       ' ' +
       date.toLocaleTimeString('en-US')
     )
+  }
+
+  calendarEvent() {
+    localStorage.setItem('panelMode', (this.calendarMode = 'add'))
+    this.elementRef.nativeElement.querySelector('.calendar-modal').classList.add('inset-0')
+  }
+
+  closeEditPanel() {
+    this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+  }
+
+  saveCalendar() {
+    if (this.calendarMode === 'add') {
+      // Get the clone of the calendar form value
+      let newCalendar = clone(this.calendarForm.value)
+
+      // Modify the calendar before sending it to the server
+      newCalendar = omit(newCalendar, ['id']) as AdminCreateCalendarInput
+
+      // Send data server
+      if (newCalendar) {
+        this.addCalendarInServserSide.emit({ input: newCalendar })
+        this.calendarForm.reset()
+        this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+      }
+    } else {
+      // Get the clone of the calendar form value
+      let newCalendar = clone(this.calendarForm.value)
+
+      // Modify the calendar before sending it to the server
+      newCalendar = omit(newCalendar) as AdminUpdateCalendarInput
+
+      const calendarId = newCalendar.id as string
+
+      // Send data server
+      this.updateCalendarInServserSide.emit({ calendarId: calendarId, input: newCalendar })
+      this.calendarForm.reset()
+      this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+    }
+  }
+
+  deleteCalendar(calendarId) {
+    this.deleteCalendarInServserSide.emit({ calendarId: calendarId })
+    this.calendarForm.reset()
+    this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+  }
+
+  toggleCalendarVisibility(calendar: Calendar): void {
+    // Toggle the visibility
+    calendar.visible = !calendar.visible
+
+    console.log(calendar.visible)
+
+    // Update the calendar
+    // this.saveCalendar(calendar);
+  }
+
+  openEditPanel(calendar) {
+    localStorage.setItem('panelMode', (this.calendarMode = 'edit'))
+    this.elementRef.nativeElement.querySelector('.calendar-modal').classList.add('inset-0')
+
+    // Reset the form and fill the calendar
+    this.calendarForm.reset()
+    this.calendarForm.patchValue(calendar)
+  }
+
+  initColor() {
+    this.currentColor = 'red-800'
+    this.setIconWhite()
+  }
+  setIconWhite() {
+    this.iconColor = 'text-white'
+  }
+  setIconBlack() {
+    this.iconColor = 'text-black'
+  }
+
+  selectColor(color, variant) {
+    this.currentColor = color + '-' + variant
+    if (variant < 500) {
+      this.setIconBlack()
+    } else {
+      this.setIconWhite()
+    }
   }
 }
