@@ -1522,7 +1522,7 @@ export type IntercomSubSubscription = { __typename?: 'Subscription' } & {
 
 export type SettingDetailsFragment = { __typename?: 'Setting' } & Pick<
   Setting,
-  'id' | 'createdAt' | 'updatedAt' | 'name'
+  'id' | 'dateFormat' | 'timeFormat' | 'startWeekOn' | 'createdAt' | 'updatedAt' | 'name'
 >
 
 export type AdminSettingsQueryVariables = Exact<{
@@ -1854,6 +1854,9 @@ export const IntercomDetailsFragmentDoc = gql`
 export const SettingDetailsFragmentDoc = gql`
   fragment SettingDetails on Setting {
     id
+    dateFormat
+    timeFormat
+    startWeekOn
     createdAt
     updatedAt
     name

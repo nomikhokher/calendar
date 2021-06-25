@@ -12,7 +12,7 @@ import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, FullCalendarCo
 import { createEventId, calendars } from './event-utils'
 import { Calendar as FullCalendar } from '@fullcalendar/core'
 import { clone, cloneDeep, isEqual, omit } from 'lodash-es'
-import { Calendar } from './calendar.types'
+import { Calendar, CalendarSettings } from './calendar.types'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import * as moment from 'moment'
 import {
@@ -22,6 +22,7 @@ import {
   AdminUpdateCalendarInput,
 } from '@calendar/web/core/data-access'
 import { calendarColors } from './calendar-colors'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 @Component({
   selector: 'ui-calendar',
@@ -29,38 +30,38 @@ import { calendarColors } from './calendar-colors'
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="demo-app border" *ngIf="isCalendar">
-      <!-- <div class="demo-app-sidebar">
-      <div class="demo-app-sidebar-section">
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
+    <div class="demo-app border dark:border-gray-800" *ngIf="isCalendar">
+      <div class="demo-app-sidebar">
+        <div class="demo-app-sidebar-section">
+          <h2>Instructions</h2>
+          <ul>
+            <li>Select dates and you will be prompted to create a new event</li>
+            <li>Drag, drop, and resize events</li>
+            <li>Click an event to delete it</li>
+          </ul>
+        </div>
+        <div class="demo-app-sidebar-section">
+          <label>
+            <input type="checkbox" [checked]="calendarVisible" (change)="handleCalendarToggle()" />
+            toggle whole calendar
+          </label>
+        </div>
+        <div class="demo-app-sidebar-section">
+          <label>
+            <input type="checkbox" [checked]="calendarOptions.weekends" (change)="handleWeekendsToggle()" />
+            toggle weekends
+          </label>
+        </div>
+        <div class="demo-app-sidebar-section">
+          <h2>All Events ({{ currentEvents.length }})</h2>
+          <ul>
+            <li *ngFor="let event of currentEvents">
+              <b>{{ event.startStr }}</b>
+              <i>{{ event.title }}</i>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="demo-app-sidebar-section">
-        <label>
-          <input type="checkbox" [checked]="calendarVisible" (change)="handleCalendarToggle()" />
-          toggle whole calendar
-        </label>
-      </div>
-      <div class="demo-app-sidebar-section">
-        <label>
-          <input type="checkbox" [checked]="calendarOptions.weekends" (change)="handleWeekendsToggle()" />
-          toggle weekends
-        </label>
-      </div>
-      <div class="demo-app-sidebar-section">
-        <h2>All Events ({{ currentEvents.length }})</h2>
-        <ul>
-          <li *ngFor="let event of currentEvents">
-            <b>{{ event.startStr }}</b>
-            <i>{{ event.title }}</i>
-          </li>
-        </ul>
-      </div>
-    </div> -->
       <div class="demo-app-sidebar">
         <div class="flex flex-col  min-h-full p-8">
           <div class="pb-6 text-3xl font-extrabold tracking-tight">Calendar</div>
@@ -88,7 +89,7 @@ import { calendarColors } from './calendar-colors'
           >
             <div class="flex items-center">
               <input type="checkbox" [checked]="calendar.visible" (click)="toggleCalendarVisibility(calendar)" />
-              <span class="w-3 h-3 ml-2 rounded-full" [ngClass]="calendar.color && 'bg-' + calendar.color"></span>
+              <span class="w-3 h-3 ml-2 rounded-full" [style]="'background-color:' + calendar.color"></span>
               <span class="ml-2 leading-none">{{ calendar.title }}</span>
             </div>
             <svg
@@ -108,7 +109,7 @@ import { calendarColors } from './calendar-colors'
             </svg>
           </div>
 
-          <div class="-mx-4 mt-auto setting" (click)="onSetting()">
+          <div class="-mx-4 mt-auto setting dark:hover:text-gray-900" (click)="onSetting()">
             <a class="flex items-center w-full py-3 px-4 rounded-full hover:bg-hover" href="javascript:void(0)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +142,7 @@ import { calendarColors } from './calendar-colors'
     </div>
     <div *ngIf="isSetting">
       <div class="m-4 flex items-center upperSetting">
-        <span class="backIcon p-3 cursor-pointer" (click)="onBack()"
+        <span class="backIcon p-3 cursor-pointer dark:hover:text-gray-900" (click)="onBack()"
           ><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 " viewBox="0 0 20 20" fill="currentColor">
             <path
               fillRule="evenodd"
@@ -153,46 +154,57 @@ import { calendarColors } from './calendar-colors'
       </div>
       <div class="mt-5 ml-4">
         <div class="grid grid-cols-4 ">
-          <form action="">
+          <form [formGroup]="settingsForm">
             <div class="mb-4">
-              <label for="location" class="block text-sm font-medium text-gray-700">Date Format</label>
+              <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Date Format</label
+              >
               <select
                 id="location"
                 name="location"
-                class="mt-1 block w-full pl-3 pr-10 py-4 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                class="mt-1 block w-full pl-3 pr-10 py-4 text-base text-gray-400 hover:text-gray-700 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                [formControlName]="'dateFormat'"
               >
-                <option selected>Aug 20, 2021</option>
-                <option>2/31/2021</option>
-                <option>31/2/2021</option>
-                <option>2021-31-2</option>
+                <option [value]="'ll'">Aug 20, {{ year }}</option>
+                <option [value]="'MMDDYYYY'">12/31/{{ year }}</option>
+                <option [value]="'DDMMYYYY'">31/12/{{ year }}</option>
+                <option [value]="'YYYYMMDD'">{{ year }}-12-31</option>
               </select>
             </div>
             <div class="mb-4">
-              <label for="location" class="block text-sm font-medium text-gray-700">Time Format</label>
+              <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Time Format</label
+              >
               <select
                 id="location"
                 name="location"
-                class="mt-1 block w-full pl-3 pr-10 py-4 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                class="mt-1 block w-full pl-3 pr-10 py-4 text-base text-gray-400 hover:text-gray-700 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                [formControlName]="'timeFormat'"
               >
-                <option selected>1:00 PM</option>
-                <option>13:00</option>
+                <option [value]="'Twelve'">1:00 PM</option>
+                <option [value]="'TwentyFour'">13:00</option>
               </select>
             </div>
             <div class="mb-4">
-              <label for="location" class="block text-sm font-medium text-gray-700">Start week on</label>
+              <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Start week on</label
+              >
               <select
                 id="location"
                 name="location"
-                class="mt-1 block w-full pl-3 pr-10 py-4 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                class="mt-1 block w-full pl-3 pr-10 text-gray-400 hover:text-gray-700 py-4 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                [formControlName]="'startWeekOn'"
               >
-                <option selected>Saturday</option>
-                <option>Sunday</option>
-                <option>Monday</option>
+                <option [value]="'Six'">Saturday</option>
+                <option [value]="'Zero'">Sunday</option>
+                <option [value]="'One'">Monday</option>
               </select>
             </div>
             <div class="text-center">
               <button
                 type="button"
+                (click)="updateSettings()"
+                [disabled]="settingsForm.invalid || settingsForm.pristine"
                 class="items-center px-5 w-full my-4 py-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Save
@@ -206,7 +218,7 @@ import { calendarColors } from './calendar-colors'
 
     <!-- This example requires Tailwind CSS v2.0+ -->
     <!-- Add / Edit mode -->
-    <div class="fixed z-10 overflow-y-auto modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed z-10 overflow-y-auto modal">
       <ng-container *ngIf="panelMode === 'add' || panelMode === 'edit'">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -217,7 +229,7 @@ import { calendarColors } from './calendar-colors'
             <div>
               <form
                 novalidate=""
-                class="flex flex-col w-full p-6 pt-8 sm:pt-10 sm:pr-8 ng-untouched ng-pristine ng-valid ng-star-inserted"
+                class="flex flex-col w-full p-6 pt-8 sm:pt-10 sm:pr-8 ng-untouched ng-pristine ng-valid ng-star-inserted text-gray-900"
                 [formGroup]="eventForm"
               >
                 <input type="hidden" *ngIf="panelMode === 'edit'" name="id" id="id" [formControlName]="'id'" />
@@ -299,15 +311,22 @@ import { calendarColors } from './calendar-colors'
                       firstDayOfNextMonthClass="first-next-day"
                       name="daterange"
                       [formControlName]="'range'"
+                      [timePicker]="timePicker"
+                      [timePickerSeconds]="false"
+                      [timePickerIncrement]="1"
+                      [timePicker24Hour]="true"
+                      [locale]="{ format: 'DD/MM/YYYY HH:mm:ss', firstDay: 1 }"
                     />
                   </div>
                 </div>
                 <div class="flex justify-items-center items-center pt-5" id="mat-checkbox-5">
                   <label class="flex justify-center" for="mat-checkbox-5-input">
-                    <input #allDay type="checkbox" [formControlName]="'allDay'" />
-                    <span class="flex justify-center pl-3 mat-checkbox-label"
-                      ><span style="display: none;">&nbsp;</span> All day
-                    </span>
+                    <input
+                      type="checkbox"
+                      [formControlName]="'allDay'"
+                      (change)="toggleChecked($event.target.checked)"
+                    />
+                    <span class="flex justify-center pl-3"><span style="display: none;">&nbsp;</span> All day </span>
                   </label>
                 </div>
                 <div class="flex items-center mt-6">
@@ -346,8 +365,9 @@ import { calendarColors } from './calendar-colors'
                       d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                     />
                   </svg>
+
                   <div class="ml-3 w-full">
-                    <div>
+                    <!-- <div>
                       <select
                         id="location"
                         name="location"
@@ -360,18 +380,92 @@ import { calendarColors } from './calendar-colors'
                           [ngClass]="getCalendar(eventForm.get('calendarId').value)?.color"
                         ></span>
                         <span class="ml-3">{{ getCalendar(eventForm.get('calendarId').value)?.title }}</span>
-                        <optgroup *ngFor="let calendar of calendars">
-                          <option [value]="calendar.id">
+                          <option [value]="calendar.id" data-icon={{calendar.color}} *ngFor="let calendar of calendars">
                             <div class="inline-flex items-center">
                               <span
-                                class="w-3 h-3 ml-2 rounded-full"
+                                class="w-3 h-3 ml-2 rounded-full absolute"
                                 [style]="'background-color:' + calendar.color + ';'"
                               ></span>
                               <span class="ml-3">{{ calendar.title }}</span>
                             </div>
                           </option>
-                        </optgroup>
                       </select>
+                    </div>
+                  </div> -->
+
+                    <div class="mt-1 relative">
+                      <button
+                        type="button"
+                        class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        aria-haspopup="listbox"
+                        aria-expanded="true"
+                        aria-labelledby="listbox-label"
+                        (click)="showOption = !showOption"
+                      >
+                        <div class="flex items-center">
+                          <!-- On: "bg-green-400", Off: "bg-gray-200" -->
+                          <span
+                            aria-label="Online"
+                            class="flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                            [style.background]="
+                              this.crurentCalendarSelect?.color ||
+                              getCalendar(eventForm.get('calendarId').value)?.color ||
+                              fetchEvent[0]?.color
+                            "
+                          ></span>
+                          <span class="ml-3 block truncate">{{
+                            this.crurentCalendarSelect?.title ||
+                              getCalendar(eventForm.get('calendarId').value)?.title ||
+                              fetchEvent[0]?.title
+                          }}</span>
+                        </div>
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                          <!-- Heroicon name: solid/selector -->
+                          <svg
+                            class="h-5 w-5 text-gray-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      </button>
+
+                      <ul
+                        class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        tabindex="-1"
+                        role="listbox"
+                        aria-labelledby="listbox-label"
+                        aria-activedescendant="listbox-option-3"
+                        *ngIf="showOption"
+                      >
+                        <li
+                          class="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-600 rounded-full hover:text-white"
+                          id="listbox-option-0"
+                          role="option"
+                          *ngFor="let calendar of calendars"
+                          (click)="selectValue(calendar)"
+                        >
+                          <div class="flex items-center">
+                            <!-- Online: "bg-green-400", Not Online: "bg-gray-200" -->
+                            <span
+                              class="flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                              aria-hidden="true"
+                              [style]="'background-color:' + calendar.color + ';'"
+                            ></span>
+                            <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
+                            <span class="font-normal ml-3 block truncate">
+                              {{ calendar.title }}
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -403,14 +497,14 @@ import { calendarColors } from './calendar-colors'
                   <button
                     type="button"
                     (click)="remoeEventModal()"
-                    class=" bg-white text-black border font-bold py-2 px-4 rounded-full mr-3"
+                    class=" bg-white text-black border font-bold py-2 px-4 rounded-full mr-3 hover:bg-gray-200"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     *ngIf="panelMode === 'add'"
-                    class="bg-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
                     (click)="addEventHandle()"
                   >
                     Add
@@ -418,7 +512,7 @@ import { calendarColors } from './calendar-colors'
                   <button
                     type="button"
                     *ngIf="panelMode === 'edit'"
-                    class="bg-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
                     (click)="updateEventHandle()"
                   >
                     Save
@@ -432,7 +526,7 @@ import { calendarColors } from './calendar-colors'
     </div>
 
     <!-- Remove Date Modal -->
-    <div class="fixed z-10 overflow-y-auto remove-modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed z-10 overflow-y-auto remove-modal">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
@@ -441,7 +535,7 @@ import { calendarColors } from './calendar-colors'
         >
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
-              <div class="p-3 text-center">Are you sure do you want to remove the event?</div>
+              <div class="p-3 text-center text-gray-900">Are you sure do you want to remove the event?</div>
             </div>
           </div>
           <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -465,12 +559,12 @@ import { calendarColors } from './calendar-colors'
     </div>
 
     <!-- Info Modal -->
-    <div class="fixed z-10 overflow-y-auto info-modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed z-10 overflow-y-auto info-modal">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <div
-          class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          class="inline-block align-bottom bg-white text-gray-900 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
         >
           <div>
             <div class="flex-auto p-8 ng-star-inserted">
@@ -491,15 +585,17 @@ import { calendarColors } from './calendar-colors'
                 </svg>
                 <div class="flex flex-auto justify-between ml-6">
                   <div>
-                    <div *ngIf="event?.title" class="text-xl font-semibold tracking-tight leading-none">
-                      {{ event?.title }}
+                    <div *ngIf="event?.event?.title" class="text-xl font-semibold tracking-tight leading-none">
+                      {{ event?.event?.title }}
                     </div>
-                    <div *ngIf="event?.range?.start" class="mt-0.5 text-sm">{{ date_format(event?.range?.start) }}</div>
+                    <div *ngIf="event?.event?.range?.start" class="mt-0.5 text-sm">
+                      {{ date_format(event?.event?.range?.start) }}
+                    </div>
                     <div class="text-secondary"></div>
                   </div>
                   <div class="flex -mt-2 -mr-2 ml-10">
                     <button
-                      class="mat-focus-indicator mat-icon-button mat-button-base ng-star-inserted"
+                      class="mat-focus-indicator mat-icon-button mat-button-base ng-star-inserted hover:text-gray-500"
                       (click)="updateEvent()"
                     >
                       <span class="mat-button-wrapper">
@@ -520,7 +616,7 @@ import { calendarColors } from './calendar-colors'
                       </span>
                     </button>
                     <button
-                      class="mat-focus-indicator mat-icon-button mat-button-base ng-star-inserted"
+                      class="mat-focus-indicator mat-icon-button mat-button-base ng-star-inserted hover:text-gray-500"
                       (click)="removeEvent()"
                     >
                       <span class="mat-button-wrapper">
@@ -543,7 +639,7 @@ import { calendarColors } from './calendar-colors'
                   </div>
                 </div>
               </div>
-              <div class="flex mt-6 ng-star-inserted" *ngIf="event?.description">
+              <div class="flex mt-6 ng-star-inserted" *ngIf="event?.event?.description">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6"
@@ -553,7 +649,7 @@ import { calendarColors } from './calendar-colors'
                 >
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
                 </svg>
-                <div class="flex-auto ml-6">{{ event?.description }}</div>
+                <div class="flex-auto ml-6">{{ event?.event?.description }}</div>
               </div>
               <div class="flex mt-6">
                 <svg
@@ -571,8 +667,8 @@ import { calendarColors } from './calendar-colors'
                   />
                 </svg>
                 <div class="flex flex-auto items-center ml-6">
-                  <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
-                  <div class="ml-3 leading-none">Work</div>
+                  <div class="w-2 h-2 rounded-full" [style.background]="event?.color"></div>
+                  <div class="ml-3 leading-none">{{ event?.title }}</div>
                 </div>
               </div>
             </div>
@@ -604,7 +700,7 @@ import { calendarColors } from './calendar-colors'
                 <p class="text-2xl font-semibold tracking-tight">Edit calendar</p></ng-container
               >
             </div>
-            <form [formGroup]="calendarForm">
+            <form [formGroup]="calendarForm" class="text-gray-900">
               <div class="bg-white mx-auto p-2">
                 <input
                   type="text"
@@ -675,7 +771,7 @@ import { calendarColors } from './calendar-colors'
               <div class="flex justify-end mt-2">
                 <button
                   type="button"
-                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                   (click)="closeEditPanel()"
                 >
                   Cancel
@@ -683,7 +779,7 @@ import { calendarColors } from './calendar-colors'
                 <button
                   *ngIf="calendarMode === 'edit'"
                   type="button"
-                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                   (click)="deleteCalendar(calendarForm.get('id').value)"
                 >
                   Delete
@@ -718,14 +814,17 @@ export class WebUiCalendarComponent {
   @ViewChild('fullCalendar') fullCalendar: FullCalendarComponent
   @Input() fetchEvent?: any
   @Input() calendars?: any
+  @Input() fetchSettings?: any
   @Output() addEventInServserSide = new EventEmitter<any>()
   @Output() removeEventInServserSide = new EventEmitter<any>()
   @Output() updateEventInServserSide = new EventEmitter<any>()
   @Output() addCalendarInServserSide = new EventEmitter<any>()
   @Output() updateCalendarInServserSide = new EventEmitter<any>()
   @Output() deleteCalendarInServserSide = new EventEmitter<any>()
+  @Output() settingsUpdateCalendarInServserSide = new EventEmitter<any>()
 
   calendar: Calendar | null
+  showOption: boolean = false
   calendarMode: string
   calendarColors: any = calendarColors
   eventForm: FormGroup
@@ -759,10 +858,11 @@ export class WebUiCalendarComponent {
   }
   calendarVisible = true
   colors: any[] = ['gray', 'red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink']
-  variants: any[] = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+  variants: any[] = [500]
   currentColor: string = ''
   iconColor: string = ''
   isOpen: boolean = false
+  cloneFetch: any
 
   //selected: any;
   alwaysShowCalendars: boolean
@@ -779,6 +879,8 @@ export class WebUiCalendarComponent {
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'))
   }
+  settingsForm: FormGroup
+  crurentCalendarSelect: Calendar
 
   constructor(private elementRef: ElementRef, private _formBuilder: FormBuilder) {
     this.alwaysShowCalendars = true
@@ -796,7 +898,7 @@ export class WebUiCalendarComponent {
         list: 'Schedule',
       },
       initialView: 'dayGridMonth',
-      events: this.fetchEvent, // alternatively, use the `events` setting to fetch from a feed
+      eventSources: this.fetchEvent, // alternatively, use the `events` setting to fetch from a feed
       weekends: true,
       editable: true,
       selectable: true,
@@ -812,6 +914,14 @@ export class WebUiCalendarComponent {
         eventRemove:
       */
     }
+
+    // Create the event form
+    this.settingsForm = this._formBuilder.group({
+      id: [''],
+      dateFormat: [''],
+      timeFormat: [''],
+      startWeekOn: [''],
+    })
 
     // Create the event form
     this.calendarForm = this._formBuilder.group({
@@ -837,7 +947,7 @@ export class WebUiCalendarComponent {
     })
     setTimeout(function () {
       window.dispatchEvent(new Event('resize'))
-    }, 1)
+    }, 0)
 
     if (localStorage.getItem('panelMode')) {
       this.panelMode = localStorage.getItem('panelMode')
@@ -852,6 +962,9 @@ export class WebUiCalendarComponent {
     }
 
     this.initColor()
+
+    let newSettingsObject = omit(this.fetchSettings[0], ['__typename', 'updatedAt', 'createdAt', 'name'])
+    this.settingsForm.patchValue(newSettingsObject)
   }
 
   getCalendar(id): Calendar {
@@ -875,6 +988,7 @@ export class WebUiCalendarComponent {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
+    this.crurentCalendarSelect = null
     this.elementRef.nativeElement.querySelector('.modal').classList.add('inset-0')
     localStorage.setItem('panelMode', (this.panelMode = 'add'))
     this.calendarApi = selectInfo.view.calendar
@@ -891,14 +1005,16 @@ export class WebUiCalendarComponent {
     // Find the event with the clicked event's id
     const event: any = cloneDeep(this.currentEvents.find((item) => item.id === clickInfo.event.id))
 
-    // Set the event
-    this.event = event
-
     // Set the range on the event
     event.range = {
       start: event.start,
       end: event.end,
     }
+
+    let eventColor = this.getCalendar(event._def.extendedProps.calendarId)
+
+    // Set the event
+    this.event = { event: event, color: eventColor.color, title: eventColor.title }
 
     // Event clone
     let updateEvent = { ...event._def, range: event.range, ...event._def.extendedProps, id: event._def.publicId }
@@ -906,6 +1022,8 @@ export class WebUiCalendarComponent {
     // Reset the form and fill the event
     this.eventForm.reset()
     this.eventForm.patchValue(updateEvent)
+    this.crurentCalendarSelect = null
+    this.timePicker = false
   }
 
   handleEvents(events: EventApi[]) {
@@ -915,10 +1033,15 @@ export class WebUiCalendarComponent {
   public onSetting() {
     this.isCalendar = false
     this.isSetting = true
+    this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.remove-modal').classList.remove('inset-0')
   }
   public onBack() {
     this.isSetting = false
     this.isCalendar = true
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'block'
   }
 
   remoeEventModal() {
@@ -948,10 +1071,11 @@ export class WebUiCalendarComponent {
       (newEvent.isFirstInstance = true),
       (newEvent.recurrence = ''),
       (newEvent.recurringEventId = ''),
+      (newEvent.calendarId = this.crurentCalendarSelect?.id),
     ) as AdminCreateCalendarEventInput
 
     // Send data server
-    if (newEvent) {
+    if (newEvent.calendarId) {
       this.calendarApi.addEvent(newEvent)
       this.addEventInServserSide.emit({ input: newEvent })
       this.eventForm.reset()
@@ -969,12 +1093,23 @@ export class WebUiCalendarComponent {
     let end = new Date(newEvent.range.end).toISOString().replace(/T.*$/, '')
 
     // Modify the event before sending it to the server
-    newEvent = omit(
-      newEvent,
-      ['range', 'duration', 'calendarId'],
-      (newEvent.start = start),
-      (newEvent.end = end),
-    ) as AdminUpdateCalendarEventInput
+
+    if (!this.crurentCalendarSelect?.id) {
+      newEvent = omit(
+        newEvent,
+        ['range', 'duration'],
+        (newEvent.start = start),
+        (newEvent.end = end),
+      ) as AdminUpdateCalendarEventInput
+    } else {
+      newEvent = omit(
+        newEvent,
+        ['range', 'duration'],
+        (newEvent.start = start),
+        (newEvent.end = end),
+        (newEvent.calendarId = this.crurentCalendarSelect?.id),
+      ) as AdminUpdateCalendarEventInput
+    }
 
     const id = this.clickInfo.event._def.publicId as string
     this.updateEventInServserSide.emit({ calendarEventId: id, input: newEvent })
@@ -1080,10 +1215,10 @@ export class WebUiCalendarComponent {
     // Toggle the visibility
     calendar.visible = !calendar.visible
 
-    console.log(calendar.visible)
+    let calendarData = omit(calendar, ['__typename']) as AdminUpdateCalendarInput
 
-    // Update the calendar
-    // this.saveCalendar(calendar);
+    // Send data server
+    this.updateCalendarInServserSide.emit({ calendarId: calendarData.id, input: calendarData })
   }
 
   openEditPanel(calendar) {
@@ -1096,22 +1231,55 @@ export class WebUiCalendarComponent {
   }
 
   initColor() {
-    this.currentColor = 'red-800'
+    this.currentColor = 'indigo'
     this.setIconWhite()
   }
   setIconWhite() {
-    this.iconColor = 'text-white'
+    this.iconColor = 'text-gray'
   }
   setIconBlack() {
     this.iconColor = 'text-black'
   }
 
   selectColor(color, variant) {
-    this.currentColor = color + '-' + variant
-    if (variant < 500) {
-      this.setIconBlack()
+    this.currentColor = color
+    this.setIconWhite()
+    this.isOpen = !this.isOpen
+  }
+
+  get year(): string {
+    return new Date().getFullYear().toString()
+  }
+
+  updateSettings(): void {
+    // Get the settings
+    const settings = this.settingsForm.value
+
+    // Update the settings on the server
+    this.settingsUpdateCalendarInServserSide.emit({ settingId: settings.id, input: settings })
+
+    // Reset the form with the updated settings
+    this.settingsForm.reset()
+  }
+
+  selectValue(calendar) {
+    if (this.panelMode === 'edit') {
+      this.getCalendar('')
+      this.crurentCalendarSelect = this.getCalendar(calendar.id)
+      this.showOption = false
     } else {
-      this.setIconWhite()
+      this.crurentCalendarSelect = this.getCalendar(calendar.id)
+      this.showOption = false
     }
+  }
+
+  public timePicker: boolean = true
+  public toggleChecked(value) {
+    value ? (this.timePicker = false) : (this.timePicker = true)
+  }
+
+  ngOnDestroy() {
+    localStorage.removeItem('panelMode')
+    localStorage.removeItem('calendarMode')
   }
 }

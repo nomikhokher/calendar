@@ -14,7 +14,7 @@ li {
 }
 
 b {
-  /* used for event dates/times */
+  // / used for event dates/times /
   margin-right: 3px;
 }
 
@@ -28,10 +28,10 @@ b {
 .demo-app-sidebar {
   width: 300px;
   line-height: 1.5;
-  border-right: 1px solid #d3e2e8;
 }
 
 .demo-app-sidebar-section {
+  border-right: 2px solid #d3e2e8;
   padding: 2em;
 }
 
@@ -40,7 +40,7 @@ b {
 }
 
 .fc {
-  /* the calendar root */
+  // / the calendar root /
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -98,12 +98,26 @@ b {
   background-color: rgb(230, 230, 230);
   border: none;
   border-radius: 30px;
+  transition: all 0.5s ease;
 }
 .dots {
   height: 12px;
   width: 12px;
   border-radius: 50%;
 }
+.eventDot {
+  padding: 10px;
+  height: 0px !important;
+}
+.calendarDot::before {
+  content: 'Working';
+  color: #464646;
+  background-color: rgb(31, 185, 185) !important;
+  height: 12px !important;
+  width: 12px !important;
+  border-radius: 50% !important;
+}
+
 input[type='checkbox'] {
   border: 2px solid grey;
   border-radius: 2px;
@@ -162,4 +176,82 @@ input[type='checkbox']:focus {
 }
 .fc-header-toolbar {
   padding: 10px;
+}
+.fc-header-toolbar button {
+  color: #d3e2e8 !important;
+  border: 1px solid #d3e2e8 !important;
+}
+.fc-header-toolbar button:hover {
+  color: #464646 !important;
+  border: 1px solid #464646 !important;
+  background-color: #d3e2e8 !important;
+  transition: all 0.3s ease;
+  box-shadow: -2px 14px 24px -10px rgba(46, 45, 45, 0.79);
+}
+.md-drppicker {
+  width: 625px !important;
+  left: 0 !important;
+}
+// .ranges{
+//   position: absolute;
+//   left: -40px;
+//   // display: none !important;
+// }
+.right {
+  margin-right: 1px !important;
+}
+.buttons_input button {
+  position: absolute;
+  top: -3rem;
+  display: block;
+  margin-left: auto;
+  font-size: 10px;
+  line-height: 32px !important;
+  padding: 0px 12px !important;
+  text-transform: capitalize !important;
+}
+.buttons_input button:hover {
+  opacity: 0.8;
+  transition: all 0.4s ease;
+}
+.ranges ul li {
+  margin: 0.5rem 0;
+}
+.buttons {
+  clear: both;
+}
+@media (max-width: 575px) {
+  .buttons_input button {
+    margin-left: 10px;
+    margin-top: 10px;
+    position: static !important;
+  }
+  .buttons {
+    clear: none;
+  }
+  .md-drppicker {
+    width: auto !important;
+    left: 0 !important;
+  }
+}
+.select select {
+  // background-image: none !important;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+}
+.left .calendar-time::before {
+  display: block;
+  content: 'Start time' !important;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  margin-right: 10px;
+}
+.right .calendar-time::before {
+  display: block;
+  content: 'End time' !important;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  margin-right: 10px;
 }

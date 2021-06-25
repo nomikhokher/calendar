@@ -1,5 +1,8 @@
 fragment SettingDetails on Setting {
   id
+  dateFormat
+  timeFormat
+  startWeekOn
   createdAt
   updatedAt
   name

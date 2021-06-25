@@ -5,8 +5,6 @@ export interface Calendar {
   visible: boolean
 }
 
-export type CalendarDrawerMode = 'over' | 'side'
-
 export interface CalendarEvent {
   id: string
   calendarId: string
@@ -25,9 +23,6 @@ export interface CalendarEventException {
   eventId: string
   exdate: string
 }
-
-export type CalendarEventPanelMode = 'view' | 'add' | 'edit'
-export type CalendarEventEditMode = 'single' | 'future' | 'all'
 
 export interface CalendarSettings {
   dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD' | 'll'

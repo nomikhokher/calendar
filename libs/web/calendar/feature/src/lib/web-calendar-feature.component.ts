@@ -1,23 +1,28 @@
 import { Component } from '@angular/core'
 import { WebCoreDataAccessService } from '@calendar/web/core/data-access'
 import { map } from 'rxjs/operators'
+import { Observable } from 'rxjs'
 
 @Component({
   template: `
     <ui-page headerTitle="Calendars">
       <div class="dark:bg-gray-800 px-6 py-4 mb-3 md:mb-6 rounded-lg shadow">
-        <ng-container *ngIf="getEvents$ | async as fetchEvent">
+        <ng-container *ngIf="getEvents$ | async | async as fetchEvent">
           <ng-container *ngIf="getcClendars$ | async as fetchCalendar">
-            <ui-calendar
-              [fetchEvent]="fetchEvent"
-              [calendars]="fetchCalendar"
-              (addEventInServserSide)="addEventInServserSide($event)"
-              (removeEventInServserSide)="removeEventInServserSide($event)"
-              (updateEventInServserSide)="updateEventInServserSide($event)"
-              (addCalendarInServserSide)="addCalendarInServserSide($event)"
-              (updateCalendarInServserSide)="updateCalendarInServserSide($event)"
-              (deleteCalendarInServserSide)="deleteCalendarInServserSide($event)"
-            ></ui-calendar>
+            <ng-container *ngIf="settings$ | async as fetchSettings">
+              <ui-calendar
+                [fetchEvent]="fetchEvent"
+                [calendars]="fetchCalendar"
+                [fetchSettings]="fetchSettings"
+                (addEventInServserSide)="addEventInServserSide($event)"
+                (removeEventInServserSide)="removeEventInServserSide($event)"
+                (updateEventInServserSide)="updateEventInServserSide($event)"
+                (addCalendarInServserSide)="addCalendarInServserSide($event)"
+                (updateCalendarInServserSide)="updateCalendarInServserSide($event)"
+                (deleteCalendarInServserSide)="deleteCalendarInServserSide($event)"
+                (settingsUpdateCalendarInServserSide)="settingsUpdateCalendarInServserSide($event)"
+              ></ui-calendar>
+            </ng-container>
           </ng-container>
         </ng-container>
       </div>
@@ -27,17 +32,43 @@ import { map } from 'rxjs/operators'
 export class WebCalendarFeatureComponent {
   getEvents$: any
   getcClendars$: any
+  settings$: any
+  calenders: any
+  EventSourceObject$ = []
+  EventSourceObjectObservable = new Observable(this.observer_function)
 
   constructor(private readonly CalendarService: WebCoreDataAccessService) {}
 
   ngOnInit() {
     this.getEventInServserSide()
     this.getCalendarInServserSide()
+    this.settingsCalendarInServserSide()
   }
+
+  observer_function() {}
 
   // Api call get event in server side
   getEventInServserSide() {
-    this.getEvents$ = this.CalendarService.adminCalendarEvents().pipe(map((res) => res.data.items))
+    this.getEvents$ = this.CalendarService.adminCalendars().pipe(
+      map((calenders) => {
+        return this.CalendarService.adminCalendarEvents().pipe(
+          map((events) => {
+            let event_source_object = []
+            calenders.data.items.forEach((calender) => {
+              let EventSourceObject = {
+                id: calender.id,
+                title: calender.title,
+                events: events.data.items.filter((event) => event.calendarId === calender.id),
+                color: calender.color,
+                display: calender.visible ? 'block' : 'none',
+              }
+              event_source_object.push(EventSourceObject)
+            })
+            return event_source_object
+          }),
+        )
+      }),
+    )
   }
 
   // Api call add event in server side
@@ -68,15 +99,27 @@ export class WebCalendarFeatureComponent {
     this.CalendarService.adminCreateCalendar(input).subscribe((res) => res)
     this.getCalendarInServserSide()
   }
-  // Api call add calendar in server side
+  // Api call update calendar in server side
   updateCalendarInServserSide(input) {
     this.CalendarService.adminUpdateCalendar(input).subscribe((res) => res)
     this.getCalendarInServserSide()
+    this.getEventInServserSide()
   }
 
-  // Api call add calendar in server side
+  // Api call delete calendar in server side
   deleteCalendarInServserSide(input) {
     this.CalendarService.adminDeleteCalendar(input).subscribe((res) => res)
     this.getCalendarInServserSide()
+  }
+
+  // Api call calendar settings
+  settingsUpdateCalendarInServserSide(input) {
+    this.CalendarService.adminUpdateSetting(input).subscribe((res) => console.log(res))
+    this.settingsCalendarInServserSide()
+  }
+
+  // Api call calendar settings
+  settingsCalendarInServserSide() {
+    this.settings$ = this.CalendarService.adminSettings().pipe(map((res) => res.data.items))
   }
 }
