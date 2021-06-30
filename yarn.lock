@@ -301,6 +301,13 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-11.2.12.tgz#7a51c0b7dea9f266bdb5cf0ebc501cc9505febe0"
   integrity sha512-7AMEnVbJeeoZnR73zSS87H6W2lZpx8Je+I90weH0hV1/Q9jYz8i2RAioiEAg8pKWvrxwwGGyMdVg9SFSJqSyWw==
 
+"@angular/material-moment-adapter@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@angular/material-moment-adapter/-/material-moment-adapter-12.1.0.tgz#e44cd282fb110048d526268c85f79be4cb86e87f"
+  integrity sha512-Mq4Sx8uXVurEuMZYhdrcd1BhQiaRw9qR2vmJu0YX0nyX44y6ROJraQdXjro6GyrTE/bSMp0v5xXMQOm5So+j4Q==
+  dependencies:
+    tslib "^2.2.0"
+
 "@angular/material@^11.2.12":
   version "11.2.12"
   resolved "https://registry.yarnpkg.com/@angular/material/-/material-11.2.12.tgz#625778113075bddb92f13ab03a8a513178f2b5a8"
@@ -1710,6 +1717,22 @@
   version "5.8.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-5.8.0.tgz#703290784d860133abaa9176bdf66383f7c7ef9f"
   integrity sha512-JlqXbWq8Gl2BMx1mOAeEWakW43xDYypBBjwKztnax5tOB5Sfty8chVmeG7ffz2NFtvg2c1nj6MP/zGrVCYY0RA==
+  dependencies:
+    "@fullcalendar/common" "~5.8.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/moment@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/moment/-/moment-5.8.0.tgz#e62312e9a1cb1e722ef55ee66f476ae7c5d487bf"
+  integrity sha512-KusONWqzjx/Nxi/Fd4qTUbddDfJQK2mVlNjIeUTARbv0/+gQClvOx6UOwoRf92tg9LxVvhO37xVDQDhEfIHrag==
+  dependencies:
+    "@fullcalendar/common" "~5.8.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/rrule@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/rrule/-/rrule-5.8.0.tgz#596a25ebbe61f0578a7337f3a46313966738e96b"
+  integrity sha512-6DhRtONQs3SO4VwH+AoFQGRs4bLipLgazjEmaOQ4gYJbyh5ymCojNxBy8UiY4P+bNDlWzCHYIXN7VUpmsAdWUQ==
   dependencies:
     "@fullcalendar/common" "~5.8.0"
     tslib "^2.1.0"
@@ -10633,6 +10656,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+luxon@^1.21.3:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.27.0.tgz#ae10c69113d85dab8f15f5e8390d0cbeddf4f00f"
+  integrity sha512-VKsFsPggTA0DvnxtJdiExAucKdAnwbCCNlMM5ENvHlxubqWd0xhZcdb4XgZ7QFNhaRhilXCFxHuoObP5BNA4PA==
+
 magic-string@0.25.7, magic-string@^0.25.0:
   version "0.25.7"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.7.tgz#3f497d6fd34c669c6798dcb821f2ef31f5445051"
@@ -13244,6 +13272,15 @@ rollup@2.38.4:
   optionalDependencies:
     fsevents "~2.3.1"
 
+rrule@^2.6.8:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/rrule/-/rrule-2.6.8.tgz#c61714f246e7676e8efa16c2baabac199f20f6db"
+  integrity sha512-cUaXuUPrz9d1wdyzHsBfT1hptKlGgABeCINFXFvulEPqh9Np9BnF3C3lrv9uO54IIr8VDb58tsSF3LhsW+4VRw==
+  dependencies:
+    tslib "^1.10.0"
+  optionalDependencies:
+    luxon "^1.21.3"
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
@@ -14779,6 +14816,11 @@ tslib@^1.10.0, tslib@^1.14.1, tslib@^1.7.1, tslib@^1.8.1, tslib@^1.9.0, tslib@^1
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
+tslib@^2.2.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
 
 tslib@~2.0.1:
   version "2.0.3"

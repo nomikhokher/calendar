@@ -26,8 +26,8 @@ export interface CalendarEventException {
 
 export interface CalendarSettings {
   dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD' | 'll'
-  timeFormat: '12' | '24'
-  startWeekOn: 6 | 0 | 1
+  timeFormat: 'Twelve' | 'TwentyFour'
+  startWeekOn: 'Six' | 'Zero' | 'One'
 }
 
 export interface CalendarWeekday {

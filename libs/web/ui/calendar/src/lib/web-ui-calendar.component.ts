@@ -5,24 +5,25 @@ import {
   EventEmitter,
   Input,
   Output,
+  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core'
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, FullCalendarComponent } from '@fullcalendar/angular'
-import { createEventId, calendars } from './event-utils'
 import { Calendar as FullCalendar } from '@fullcalendar/core'
-import { clone, cloneDeep, isEqual, omit } from 'lodash-es'
+import { clone, cloneDeep, omit } from 'lodash-es'
 import { Calendar, CalendarSettings } from './calendar.types'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import * as moment from 'moment'
 import {
   AdminCreateCalendarEventInput,
   AdminCreateCalendarInput,
   AdminUpdateCalendarEventInput,
   AdminUpdateCalendarInput,
+  CalendarWeekday,
 } from '@calendar/web/core/data-access'
 import { calendarColors } from './calendar-colors'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { RRule } from 'rrule'
 
 @Component({
   selector: 'ui-calendar',
@@ -314,8 +315,9 @@ import { BehaviorSubject, Observable } from 'rxjs'
                       [timePicker]="timePicker"
                       [timePickerSeconds]="false"
                       [timePickerIncrement]="1"
-                      [timePicker24Hour]="true"
-                      [locale]="{ format: 'DD/MM/YYYY HH:mm:ss', firstDay: 1 }"
+                      [timeFormat]="fetchSettings.timeFormat"
+                      [timePicker24Hour]="fetchSettings.timeFormat == 'TwentyFour' ? false : true"
+                      [locale]="{ format: fetchSettings.dateFormat, firstDay: 1 }"
                     />
                   </div>
                 </div>
@@ -347,7 +349,7 @@ import { BehaviorSubject, Observable } from 'rxjs'
                   <div
                     class="flex flex-auto items-center h-12 ml-3 rounded-md border cursor-pointer shadow-sm border-gray-300 dark:bg-black dark:bg-opacity-5 dark:border-gray-500"
                   >
-                    <div class="flex-auto pl-3 w-full">Does not repeat</div>
+                    <div class="flex-auto pl-3 w-full" (click)="recurrenceEvent()">Does not repeat</div>
                   </div>
                 </div>
                 <div class="flex items-center mt-6">
@@ -408,15 +410,11 @@ import { BehaviorSubject, Observable } from 'rxjs'
                             aria-label="Online"
                             class="flex-shrink-0 inline-block h-2 w-2 rounded-full"
                             [style.background]="
-                              this.crurentCalendarSelect?.color ||
-                              getCalendar(eventForm.get('calendarId').value)?.color ||
-                              fetchEvent[0]?.color
+                              this.crurentCalendarSelect?.color || getCalendar(eventForm.get('calendarId').value)?.color
                             "
                           ></span>
                           <span class="ml-3 block truncate">{{
-                            this.crurentCalendarSelect?.title ||
-                              getCalendar(eventForm.get('calendarId').value)?.title ||
-                              fetchEvent[0]?.title
+                            this.crurentCalendarSelect?.title || getCalendar(eventForm.get('calendarId').value)?.title
                           }}</span>
                         </div>
                         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -808,13 +806,160 @@ import { BehaviorSubject, Observable } from 'rxjs'
         </div>
       </ng-container>
     </div>
+
+    <!-- Recurrence Modal -->
+    <div
+      class="fixed z-10 overflow-y-auto recurrence-modal"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed bg-gray-500 bg-opacity-75 transition-opacity recurrence-modal" aria-hidden="true"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div
+          class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+        >
+          <div>
+            <form class="flex flex-col w-full" [formGroup]="recurrenceForm">
+              <div class="text-2xl font-semibold text-black">Recurrence rules</div>
+
+              <!-- Interval and frequency -->
+              <div class="flex mt-12">
+                <div class="w-full -mt-6">
+                  <label class="text-black">Repeat every</label>
+                  <input
+                    type="number"
+                    class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    [autocomplete]="'off'"
+                    [formControlName]="'interval'"
+                    [min]="1"
+                  />
+                </div>
+                <div class="w-full ml-4">
+                  <select
+                    [formControlName]="'freq'"
+                    class="block w-full pl-3 pr-10 text-base text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  >
+                    <option [value]="'DAILY'" class="text-black">day(s)</option>
+                    <option [value]="'WEEKLY'" class="text-black">week(s)</option>
+                    <option [value]="'MONTHLY'" class="text-black">month(s)</option>
+                    <option [value]="'YEARLY'" class="text-black">year(s)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div
+                class="flex flex-col mt-6"
+                [formGroupName]="'weekly'"
+                *ngIf="recurrenceForm.get('freq').value === 'WEEKLY'"
+              >
+                <div class="font-medium text-black">Repeat on</div>
+                <mat-button-toggle-group class="mt-1.5" [formControlName]="'byDay'" [multiple]="true">
+                  <mat-button-toggle
+                    class="w-10 h-10 rounded-full text-black focus:outline-none focus:border-none  focus:ring-0"
+                    *ngFor="let weekday of weekdays; let i = index"
+                    [ngClass]="[weekday.label === currentDay ? 'bg-gray-300' : 'class_' + i]"
+                    [disableRipple]="true"
+                    [value]="weekday.value"
+                    (click)="changeSelect(i)"
+                  >
+                    {{ weekday.abbr }}
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+
+              <!-- Monthly repeat options -->
+              <div class="flex mt-6" [formGroupName]="'monthly'" *ngIf="recurrenceForm.get('freq').value === 'MONTHLY'">
+                <div class="w-full">
+                  <label class="text-black">Repeat on</label>
+                  <select
+                    [formControlName]="'repeatOn'"
+                    class="block w-full pl-3 pr-10 text-base text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  >
+                    <option [value]="'date'" class="text-black">
+                      Monthly on day {{ recurrenceForm.get('monthly.date').value }}
+                    </option>
+                    <option [value]="'nthWeekday'" class="text-black">Monthly on the {{ nthWeekdayText }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Ends -->
+              <div class="flex flex-col mt-10" [formGroupName]="'end'">
+                <div class="flex items-center">
+                  <div class="w-full -mt-6">
+                    <label class="text-black">Ends</label>
+                    <select
+                      [formControlName]="'type'"
+                      class="block w-full pl-3 pr-10 text-base text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    >
+                      <option [value]="'never'" class="text-black">Never</option>
+                      <option [value]="'until'" class="text-black">On</option>
+                      <option [value]="'count'" class="text-black">After</option>
+                    </select>
+                  </div>
+                  <div class="w-40 ml-4" *ngIf="recurrenceForm.get('end.type').value === 'until'">
+                    <input
+                      multiple
+                      [matDatepicker]="untilDatePicker"
+                      class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      [formControlName]="'until'"
+                      [for]="untilDatePicker"
+                      matSuffix
+                    />
+                  </div>
+                  <ng-container *ngIf="recurrenceForm.get('end.type').value === 'count'">
+                    <div class="w-full">
+                      <br />
+                      <div class="w-40 ml-4">
+                        <input
+                          type="number"
+                          multiple
+                          class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                          [autocomplete]="'off'"
+                          [formControlName]="'count'"
+                          [min]="1"
+                        />
+                      </div>
+                      <span class="ml-4 text-green-500">occurrence(s)</span>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="ml-auto mt-8">
+                <button
+                  class="clear"
+                  (click)="clear()"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                >
+                  Clear
+                </button>
+                <button
+                  [disabled]="recurrenceForm.invalid"
+                  (click)="done()"
+                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                >
+                  Done
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   `,
 })
 export class WebUiCalendarComponent {
   @ViewChild('fullCalendar') fullCalendar: FullCalendarComponent
   @Input() fetchEvent?: any
   @Input() calendars?: any
-  @Input() fetchSettings?: any
+  @Input() fetchSettings?: CalendarSettings
+  @Input() weekdays?: CalendarWeekday[]
   @Output() addEventInServserSide = new EventEmitter<any>()
   @Output() removeEventInServserSide = new EventEmitter<any>()
   @Output() updateEventInServserSide = new EventEmitter<any>()
@@ -823,6 +968,10 @@ export class WebUiCalendarComponent {
   @Output() deleteCalendarInServserSide = new EventEmitter<any>()
   @Output() settingsUpdateCalendarInServserSide = new EventEmitter<any>()
 
+  recurrenceFormValues: any
+  settingsForm: FormGroup
+  crurentCalendarSelect: Calendar
+  recurrenceForm: FormGroup
   calendar: Calendar | null
   showOption: boolean = false
   calendarMode: string
@@ -864,6 +1013,10 @@ export class WebUiCalendarComponent {
   isOpen: boolean = false
   cloneFetch: any
 
+  dataWeekEnd: any
+  nthWeekdayText: string
+  currentDay: string
+
   //selected: any;
   alwaysShowCalendars: boolean
   ranges: any = {
@@ -879,41 +1032,36 @@ export class WebUiCalendarComponent {
   isInvalidDate = (m: moment.Moment) => {
     return this.invalidDates.some((d) => d.isSame(m, 'day'))
   }
-  settingsForm: FormGroup
-  crurentCalendarSelect: Calendar
 
   constructor(private elementRef: ElementRef, private _formBuilder: FormBuilder) {
     this.alwaysShowCalendars = true
   }
 
   ngOnInit() {
-    // initial value of object
-    this.calendarOptions = {
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-      },
-      buttonText: {
-        list: 'Schedule',
-      },
-      initialView: 'dayGridMonth',
-      eventSources: this.fetchEvent, // alternatively, use the `events` setting to fetch from a feed
-      weekends: true,
-      editable: true,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      droppable: true,
-      select: this.handleDateSelect.bind(this),
-      eventClick: this.handleEventClick.bind(this),
-      eventsSet: this.handleEvents.bind(this),
-      /* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-      */
-    }
+    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    let dateObj = new Date()
+
+    let day = dateObj.getDay()
+
+    this.currentDay = days[day]
+    // Create the recurrence form
+    this.recurrenceForm = this._formBuilder.group({
+      freq: [null],
+      interval: [null, Validators.required],
+      weekly: this._formBuilder.group({
+        byDay: [[]],
+      }),
+      monthly: this._formBuilder.group({
+        repeatOn: [null], // date | nthWeekday
+        date: [null],
+        nthWeekday: [null],
+      }),
+      end: this._formBuilder.group({
+        type: [null], // never | until | count
+        until: [null],
+        count: [null],
+      }),
+    })
 
     // Create the event form
     this.settingsForm = this._formBuilder.group({
@@ -945,9 +1093,43 @@ export class WebUiCalendarComponent {
       recurrence: [null],
       range: [{}],
     })
-    setTimeout(function () {
-      window.dispatchEvent(new Event('resize'))
-    }, 0)
+
+    // Subscribe to 'range' field value changes
+    this.eventForm.get('range').valueChanges.subscribe((value) => {
+      if (!value) {
+        return
+      }
+
+      // Set the 'start' field value from the range
+      this.eventForm.get('start').setValue(value.start, { emitEvent: false })
+
+      // If this is a recurring event...
+      if (this.eventForm.get('recurrence').value) {
+        // Update the recurrence rules if needed
+        this._updateRecurrenceRule()
+
+        // Set the duration field
+        const duration = moment(value.end).diff(moment(value.start), 'minutes')
+        this.eventForm.get('duration').setValue(duration, { emitEvent: false })
+
+        // Update the end value
+        this._updateEndValue()
+      }
+      // Otherwise...
+      else {
+        // Set the end field
+        this.eventForm.get('end').setValue(value.end, { emitEvent: false })
+      }
+    })
+
+    // Subscribe to 'recurrence' field changes
+    this.eventForm.get('recurrence').valueChanges.subscribe((value) => {
+      // If this is a recurring event...
+      if (value) {
+        // Update the end value
+        this._updateEndValue()
+      }
+    })
 
     if (localStorage.getItem('panelMode')) {
       this.panelMode = localStorage.getItem('panelMode')
@@ -965,6 +1147,36 @@ export class WebUiCalendarComponent {
 
     let newSettingsObject = omit(this.fetchSettings[0], ['__typename', 'updatedAt', 'createdAt', 'name'])
     this.settingsForm.patchValue(newSettingsObject)
+  }
+
+  ngOnChanges() {
+    // initial value of object
+    this.calendarOptions = {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+      },
+      buttonText: {
+        list: 'Schedule',
+      },
+      initialView: 'dayGridMonth',
+      eventSources: this.fetchEvent, // alternatively, use the `events` setting to fetch from a feed
+      weekends: true,
+      editable: true,
+      selectable: true,
+      selectMirror: true,
+      dayMaxEvents: true,
+      droppable: true,
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      eventsSet: this.handleEvents.bind(this),
+      /* you can update a remote database when these fire:
+        eventAdd:
+        eventChange:
+        eventRemove:
+      */
+    }
   }
 
   getCalendar(id): Calendar {
@@ -1057,27 +1269,36 @@ export class WebUiCalendarComponent {
     // Get the clone of the event form value
     let newEvent = clone(this.eventForm.value)
 
-    // Date formate
-    let start = new Date(newEvent.range.start).toISOString().replace(/T.*$/, '')
-    let end = new Date(newEvent.range.end).toISOString().replace(/T.*$/, '')
+    console.log(newEvent)
+
+    let start = moment(newEvent.range.start.$d).format()
+    let end = moment(newEvent.range.end.$d).format()
+
+    // If the event is a recurring event...
+    if (newEvent.recurrence) {
+      // Set the event duration
+      newEvent.duration = moment(end).diff(moment(start), 'minutes')
+    }
+
+    // Find color
+    let { color } = this.fetchEvent.find((color) => color.id === this.crurentCalendarSelect?.id)
 
     // Modify the event before sending it to the server
     newEvent = omit(
       newEvent,
-      ['range', 'duration', 'id'],
+      ['range', 'id', 'duration'],
       (newEvent.start = start),
       (newEvent.end = end),
-      (newEvent.id = createEventId()),
       (newEvent.isFirstInstance = true),
-      (newEvent.recurrence = ''),
       (newEvent.recurringEventId = ''),
       (newEvent.calendarId = this.crurentCalendarSelect?.id),
     ) as AdminCreateCalendarEventInput
 
     // Send data server
     if (newEvent.calendarId) {
-      this.calendarApi.addEvent(newEvent)
-      this.addEventInServserSide.emit({ input: newEvent })
+      this.calendarApi.addEvent({ ...newEvent, color, rrule: newEvent.recurrence }).remove()
+      // this.addEventInServserSide.emit({ input: newEvent })
+      this.fullCalendarApi.refetchEvents()
       this.eventForm.reset()
     }
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
@@ -1111,10 +1332,44 @@ export class WebUiCalendarComponent {
       ) as AdminUpdateCalendarEventInput
     }
 
+    // Update calendar event
+    let event_source_object_update = this.fetchEvent.map((data) => {
+      data.events.map((res) => {
+        if (res.calendarId === newEvent.calendarId) {
+          if (res.recurrence === '') {
+            res.start = newEvent.start
+            res.end = newEvent.end
+            res.id = newEvent.id
+            res.isFirstInstance = newEvent.isFirstInstance
+            res.recurrence = newEvent.recurrence
+            res.recurringEventId = newEvent.recurringEventId
+            res.calendarId = newEvent.calendarId
+            res.title = newEvent.title
+            res.description = newEvent.description
+          } else {
+            res.start = newEvent.start
+            res.end = newEvent.end
+            res.id = newEvent.id
+            res.isFirstInstance = newEvent.isFirstInstance
+            res.recurrence = newEvent.recurrence
+            res.rrule = newEvent.recurrence
+            res.recurringEventId = newEvent.recurringEventId
+            res.calendarId = newEvent.calendarId
+            res.title = newEvent.title
+            res.description = newEvent.description
+          }
+        }
+      })
+      return data
+    })
+
+    this.apiEvt.unselect()
+
+    this.apiEvt.addEventSource(event_source_object_update).remove()
+
     const id = this.clickInfo.event._def.publicId as string
     this.updateEventInServserSide.emit({ calendarEventId: id, input: newEvent })
-    this.apiEvt.removeAllEvents()
-    this.apiEvt.addEventSource(this.fetchEvent)
+
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
   }
@@ -1278,8 +1533,372 @@ export class WebUiCalendarComponent {
     value ? (this.timePicker = false) : (this.timePicker = true)
   }
 
+  recurrenceEvent() {
+    this.elementRef.nativeElement.querySelectorAll('.recurrence-modal').forEach((res) => {
+      res.classList.add('inset-0')
+    })
+
+    this.dataWeekEnd = this.eventForm.value
+
+    // Initialize
+    this._init()
+
+    // Subscribe to 'freq' field value changes
+    this.recurrenceForm.get('freq').valueChanges.subscribe((value) => {
+      // Set the end values
+      this._setEndValues(value)
+    })
+
+    // Subscribe to 'weekly.byDay' field value changes
+    this.recurrenceForm.get('weekly.byDay').valueChanges.subscribe((value) => {
+      // Get the event's start date
+      const startDate = moment(this.eventForm.value.range.start)
+
+      // If nothing is selected, select the original value from
+      //  the event form to prevent an empty value on the field
+      if (!value || !value.length) {
+        //Get the day of event start date
+        const eventStartDay = startDate.format('dd').toUpperCase()
+        // Set the original value back without emitting a
+        // change event to prevent an infinite loop
+        this.recurrenceForm.get('weekly.byDay').setValue([eventStartDay], { emitEvent: false })
+      }
+    })
+
+    // Patch the form with the values
+    this.recurrenceForm.patchValue(this.recurrenceFormValues)
+
+    // Set end values for the first time
+    this._setEndValues(this.recurrenceForm.get('freq').value)
+  }
+
   ngOnDestroy() {
     localStorage.removeItem('panelMode')
     localStorage.removeItem('calendarMode')
+  }
+
+  clear(): void {
+    // Close the dialog
+    this.elementRef.nativeElement.querySelectorAll('.recurrence-modal').forEach((res) => {
+      res.classList.remove('inset-0')
+    })
+  }
+
+  done(): void {
+    // Get the recurrence form values
+    const recurrenceForm = this.recurrenceForm.value
+
+    // Prepare the rule array and add the base rules
+    const ruleArr = ['FREQ=' + recurrenceForm.freq, 'INTERVAL=' + recurrenceForm.interval]
+
+    // If monthly on certain days...
+    if (recurrenceForm.freq === 'MONTHLY' && recurrenceForm.monthly.repeatOn === 'nthWeekday') {
+      ruleArr.push('BYDAY=' + recurrenceForm.monthly.nthWeekday)
+    }
+
+    // If weekly...
+    if (recurrenceForm.freq === 'WEEKLY') {
+      // If byDay is an array...
+      if (Array.isArray(recurrenceForm.weekly.byDay)) {
+        ruleArr.push('BYDAY=' + recurrenceForm.weekly.byDay.join(','))
+      }
+      // Otherwise
+      else {
+        ruleArr.push('BYDAY=' + recurrenceForm.weekly.byDay)
+      }
+    }
+
+    // If one of the end options is selected...
+    if (recurrenceForm.end.type === 'until') {
+      ruleArr.push('UNTIL=' + moment(recurrenceForm.end.until).endOf('day').utc().format('YYYYMMDD[T]HHmmss[Z]'))
+    }
+
+    if (recurrenceForm.end.type === 'count') {
+      ruleArr.push('COUNT=' + recurrenceForm.end.count)
+    }
+
+    // Generate rule text
+    const ruleText = ruleArr.join(';')
+
+    this.elementRef.nativeElement.querySelectorAll('.recurrence-modal').forEach((res) => {
+      res.classList.remove('inset-0')
+    })
+
+    if (ruleText === '') {
+      // Clear the recurrence field if recurrence cleared
+      this.eventForm.get('recurrence').setValue(null)
+    }
+    // Otherwise...
+    else {
+      // Update the recurrence field with the result
+      this.eventForm.get('recurrence').setValue(ruleText)
+    }
+  }
+
+  private _init(): void {
+    // Get the event's start date
+    const startDate = moment(this.dataWeekEnd.range.start)
+
+    // Calculate the weekday
+    const weekday = moment(this.dataWeekEnd.range.start).format('dd').toUpperCase()
+
+    // Calculate the nthWeekday
+    let nthWeekdayNo = 1
+    while (startDate.clone().isSame(startDate.clone().subtract(nthWeekdayNo, 'week'), 'month')) {
+      nthWeekdayNo++
+    }
+    const nthWeekday = nthWeekdayNo + weekday
+
+    // Calculate the nthWeekday as text
+    const ordinalNumberSuffixes = {
+      1: 'st',
+      2: 'nd',
+      3: 'rd',
+      4: 'th',
+      5: 'th',
+    }
+    this.nthWeekdayText =
+      nthWeekday.slice(0, 1) +
+      ordinalNumberSuffixes[nthWeekday.slice(0, 1)] +
+      ' ' +
+      this.weekdays.find((item) => item.value === nthWeekday.slice(-2)).label
+
+    // Set the defaults on recurrence form values
+    this.recurrenceFormValues = {
+      freq: 'DAILY',
+      interval: 1,
+      weekly: {
+        byDay: weekday,
+      },
+      monthly: {
+        repeatOn: 'date',
+        date: moment(this.dataWeekEnd.range.start).date(),
+        nthWeekday: nthWeekday,
+      },
+      end: {
+        type: 'never',
+        until: null,
+        count: null,
+      },
+    }
+
+    // If recurrence rule string is available on the
+    // event meaning that the is a recurring one...
+    if (this.dataWeekEnd.recurrence) {
+      // Parse the rules
+      const parsedRules: any = {}
+      this.dataWeekEnd.recurrence.split(';').forEach((rule) => {
+        parsedRules[rule.split('=')[0]] = rule.split('=')[1]
+      })
+
+      // Overwrite the recurrence form values
+      this.recurrenceFormValues.freq = parsedRules.FREQ
+      this.recurrenceFormValues.interval = parsedRules.INTERVAL
+
+      if (parsedRules.FREQ === 'WEEKLY') {
+        this.recurrenceFormValues.weekly.byDay = parsedRules.BYDAY.split(',')
+      }
+
+      if (parsedRules.FREQ === 'MONTHLY') {
+        this.recurrenceFormValues.monthly.repeatOn = parsedRules.BYDAY ? 'nthWeekday' : 'date'
+      }
+
+      this.recurrenceFormValues.end.type = parsedRules.UNTIL ? 'until' : parsedRules.COUNT ? 'count' : 'never'
+      this.recurrenceFormValues.end.until = parsedRules.UNTIL || null
+      this.recurrenceFormValues.end.count = parsedRules.COUNT || null
+    }
+  }
+
+  private _setEndValues(freq: string): void {
+    // Return if freq is not available
+    if (!freq) {
+      return
+    }
+
+    // Get the event's start date
+    const startDate = moment(this.dataWeekEnd.range.startDate)
+
+    // Get the end type
+    const endType = this.recurrenceForm.get('end.type').value
+
+    // If until is not selected
+    if (endType !== 'until') {
+      let until
+
+      // Change the until's default value based on the frequency
+      if (freq === 'DAILY') {
+        until = startDate.clone().add(1, 'month').toISOString()
+      }
+
+      if (freq === 'WEEKLY') {
+        until = startDate.clone().add(12, 'weeks').toISOString()
+      }
+
+      if (freq === 'MONTHLY') {
+        until = startDate.clone().add(12, 'months').toISOString()
+      }
+
+      if (freq === 'YEARLY') {
+        until = startDate.clone().add(5, 'years').toISOString()
+      }
+
+      // Set the until
+      this.recurrenceForm.get('end.until').setValue(until)
+    }
+
+    // If count is not selected...
+    if (endType !== 'count') {
+      let count
+
+      // Change the count's default value based on the frequency
+      if (freq === 'DAILY') {
+        count = 30
+      }
+
+      if (freq === 'WEEKLY' || freq === 'MONTHLY') {
+        count = 12
+      }
+
+      if (freq === 'YEARLY') {
+        count = 5
+      }
+
+      // Set the count
+      this.recurrenceForm.get('end.count').setValue(count)
+    }
+  }
+
+  public isActive = false
+  onList() {
+    this.isActive = !this.isActive
+  }
+  select = []
+
+  private _updateEndValue(): void {
+    // Get the event recurrence
+    const recurrence = this.eventForm.get('recurrence').value
+
+    // Return if this is a non-recurring event
+    if (!recurrence) {
+      return
+    }
+
+    // Parse the recurrence rule
+    const parsedRules = {}
+    recurrence.split(';').forEach((rule) => {
+      // Split the rule
+      const parsedRule = rule.split('=')
+
+      // Add the rule to the parsed rules
+      parsedRules[parsedRule[0]] = parsedRule[1]
+    })
+
+    // If there is an UNTIL rule...
+    if (parsedRules['UNTIL']) {
+      // Use that to set the end date
+      this.eventForm.get('end').setValue(parsedRules['UNTIL'])
+
+      // Return
+      return
+    }
+
+    // If there is a COUNT rule...
+    if (parsedRules['COUNT']) {
+      // Generate the RRule string
+      const rrule =
+        'DTSTART=' +
+        moment(this.eventForm.get('start').value).utc().format('YYYYMMDD[T]HHmmss[Z]') +
+        '\nRRULE:' +
+        recurrence
+
+      // Use RRule string to generate dates
+      const dates = RRule.fromString(rrule).all()
+
+      // Get the last date from dates array and set that as the end date
+      this.eventForm.get('end').setValue(moment(dates[dates.length - 1]).toISOString())
+
+      // Return
+      return
+    }
+
+    // If there are no UNTIL or COUNT, set the end date to a fixed value
+    this.eventForm.get('end').setValue(moment().year(9999).endOf('year').toISOString())
+  }
+
+  private _updateRecurrenceRule(): void {
+    // Get the event
+    const event = this.eventForm.value
+
+    // Return if this is a non-recurring event
+    if (!event.recurrence) {
+      return
+    }
+
+    // Parse the recurrence rule
+    const parsedRules = {}
+    event.recurrence.split(';').forEach((rule) => {
+      // Split the rule
+      const parsedRule = rule.split('=')
+
+      // Add the rule to the parsed rules
+      parsedRules[parsedRule[0]] = parsedRule[1]
+    })
+
+    // If there is a BYDAY rule, split that as well
+    if (parsedRules['BYDAY']) {
+      parsedRules['BYDAY'] = parsedRules['BYDAY'].split(',')
+    }
+
+    // Do not update the recurrence rule if ...
+    // ... the frequency is DAILY,
+    // ... the frequency is WEEKLY and BYDAY has multiple values,
+    // ... the frequency is MONTHLY and there isn't a BYDAY rule,
+    // ... the frequency is YEARLY,
+    if (
+      parsedRules['FREQ'] === 'DAILY' ||
+      (parsedRules['FREQ'] === 'WEEKLY' && parsedRules['BYDAY'].length > 1) ||
+      (parsedRules['FREQ'] === 'MONTHLY' && !parsedRules['BYDAY']) ||
+      parsedRules['FREQ'] === 'YEARLY'
+    ) {
+      return
+    }
+
+    // If the frequency is WEEKLY, update the BYDAY value with the new one
+    if (parsedRules['FREQ'] === 'WEEKLY') {
+      parsedRules['BYDAY'] = [moment(event.start).format('dd').toUpperCase()]
+    }
+
+    // If the frequency is MONTHLY, update the BYDAY value with the new one
+    if (parsedRules['FREQ'] === 'MONTHLY') {
+      // Calculate the weekday
+      const weekday = moment(event.start).format('dd').toUpperCase()
+
+      // Calculate the nthWeekday
+      let nthWeekdayNo = 1
+      while (moment(event.start).isSame(moment(event.start).subtract(nthWeekdayNo, 'week'), 'month')) {
+        nthWeekdayNo++
+      }
+
+      // Set the BYDAY
+      parsedRules['BYDAY'] = [nthWeekdayNo + weekday]
+    }
+
+    // Generate the rule string from the parsed rules
+    const rules = []
+    Object.keys(parsedRules).forEach((key) => {
+      rules.push(key + '=' + (Array.isArray(parsedRules[key]) ? parsedRules[key].join(',') : parsedRules[key]))
+    })
+    const rrule = rules.join(';')
+
+    // Update the recurrence rule
+    this.eventForm.get('recurrence').setValue(rrule)
+  }
+
+  changeSelect(value) {
+    if (this.elementRef.nativeElement.querySelector('.class_' + value).classList.contains('bg-gray-300')) {
+      this.elementRef.nativeElement.querySelector('.class_' + value).classList.remove('bg-gray-300')
+    } else {
+      this.elementRef.nativeElement.querySelector('.class_' + value).classList.add('bg-gray-300')
+    }
   }
 }
