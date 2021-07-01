@@ -21,6 +21,7 @@ import momentPlugin from '@fullcalendar/moment'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material'
 import { MAT_DATE_FORMATS } from '@angular/material/core'
+import { ClickOutsideModule } from 'ng-click-outside'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -46,6 +47,7 @@ FullCalendarModule.registerPlugins([
     FormsModule,
     ReactiveFormsModule,
     NgxDaterangepickerMd.forRoot(),
+    ClickOutsideModule,
   ],
   declarations: [WebUiCalendarComponent],
   exports: [WebUiCalendarComponent],

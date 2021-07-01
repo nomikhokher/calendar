@@ -106,6 +106,7 @@
     "graphql-type-json": "^0.3.2",
     "joi": "^17.2.1",
     "lodash-es": "^4.17.21",
+    "ng-click-outside": "^8.0.0",
     "ngx-daterangepicker-material": "^5.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

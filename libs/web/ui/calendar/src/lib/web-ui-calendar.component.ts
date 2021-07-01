@@ -25,6 +25,18 @@ import {
 import { calendarColors } from './calendar-colors'
 import { RRule } from 'rrule'
 
+export enum DateFormat {
+  DDMMYYYY = 'DD-MM-YYYY',
+  MMDDYYYY = 'MM-DD-YYYY',
+  YYYYMMDD = 'YYYY-MM-DD',
+  Ll = 'll',
+}
+
+export enum TimeFormat {
+  Twelve = 'Twelve',
+  TwentyFour = 'TwentyFour',
+}
+
 @Component({
   selector: 'ui-calendar',
   styleUrls: ['./ui-calendar.scss'],
@@ -282,7 +294,6 @@ import { RRule } from 'rrule'
                       autocomplete="off"
                       type="text"
                       class="w-full pl-3 ml-3 py-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                      matInput
                       ngxDaterangepickerMd
                       [autoApply]="options.autoApply"
                       [linkedCalendars]="options.linkedCalendars"
@@ -312,12 +323,12 @@ import { RRule } from 'rrule'
                       firstDayOfNextMonthClass="first-next-day"
                       name="daterange"
                       [formControlName]="'range'"
-                      [timePicker]="timePicker"
+                      [locale]="{ format: dateCheckEnumFormat, firstDay: 1 }"
+                      [timePicker]="!eventForm.get('allDay').value"
                       [timePickerSeconds]="false"
                       [timePickerIncrement]="1"
                       [timeFormat]="fetchSettings.timeFormat"
-                      [timePicker24Hour]="fetchSettings.timeFormat == 'TwentyFour' ? false : true"
-                      [locale]="{ format: fetchSettings.dateFormat, firstDay: 1 }"
+                      [timePicker24Hour]="timeCheckEnumFormat === 'TwentyFour' ? true : false"
                     />
                   </div>
                 </div>
@@ -331,6 +342,7 @@ import { RRule } from 'rrule'
                     <span class="flex justify-center pl-3"><span style="display: none;">&nbsp;</span> All day </span>
                   </label>
                 </div>
+
                 <div class="flex items-center mt-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -395,7 +407,7 @@ import { RRule } from 'rrule'
                     </div>
                   </div> -->
 
-                    <div class="mt-1 relative">
+                    <div class="mt-1 relative" (clickOutside)="onClickedOutside($event)">
                       <button
                         type="button"
                         class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -409,12 +421,17 @@ import { RRule } from 'rrule'
                           <span
                             aria-label="Online"
                             class="flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                            *ngIf="fetchEvent"
                             [style.background]="
-                              this.crurentCalendarSelect?.color || getCalendar(eventForm.get('calendarId').value)?.color
+                              crurentCalendarSelect?.color ||
+                              getCalendar(eventForm.get('calendarId').value)?.color ||
+                              fetchEvent[0]?.color
                             "
                           ></span>
-                          <span class="ml-3 block truncate">{{
-                            this.crurentCalendarSelect?.title || getCalendar(eventForm.get('calendarId').value)?.title
+                          <span class="ml-3 block truncate" *ngIf="fetchEvent">{{
+                            crurentCalendarSelect?.title ||
+                              getCalendar(eventForm.get('calendarId').value)?.title ||
+                              fetchEvent[0]?.title
                           }}</span>
                         </div>
                         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -671,6 +688,16 @@ import { RRule } from 'rrule'
               </div>
             </div>
           </div>
+
+          <div class="sm:mt-4 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              (click)="remoeEventInfoModal()"
+              class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-offset-2 focus:ring-0 sm:text-sm"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -857,9 +884,13 @@ import { RRule } from 'rrule'
                 *ngIf="recurrenceForm.get('freq').value === 'WEEKLY'"
               >
                 <div class="font-medium text-black">Repeat on</div>
-                <mat-button-toggle-group class="mt-1.5" [formControlName]="'byDay'" [multiple]="true">
+                <mat-button-toggle-group
+                  class="mt-1.5 border-none outline-none"
+                  [formControlName]="'byDay'"
+                  [multiple]="true"
+                >
                   <mat-button-toggle
-                    class="w-10 h-10 rounded-full text-black focus:outline-none focus:border-none  focus:ring-0"
+                    class="w-10 h-10 rounded-full text-black outline-none focus:outline-none focus:border-none  focus:ring-0"
                     *ngFor="let weekday of weekdays; let i = index"
                     [ngClass]="[weekday.label === currentDay ? 'bg-gray-300' : 'class_' + i]"
                     [disableRipple]="true"
@@ -968,6 +999,8 @@ export class WebUiCalendarComponent {
   @Output() deleteCalendarInServserSide = new EventEmitter<any>()
   @Output() settingsUpdateCalendarInServserSide = new EventEmitter<any>()
 
+  timeCheckEnumFormat: string
+  dateCheckEnumFormat: string
   recurrenceFormValues: any
   settingsForm: FormGroup
   crurentCalendarSelect: Calendar
@@ -1038,12 +1071,19 @@ export class WebUiCalendarComponent {
   }
 
   ngOnInit() {
+    // Enum check value exits
+    this.dateCheckEnumFormat = DateFormat[this.fetchSettings[0].dateFormat]
+    this.timeCheckEnumFormat = TimeFormat[this.fetchSettings[0].timeFormat]
+
+    // Create Day of Array
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    // Find Current Date
     let dateObj = new Date()
-
+    // Get Only day
     let day = dateObj.getDay()
-
+    // Date covert to string
     this.currentDay = days[day]
+
     // Create the recurrence form
     this.recurrenceForm = this._formBuilder.group({
       freq: [null],
@@ -1203,8 +1243,31 @@ export class WebUiCalendarComponent {
     this.crurentCalendarSelect = null
     this.elementRef.nativeElement.querySelector('.modal').classList.add('inset-0')
     localStorage.setItem('panelMode', (this.panelMode = 'add'))
+
+    // Get calendar event date
     this.calendarApi = selectInfo.view.calendar
+
+    // New date
+    var startDate = new Date()
+
+    // Update date
+    startDate.setFullYear(startDate.getFullYear() + 1)
+
+    // Format date
+    let endDateFormat = moment(startDate).format('YYYY-MM-DD HH:mm:ss')
+    let startDateFormat = moment(selectInfo.startStr).format('YYYY-MM-DD HH:mm:ss')
+
+    // Set date
+    let range = {
+      start: startDateFormat,
+      end: endDateFormat,
+    }
+
+    // Reset form event
     this.eventForm.reset()
+
+    // Set Range
+    this.eventForm.get('range').setValue(range)
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -1269,8 +1332,6 @@ export class WebUiCalendarComponent {
     // Get the clone of the event form value
     let newEvent = clone(this.eventForm.value)
 
-    console.log(newEvent)
-
     let start = moment(newEvent.range.start.$d).format()
     let end = moment(newEvent.range.end.$d).format()
 
@@ -1281,7 +1342,15 @@ export class WebUiCalendarComponent {
     }
 
     // Find color
-    let { color } = this.fetchEvent.find((color) => color.id === this.crurentCalendarSelect?.id)
+    //let { color } = this.fetchEvent.find((color) => color.id === this.crurentCalendarSelect?.id)
+
+    let customId: string
+
+    if (!this.crurentCalendarSelect?.id) {
+      customId = this.fetchEvent[0].id
+    } else {
+      customId = this.crurentCalendarSelect?.id
+    }
 
     // Modify the event before sending it to the server
     newEvent = omit(
@@ -1291,13 +1360,13 @@ export class WebUiCalendarComponent {
       (newEvent.end = end),
       (newEvent.isFirstInstance = true),
       (newEvent.recurringEventId = ''),
-      (newEvent.calendarId = this.crurentCalendarSelect?.id),
+      (newEvent.calendarId = customId),
     ) as AdminCreateCalendarEventInput
 
     // Send data server
     if (newEvent.calendarId) {
-      this.calendarApi.addEvent({ ...newEvent, color, rrule: newEvent.recurrence }).remove()
-      // this.addEventInServserSide.emit({ input: newEvent })
+      //this.calendarApi.addEvent({ ...newEvent, color, rrule: newEvent.recurrence })
+      this.addEventInServserSide.emit({ input: newEvent })
       this.fullCalendarApi.refetchEvents()
       this.eventForm.reset()
     }
@@ -1310,8 +1379,14 @@ export class WebUiCalendarComponent {
     let newEvent = clone(this.eventForm.value)
 
     // Date formate
-    let start = new Date(newEvent.range.start).toISOString().replace(/T.*$/, '')
-    let end = new Date(newEvent.range.end).toISOString().replace(/T.*$/, '')
+    let start = moment(newEvent.range.start.$d).format()
+    let end = moment(newEvent.range.end.$d).format()
+
+    // If the event is a recurring event...
+    if (newEvent.recurrence) {
+      // Set the event duration
+      newEvent.duration = moment(end).diff(moment(start), 'minutes')
+    }
 
     // Modify the event before sending it to the server
 
@@ -1899,6 +1974,20 @@ export class WebUiCalendarComponent {
       this.elementRef.nativeElement.querySelector('.class_' + value).classList.remove('bg-gray-300')
     } else {
       this.elementRef.nativeElement.querySelector('.class_' + value).classList.add('bg-gray-300')
+    }
+  }
+
+  remoeEventInfoModal() {
+    this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
+  }
+
+  typeof_variable(vrr) {
+    return typeof vrr
+  }
+
+  onClickedOutside(e: Event) {
+    if (this.showOption) {
+      this.showOption = false
     }
   }
 }

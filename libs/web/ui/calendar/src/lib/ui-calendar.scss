@@ -264,3 +264,8 @@ input[type='checkbox']:focus {
 .max-h-select {
   max-height: 300px;
 }
+
+mat-button-toggle:hover {
+  border: 1px #000 solid !important;
+  background-color: rgb(236, 236, 236) !important;
+}

@@ -110,6 +110,7 @@ export class WebCalendarFeatureComponent {
   addCalendarInServserSide(input) {
     this.CalendarService.adminCreateCalendar(input).subscribe((res) => res)
     this.getCalendarInServserSide()
+    this.getEventInServserSide()
   }
   // Api call update calendar in server side
   updateCalendarInServserSide(input) {
