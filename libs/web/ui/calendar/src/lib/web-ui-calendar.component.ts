@@ -1561,6 +1561,8 @@ export class WebUiCalendarComponent {
     // Toggle the visibility
     calendar.visible = !calendar.visible
 
+    console.log('checkbox run')
+
     let calendarData = omit(calendar, ['__typename']) as AdminUpdateCalendarInput
 
     // Send data server
@@ -1679,8 +1681,10 @@ export class WebUiCalendarComponent {
     // Get the recurrence form values
     const recurrenceForm = this.recurrenceForm.value
 
+    let newInterval = Math.abs(recurrenceForm.interval)
+
     // Prepare the rule array and add the base rules
-    const ruleArr = ['FREQ=' + recurrenceForm.freq, 'INTERVAL=' + recurrenceForm.interval]
+    const ruleArr = ['FREQ=' + recurrenceForm.freq, 'INTERVAL=' + newInterval]
 
     // If monthly on certain days...
     if (recurrenceForm.freq === 'MONTHLY' && recurrenceForm.monthly.repeatOn === 'nthWeekday') {
