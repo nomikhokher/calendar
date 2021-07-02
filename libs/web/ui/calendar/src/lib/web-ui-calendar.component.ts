@@ -761,6 +761,7 @@ export enum StartWeekOn {
                         class="border border-gray-400 p-2 w-full text-base focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm rounded-md "
                         [(ngModel)]="currentColor"
                         [formControlName]="'color'"
+                        readonly
                       />
                       <div
                         (click)="isOpen = !isOpen"
@@ -966,6 +967,7 @@ export enum StartWeekOn {
                           [autocomplete]="'off'"
                           [formControlName]="'count'"
                           [min]="1"
+                          readonly
                         />
                       </div>
                       <span class="ml-4 text-green-500">occurrence(s)</span>
@@ -1088,8 +1090,6 @@ export class WebUiCalendarComponent {
     this.dateCheckEnumFormat = DateFormat[this.fetchSettings[0]?.dateFormat]
     this.timeCheckEnumFormat = TimeFormat[this.fetchSettings[0]?.timeFormat]
     this.startWeekOnheckEnumFormat = StartWeekOn[this.fetchSettings[0]?.startWeekOn]
-
-    console.log(this.startWeekOnheckEnumFormat)
 
     // Create Day of Array
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -1561,8 +1561,6 @@ export class WebUiCalendarComponent {
     // Toggle the visibility
     calendar.visible = !calendar.visible
 
-    console.log('checkbox run')
-
     let calendarData = omit(calendar, ['__typename']) as AdminUpdateCalendarInput
 
     // Send data server
@@ -1682,6 +1680,10 @@ export class WebUiCalendarComponent {
     const recurrenceForm = this.recurrenceForm.value
 
     let newInterval = Math.abs(recurrenceForm.interval)
+
+    if (newInterval < 1) {
+      newInterval = 1
+    }
 
     // Prepare the rule array and add the base rules
     const ruleArr = ['FREQ=' + recurrenceForm.freq, 'INTERVAL=' + newInterval]

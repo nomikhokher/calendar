@@ -117,8 +117,6 @@ export class WebCalendarFeatureComponent {
     this.CalendarService.adminUpdateCalendar(input).subscribe((res) => res)
     this.getCalendarInServserSide()
     this.getEventInServserSide()
-
-    console.log('server')
   }
 
   // Api call delete calendar in server side
