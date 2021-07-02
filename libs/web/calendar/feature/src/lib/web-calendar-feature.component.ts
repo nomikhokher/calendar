@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 @Component({
   template: `
     <ui-page headerTitle="Calendars">
-      <div class="dark:bg-gray-800 px-6 py-4 mb-3 md:mb-6 rounded-lg shadow">
+      <div class="dark:bg-gray-800 px-6 py-4 mb-3 md:mb-6">
         <ng-container *ngIf="settings$ | async as fetchSettings; else elseBlok">
           <ui-calendar
             [fetchEvent]="fetchEvent"

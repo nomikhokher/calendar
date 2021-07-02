@@ -4,7 +4,7 @@ import { WebLayoutStore } from './web-layout.store'
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-300">
+      <div class="flex flex-col h-full dark:bg-gray-900 text-gray-900 dark:text-gray-300">
         <div>
           <layout-header
             [logo]="vm?.layout?.logo"
@@ -14,12 +14,13 @@ import { WebLayoutStore } from './web-layout.store'
           >
           </layout-header>
         </div>
+        <hr />
         <main class="flex-1 h-full overflow-auto">
           <router-outlet></router-outlet>
         </main>
-        <footer class="mt-auto">
+        <!-- <footer class="mt-auto">
           <layout-footer [html]="vm?.layout?.footerHtml"></layout-footer>
-        </footer>
+        </footer> -->
       </div>
     </ng-container>
   `,

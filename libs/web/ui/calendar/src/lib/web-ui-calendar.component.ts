@@ -37,6 +37,12 @@ export enum TimeFormat {
   TwentyFour = 'TwentyFour',
 }
 
+export enum StartWeekOn {
+  One = 1,
+  Six = 6,
+  Zero = 0,
+}
+
 @Component({
   selector: 'ui-calendar',
   styleUrls: ['./ui-calendar.scss'],
@@ -44,7 +50,7 @@ export enum TimeFormat {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="demo-app border dark:border-gray-800" *ngIf="isCalendar">
-      <div class="demo-app-sidebar">
+      <!-- <div class="demo-app-sidebar">
         <div class="demo-app-sidebar-section">
           <h2>Instructions</h2>
           <ul>
@@ -74,8 +80,8 @@ export enum TimeFormat {
             </li>
           </ul>
         </div>
-      </div>
-      <div class="demo-app-sidebar">
+      </div> -->
+      <div class="demo-app-sidebar border-r">
         <div class="flex flex-col  min-h-full p-8">
           <div class="pb-6 text-3xl font-extrabold tracking-tight">Calendar</div>
           <div class="group flex items-center justify-between mb-3 calender">
@@ -101,9 +107,17 @@ export enum TimeFormat {
             *ngFor="let calendar of calendars"
           >
             <div class="flex items-center">
-              <input type="checkbox" [checked]="calendar.visible" (click)="toggleCalendarVisibility(calendar)" />
+              <input
+                type="checkbox"
+                [checked]="calendar.visible"
+                [attr.id]="calendar.color"
+                (click)="toggleCalendarVisibility(calendar)"
+              />
+
               <span class="w-3 h-3 ml-2 rounded-full" [style]="'background-color:' + calendar.color"></span>
-              <span class="ml-2 leading-none">{{ calendar.title }}</span>
+              <label [attr.for]="calendar.color" class="cursor-text">
+                <span class="ml-2 leading-none">{{ calendar.title }}</span>
+              </label>
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -332,12 +346,13 @@ export enum TimeFormat {
                     />
                   </div>
                 </div>
-                <div class="flex justify-items-center items-center pt-5" id="mat-checkbox-5">
-                  <label class="flex justify-center" for="mat-checkbox-5-input">
+                <div class="flex justify-items-center items-center pt-5">
+                  <label class="flex justify-center" for="allday-input">
                     <input
                       type="checkbox"
                       [formControlName]="'allDay'"
                       (change)="toggleChecked($event.target.checked)"
+                      id="allday-input"
                     />
                     <span class="flex justify-center pl-3"><span style="display: none;">&nbsp;</span> All day </span>
                   </label>
@@ -885,12 +900,12 @@ export enum TimeFormat {
               >
                 <div class="font-medium text-black">Repeat on</div>
                 <mat-button-toggle-group
-                  class="mt-1.5 border-none outline-none"
+                  class="mt-1.5 border-0 space-x-1"
                   [formControlName]="'byDay'"
                   [multiple]="true"
                 >
                   <mat-button-toggle
-                    class="w-10 h-10 rounded-full text-black outline-none focus:outline-none focus:border-none  focus:ring-0"
+                    class="w-10 h-10 rounded-full text-black focus:outline-none focus:border-none  focus:ring-0"
                     *ngFor="let weekday of weekdays; let i = index"
                     [ngClass]="[weekday.label === currentDay ? 'bg-gray-300' : 'class_' + i]"
                     [disableRipple]="true"
@@ -932,16 +947,14 @@ export enum TimeFormat {
                       <option [value]="'count'" class="text-black">After</option>
                     </select>
                   </div>
-                  <div class="w-40 ml-4" *ngIf="recurrenceForm.get('end.type').value === 'until'">
-                    <input
-                      multiple
-                      [matDatepicker]="untilDatePicker"
-                      class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                      [formControlName]="'until'"
-                      [for]="untilDatePicker"
-                      matSuffix
-                    />
-                  </div>
+                  <mat-form-field
+                    class="w-40 ml-4 z-50 border-gray-300 border rounded-md"
+                    *ngIf="recurrenceForm.get('end.type').value === 'until'"
+                  >
+                    <input matInput [matDatepicker]="untilDatePicker" [formControlName]="'until'" />
+                    <mat-datepicker-toggle matSuffix [for]="untilDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #untilDatePicker></mat-datepicker>
+                  </mat-form-field>
                   <ng-container *ngIf="recurrenceForm.get('end.type').value === 'count'">
                     <div class="w-full">
                       <br />
@@ -960,7 +973,6 @@ export enum TimeFormat {
                   </ng-container>
                 </div>
               </div>
-
               <!-- Actions -->
               <div class="ml-auto mt-8">
                 <button
@@ -999,6 +1011,7 @@ export class WebUiCalendarComponent {
   @Output() deleteCalendarInServserSide = new EventEmitter<any>()
   @Output() settingsUpdateCalendarInServserSide = new EventEmitter<any>()
 
+  startWeekOnheckEnumFormat: string
   timeCheckEnumFormat: string
   dateCheckEnumFormat: string
   recurrenceFormValues: any
@@ -1072,8 +1085,11 @@ export class WebUiCalendarComponent {
 
   ngOnInit() {
     // Enum check value exits
-    this.dateCheckEnumFormat = DateFormat[this.fetchSettings[0].dateFormat]
-    this.timeCheckEnumFormat = TimeFormat[this.fetchSettings[0].timeFormat]
+    this.dateCheckEnumFormat = DateFormat[this.fetchSettings[0]?.dateFormat]
+    this.timeCheckEnumFormat = TimeFormat[this.fetchSettings[0]?.timeFormat]
+    this.startWeekOnheckEnumFormat = StartWeekOn[this.fetchSettings[0]?.startWeekOn]
+
+    console.log(this.startWeekOnheckEnumFormat)
 
     // Create Day of Array
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

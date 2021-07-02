@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material'
 import { MAT_DATE_FORMATS } from '@angular/material/core'
 import { ClickOutsideModule } from 'ng-click-outside'
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -43,6 +44,8 @@ FullCalendarModule.registerPlugins([
     MatInputModule,
     MatMomentDateModule,
     MatSelectModule,
+    MatNativeDateModule,
+    MatRippleModule,
     FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,

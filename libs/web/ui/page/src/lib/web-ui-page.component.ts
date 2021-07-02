@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core'
   selector: 'ui-page',
   template: `
     <div class="h-full flex flex-col justify-between">
-      <header class="bg-gray-800 text-gray-300 shadow" *ngIf="headerTitle">
+      <header class="text-black" *ngIf="headerTitle">
         <div class="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 class="text-2xl md:text-3xl font-bold leading-tight ">
             {{ headerTitle }}
