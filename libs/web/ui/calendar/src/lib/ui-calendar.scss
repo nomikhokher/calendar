@@ -277,7 +277,7 @@ mat-button-toggle:hover {
   background: #eee;
   left: 40%;
   border-radius: 5px;
-  padding-bottom: 50px;
+  padding-bottom: 45px;
 }
 .mat-form-field-flex {
   display: flex !important;
@@ -294,7 +294,7 @@ mat-button-toggle {
 }
 .mat-datepicker-content .mat-datepicker-close-button {
   position: absolute;
-  top: 87% !important;
+  top: 86% !important;
   left: 15px !important;
   margin-top: 0;
   background: #000 !important;
@@ -302,4 +302,25 @@ mat-button-toggle {
 }
 .mat-button-toggle-button:focus {
   outline: none !important;
+}
+
+input.ng-dirty.ng-invalid.ng-touched {
+  --tw-border-opacity: 1;
+  border-color: rgba(239, 68, 68, var(--tw-border-opacity));
+}
+input.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42a948;
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+}
+// input[type='number']:focus {
+//   --tw-border-opacity: 1;
+//   border-color: rgba(209, 213, 219, var(--tw-border-opacity)) !important;
+// }
+
+.cdk-live-announcer-element .cdk-visually-hidden {
+  display: none !important;
 }

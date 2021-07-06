@@ -527,14 +527,14 @@ export enum StartWeekOn {
                   <button
                     type="button"
                     (click)="remoeEventModal()"
-                    class=" bg-white text-black border font-bold py-2 px-4 rounded-full mr-3 hover:bg-gray-200"
+                    class=" bg-white text-black border font-bold py-2 px-4 rounded-full mr-3 hover:bg-gray-200 focus:outline-none focus:ring-offset-0 focus:ring-0"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     *ngIf="panelMode === 'add'"
-                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
+                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-offset-0 focus:ring-0"
                     (click)="addEventHandle()"
                   >
                     Add
@@ -542,7 +542,7 @@ export enum StartWeekOn {
                   <button
                     type="button"
                     *ngIf="panelMode === 'edit'"
-                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
+                    class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-offset-0 focus:ring-0 "
                     (click)="updateEventHandle()"
                   >
                     Save
@@ -572,14 +572,14 @@ export enum StartWeekOn {
             <button
               type="button"
               (click)="removeEventHandle()"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-offset-0 focus:ring-0 sm:ml-3 sm:w-auto sm:text-sm"
             >
               Remove
             </button>
             <button
               type="button"
               (click)="removeModal()"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-offset-0 focus:ring-0 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
             >
               Cancel
             </button>
@@ -749,6 +749,7 @@ export enum StartWeekOn {
                   class="w-full text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                   [placeholder]="'Calendar title'"
                   [formControlName]="'title'"
+                  required
                 />
               </div>
 
@@ -762,6 +763,7 @@ export enum StartWeekOn {
                         [(ngModel)]="currentColor"
                         [formControlName]="'color'"
                         readonly
+                        required
                       />
                       <div
                         (click)="isOpen = !isOpen"
@@ -812,7 +814,7 @@ export enum StartWeekOn {
               <div class="flex justify-end mt-2">
                 <button
                   type="button"
-                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-offset-0 focus:ring-0 sm:text-sm"
                   (click)="closeEditPanel()"
                 >
                   Cancel
@@ -820,7 +822,7 @@ export enum StartWeekOn {
                 <button
                   *ngIf="calendarMode === 'edit'"
                   type="button"
-                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none  focus:ring-offset-0 focus:ring-0 sm:text-sm"
                   (click)="deleteCalendar(calendarForm.get('id').value)"
                 >
                   Delete
@@ -828,17 +830,19 @@ export enum StartWeekOn {
                 <button
                   *ngIf="calendarMode === 'edit'"
                   type="button"
-                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="disabled:opacity-50 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-offset-0 focus:ring-0 sm:text-sm"
                   [color]="'primary'"
+                  [disabled]="calendarForm.invalid"
                   (click)="saveCalendar()"
                 >
                   Update
                 </button>
                 <button
                   type="button"
-                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="disabled:opacity-50 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-offset-0 focus:ring-0 sm:text-sm"
                   *ngIf="calendarMode === 'add'"
                   [color]="'primary'"
+                  [disabled]="calendarForm.invalid"
                   (click)="saveCalendar()"
                 >
                   Add
@@ -872,13 +876,17 @@ export enum StartWeekOn {
               <!-- Interval and frequency -->
               <div class="flex mt-12">
                 <div class="w-full -mt-6">
-                  <label class="text-black">Repeat every</label>
+                  <label class="text-black" for="interval">Repeat every</label>
                   <input
                     type="number"
-                    class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    class="w-full text-base border-gray-300 text-black outline-none focus:outline-none focus:ring-0 focus:border-0 sm:text-sm rounded-md"
                     [autocomplete]="'off'"
                     [formControlName]="'interval'"
                     [min]="1"
+                    required
+                    id="interval"
+                    [ngClass]="[recurrenceForm.get('interval').invalid && 'border-red-500']"
+                    onkeypress="return event.charCode > 48"
                   />
                 </div>
                 <div class="w-full ml-4">
@@ -935,59 +943,70 @@ export enum StartWeekOn {
               </div>
 
               <!-- Ends -->
-              <div class="flex flex-col mt-10" [formGroupName]="'end'">
-                <div class="flex items-center">
-                  <div class="w-full -mt-6">
-                    <label class="text-black">Ends</label>
-                    <select
-                      [formControlName]="'type'"
-                      class="block w-full pl-3 pr-10 text-base text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    >
-                      <option [value]="'never'" class="text-black">Never</option>
-                      <option [value]="'until'" class="text-black">On</option>
-                      <option [value]="'count'" class="text-black">After</option>
-                    </select>
-                  </div>
-                  <mat-form-field
-                    class="w-40 ml-4 z-50 border-gray-300 border rounded-md"
-                    *ngIf="recurrenceForm.get('end.type').value === 'until'"
-                  >
-                    <input matInput [matDatepicker]="untilDatePicker" [formControlName]="'until'" />
-                    <mat-datepicker-toggle matSuffix [for]="untilDatePicker"></mat-datepicker-toggle>
-                    <mat-datepicker #untilDatePicker></mat-datepicker>
-                  </mat-form-field>
-                  <ng-container *ngIf="recurrenceForm.get('end.type').value === 'count'">
-                    <div class="w-full">
-                      <br />
-                      <div class="w-40 ml-4">
-                        <input
-                          type="number"
-                          multiple
-                          class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                          [autocomplete]="'off'"
-                          [formControlName]="'count'"
-                          [min]="1"
-                          readonly
-                        />
-                      </div>
-                      <span class="ml-4 text-green-500">occurrence(s)</span>
+              <ng-container [formGroupName]="'end'">
+                <div class="flex flex-col mt-10">
+                  <div class="flex items-center">
+                    <div class="w-full -mt-6">
+                      <label class="text-black">Ends</label>
+                      <select
+                        [formControlName]="'type'"
+                        class="block w-full pl-3 pr-10 text-base text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      >
+                        <option [value]="'never'" class="text-black">Never</option>
+                        <option [value]="'until'" class="text-black">On</option>
+                        <option [value]="'count'" class="text-black">After</option>
+                      </select>
                     </div>
-                  </ng-container>
+                    <mat-form-field
+                      class="w-40 ml-4 z-50 border-gray-300 border rounded-md"
+                      *ngIf="recurrenceForm.get('end.type').value === 'until'"
+                    >
+                      <input matInput [matDatepicker]="untilDatePicker" [formControlName]="'until'" />
+                      <mat-datepicker-toggle matSuffix [for]="untilDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #untilDatePicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <ng-container *ngIf="recurrenceForm.get('end.type').value === 'count'">
+                      <div class="w-full">
+                        <br />
+                        <div class="w-40 ml-4">
+                          <input
+                            type="number"
+                            multiple
+                            class="w-full text-base border-gray-300 text-black focus:outline-none focus:ring-0 focus:border-0 sm:text-sm rounded-md"
+                            [autocomplete]="'off'"
+                            [formControlName]="'count'"
+                            [min]="1"
+                            required
+                            [ngClass]="[recurrenceForm.get('end.count').invalid && 'border-red-500']"
+                            onkeypress="return event.charCode > 48"
+                          />
+                        </div>
+                        <span class="ml-4 text-green-500" *ngIf="recurrenceForm.get('end.count').valid"
+                          >occurrence(s)</span
+                        >
+                        <span class="ml-4 text-red-500" *ngIf="recurrenceForm.get('end.count').invalid"
+                          >occurrence(s)</span
+                        >
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
-              </div>
+              </ng-container>
+
               <!-- Actions -->
               <div class="ml-auto mt-8">
                 <button
                   class="clear"
                   (click)="clear()"
-                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="mr-2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none  focus:ring-offset-0 focus:ring-0 sm:text-sm"
                 >
                   Clear
                 </button>
                 <button
                   [disabled]="recurrenceForm.invalid"
                   (click)="done()"
-                  class="rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  class="disabled:opacity-50 rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-0 focus:ring-offset0 sm:text-sm"
                 >
                   Done
                 </button>
@@ -1056,7 +1075,7 @@ export class WebUiCalendarComponent {
   calendarVisible = true
   colors: any[] = ['gray', 'red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink']
   variants: any[] = [500]
-  currentColor: string = ''
+  currentColor: string
   iconColor: string = ''
   isOpen: boolean = false
   cloneFetch: any
@@ -1533,6 +1552,7 @@ export class WebUiCalendarComponent {
       if (newCalendar) {
         this.addCalendarInServserSide.emit({ input: newCalendar })
         this.calendarForm.reset()
+        this.calendarForm.get('color').setValue('indigo')
         this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
       }
     } else {
@@ -1547,6 +1567,7 @@ export class WebUiCalendarComponent {
       // Send data server
       this.updateCalendarInServserSide.emit({ calendarId: calendarId, input: newCalendar })
       this.calendarForm.reset()
+      this.calendarForm.get('color').setValue('indigo')
       this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
     }
   }
@@ -1554,6 +1575,7 @@ export class WebUiCalendarComponent {
   deleteCalendar(calendarId) {
     this.deleteCalendarInServserSide.emit({ calendarId: calendarId })
     this.calendarForm.reset()
+    this.calendarForm.get('color').setValue('indigo')
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
   }
 
@@ -1730,6 +1752,8 @@ export class WebUiCalendarComponent {
       // Update the recurrence field with the result
       this.eventForm.get('recurrence').setValue(ruleText)
     }
+
+    this.recurrenceForm.reset()
   }
 
   private _init(): void {
