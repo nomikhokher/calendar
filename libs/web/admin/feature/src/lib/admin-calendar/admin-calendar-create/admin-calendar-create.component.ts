@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
 import { WebUiFormField } from '@calendar/web/ui/form'
 import { AdminCalendarCreateStore } from './admin-calendar-create.store'
-
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
@@ -22,19 +21,16 @@ import { AdminCalendarCreateStore } from './admin-calendar-create.store'
 })
 export class AdminCalendarCreateComponent {
   readonly vm$ = this.store.vm$
-
   fields = [
     WebUiFormField.fieldRow([
       WebUiFormField.input('id', { label: 'Id' }, { className: 'w-1/2  px-1', hide: true }),
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' }),
     ]),
-    WebUiFormField.fieldRow([
-      WebUiFormField.input('visible', { label: 'Visible' }, { className: 'w-1/2  px-1', type: 'checkbox' }),
-    ]),
+    WebUiFormField.fieldRow([WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' })]),
+    WebUiFormField.fieldRow([WebUiFormField.checkbox('visible', { label: 'Visible' }, { className: 'w-1/2  px-1' })]),
   ]
   constructor(private readonly store: AdminCalendarCreateStore) {}
-
   createCalendar(input) {
     this.store.createCalendarEffect(input)
   }

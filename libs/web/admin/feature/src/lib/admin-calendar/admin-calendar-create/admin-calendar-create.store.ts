@@ -3,36 +3,25 @@ import { Router } from '@angular/router'
 import { AdminCreateCalendarInput, WebCoreDataAccessService, Calendar } from '@calendar/web/core/data-access'
 import { ComponentStore, tapResponse } from '@ngrx/component-store'
 import { switchMap, tap } from 'rxjs/operators'
-
 export interface CalendarCreateState {
   errors?: any
   loading?: boolean
   item?: Calendar
-
   searchTerm?: string
 }
-
 @Injectable()
 export class AdminCalendarCreateStore extends ComponentStore<CalendarCreateState> {
   constructor(private readonly data: WebCoreDataAccessService, private readonly router: Router) {
     super({ loading: false })
   }
-
   readonly errors$ = this.select((s) => s.errors)
   readonly loading$ = this.select((s) => s.loading)
   readonly item$ = this.select((s) => s.item)
-
-  readonly vm$ = this.select(
-    this.errors$,
-    this.loading$,
-    this.item$,
-
-    (errors, loading, item) => ({
-      errors,
-      loading,
-      item,
-    }),
-  )
+  readonly vm$ = this.select(this.errors$, this.loading$, this.item$, (errors, loading, item) => ({
+    errors,
+    loading,
+    item,
+  }))
 
   readonly createCalendarEffect = this.effect<AdminCreateCalendarInput>((input$) =>
     input$.pipe(

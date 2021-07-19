@@ -1105,6 +1105,13 @@ export class WebUiCalendarComponent {
   }
 
   ngOnInit() {
+    // Remove all model
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.remove-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.recurrence-modal').style.display = 'none'
+
     // Enum check value exits
     this.dateCheckEnumFormat = DateFormat[this.fetchSettings[0]?.dateFormat]
     this.timeCheckEnumFormat = TimeFormat[this.fetchSettings[0]?.timeFormat]
@@ -1277,6 +1284,7 @@ export class WebUiCalendarComponent {
   handleDateSelect(selectInfo: DateSelectArg) {
     this.crurentCalendarSelect = null
     this.elementRef.nativeElement.querySelector('.modal').classList.add('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'block'
     localStorage.setItem('panelMode', (this.panelMode = 'add'))
 
     // Get calendar event date
@@ -1307,7 +1315,7 @@ export class WebUiCalendarComponent {
 
   handleEventClick(clickInfo: EventClickArg) {
     this.elementRef.nativeElement.querySelector('.info-modal').classList.add('inset-0')
-
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'block'
     this.apiEvt = clickInfo.view.calendar
 
     this.clickInfo = clickInfo
@@ -1344,21 +1352,34 @@ export class WebUiCalendarComponent {
     this.isCalendar = false
     this.isSetting = true
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
-    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
     this.elementRef.nativeElement.querySelector('.remove-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.recurrence-modal').classList.remove('inset-0')
+
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.remove-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.recurrence-modal').style.display = 'none'
   }
   public onBack() {
     this.isSetting = false
     this.isCalendar = true
-    this.elementRef.nativeElement.querySelector('.modal').style.display = 'block'
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.remove-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
+    this.elementRef.nativeElement.querySelector('.recurrence-modal').style.display = 'none'
   }
 
   remoeEventModal() {
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
   }
   removeModal() {
     this.elementRef.nativeElement.querySelector('.remove-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.remove-modal').style.display = 'none'
   }
 
   addEventHandle() {
@@ -1406,6 +1427,8 @@ export class WebUiCalendarComponent {
       this.eventForm.reset()
     }
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
+
     localStorage.removeItem('panelMode')
   }
 
@@ -1436,8 +1459,8 @@ export class WebUiCalendarComponent {
       newEvent = omit(
         newEvent,
         ['range', 'duration'],
-        (newEvent.start = start),
-        (newEvent.end = end),
+        (newEvent.start = newEvent.range.start),
+        (newEvent.end = newEvent.range.end),
         (newEvent.calendarId = this.crurentCalendarSelect?.id),
       ) as AdminUpdateCalendarEventInput
     }
@@ -1481,16 +1504,23 @@ export class WebUiCalendarComponent {
     this.updateEventInServserSide.emit({ calendarEventId: id, input: newEvent })
 
     this.elementRef.nativeElement.querySelector('.modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'none'
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
   }
 
   removeEvent() {
     this.elementRef.nativeElement.querySelector('.remove-modal').classList.add('inset-0')
+    this.elementRef.nativeElement.querySelector('.remove-modal').style.display = 'block'
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
   }
 
   updateEvent() {
     this.elementRef.nativeElement.querySelector('.modal').classList.add('inset-0')
+    this.elementRef.nativeElement.querySelector('.modal').style.display = 'block'
+
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
     localStorage.setItem('panelMode', (this.panelMode = 'edit'))
   }
@@ -1534,10 +1564,12 @@ export class WebUiCalendarComponent {
   calendarEvent() {
     localStorage.setItem('panelMode', (this.calendarMode = 'add'))
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.add('inset-0')
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'block'
   }
 
   closeEditPanel() {
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
   }
 
   saveCalendar() {
@@ -1554,6 +1586,7 @@ export class WebUiCalendarComponent {
         this.calendarForm.reset()
         this.calendarForm.get('color').setValue('indigo')
         this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+        this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
       }
     } else {
       // Get the clone of the calendar form value
@@ -1569,6 +1602,7 @@ export class WebUiCalendarComponent {
       this.calendarForm.reset()
       this.calendarForm.get('color').setValue('indigo')
       this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+      this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
     }
   }
 
@@ -1577,6 +1611,7 @@ export class WebUiCalendarComponent {
     this.calendarForm.reset()
     this.calendarForm.get('color').setValue('indigo')
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'none'
   }
 
   toggleCalendarVisibility(calendar: Calendar): void {
@@ -1592,6 +1627,7 @@ export class WebUiCalendarComponent {
   openEditPanel(calendar) {
     localStorage.setItem('panelMode', (this.calendarMode = 'edit'))
     this.elementRef.nativeElement.querySelector('.calendar-modal').classList.add('inset-0')
+    this.elementRef.nativeElement.querySelector('.calendar-modal').style.display = 'block'
 
     // Reset the form and fill the calendar
     this.calendarForm.reset()
@@ -1649,6 +1685,7 @@ export class WebUiCalendarComponent {
   recurrenceEvent() {
     this.elementRef.nativeElement.querySelectorAll('.recurrence-modal').forEach((res) => {
       res.classList.add('inset-0')
+      res.style.display = 'block'
     })
 
     this.dataWeekEnd = this.eventForm.value
@@ -1694,6 +1731,7 @@ export class WebUiCalendarComponent {
     // Close the dialog
     this.elementRef.nativeElement.querySelectorAll('.recurrence-modal').forEach((res) => {
       res.classList.remove('inset-0')
+      res.style.display = 'none'
     })
   }
 
@@ -2025,6 +2063,7 @@ export class WebUiCalendarComponent {
 
   remoeEventInfoModal() {
     this.elementRef.nativeElement.querySelector('.info-modal').classList.remove('inset-0')
+    this.elementRef.nativeElement.querySelector('.info-modal').style.display = 'none'
   }
 
   typeof_variable(vrr) {
