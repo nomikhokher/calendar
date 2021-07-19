@@ -10,6 +10,7 @@ export class ApiUserCalendarDataAccessUserService {
 
   async userUserCalendars(userId: string, input?: UserListUserCalendarInput) {
     return this.data.userCalendar.findMany({
+      where: { userId: userId },
       take: input?.limit,
       skip: input?.skip,
     })

@@ -51,6 +51,11 @@ export class AdminUserCalendarEditComponent {
   ]
   constructor(private readonly store: AdminUserCalendarEditStore) {}
 
+  ngOnInit(): void {
+    this.store.filterCalendars('')
+    this.store.filterUsers('')
+  }
+
   updateUserCalendar(input: AdminUpdateUserCalendarInput) {
     const { name, userId, calendarId } = input
     this.store.updateUserCalendarEffect({ name, userId, calendarId })

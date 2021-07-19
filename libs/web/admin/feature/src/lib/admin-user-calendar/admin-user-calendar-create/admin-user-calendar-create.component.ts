@@ -7,12 +7,6 @@ import { AdminUserCalendarCreateStore } from './admin-user-calendar-create.store
     <ng-container *ngIf="vm$ | async as vm">
       <ui-page-header title="Create User Calendar" linkPath=".." linkTitle="Back"></ui-page-header>
       <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-        <div class="flex flex-row">
-          <div class="flex w-full"></div>
-          <div class="flex-none space-x-2">
-            <ui-button label="Submit" type="submit"></ui-button>
-          </div>
-        </div>
         <ui-form [fields]="fields" [model]="{}" (submitForm)="createUserCalendar($event)">
           <div class="flex flex-row">
             <div class="flex w-full"></div>
@@ -56,6 +50,11 @@ export class AdminUserCalendarCreateComponent {
     }),
   ]
   constructor(private readonly store: AdminUserCalendarCreateStore) {}
+
+  ngOnInit(): void {
+    this.store.filterCalendars('')
+    this.store.filterUsers('')
+  }
 
   createUserCalendar(input) {
     this.store.createUserCalendarEffect(input)

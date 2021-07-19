@@ -54,18 +54,28 @@ export class AdminUserCalendarEditStore extends ComponentStore<UserCalendarUpdat
   readonly filterUsers = this.effect<string>((filter$) =>
     filter$.pipe(
       switchMap((term) =>
-        this.data.adminUsers().pipe(
-          tapResponse(
-            (res: any) => {
-              let users = res.data.items
-              return this.patchState({ users: users })
+        this.data
+          .adminUsers({
+            paging: {
+              limit: 10,
+              skip: 0,
             },
-            (errors: any) =>
-              this.patchState({
-                errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
-              }),
+          })
+          .pipe(
+            tapResponse(
+              (res: any) => {
+                let users = res.data.users.map((user) => {
+                  user.name = user.firstName + ' ' + user.lastName
+                  return user
+                })
+                return this.patchState({ users: users })
+              },
+              (errors: any) =>
+                this.patchState({
+                  errors: errors.graphQLErrors ? errors.graphQLErrors : errors,
+                }),
+            ),
           ),
-        ),
       ),
     ),
   )
@@ -76,7 +86,10 @@ export class AdminUserCalendarEditStore extends ComponentStore<UserCalendarUpdat
         this.data.adminCalendars({ input: { name: term } }).pipe(
           tapResponse(
             (res: any) => {
-              let calendars = res.data.items
+              let calendars = res.data.items.map((calendar) => {
+                calendar.name = calendar.title
+                return calendar
+              })
               return this.patchState({ calendars: calendars })
             },
             (errors: any) =>

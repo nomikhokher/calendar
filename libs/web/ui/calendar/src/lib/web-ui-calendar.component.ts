@@ -1021,7 +1021,7 @@ export enum StartWeekOn {
 export class WebUiCalendarComponent {
   @ViewChild('fullCalendar') fullCalendar: FullCalendarComponent
   @Input() fetchEvent?: any
-  @Input() calendars?: any
+  @Input() calendars: any
   @Input() fetchSettings?: CalendarSettings
   @Input() weekdays?: CalendarWeekday[]
   @Output() addEventInServserSide = new EventEmitter<any>()
