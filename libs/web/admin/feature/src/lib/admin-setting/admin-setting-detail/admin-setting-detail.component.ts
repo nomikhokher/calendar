@@ -4,27 +4,81 @@ import { AdminSettingDetailStore } from './admin-setting-detail.store'
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <ui-page-header [title]="'Setting ' + vm.item?.name" linkPath=".." linkTitle="Back"></ui-page-header>
+      <ui-page-header [title]="'Setting ' + vm.item?.dateFormat" linkPath=".." linkTitle="Back"></ui-page-header>
       <ng-container *ngIf="vm.item">
-        <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <div class="ml-4">
-                <div class="text-lg font-medium text-gray-900 dark:text-gray-200">
-                  {{ vm.item?.name }}
+        <ul class="grid">
+          <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
+            <div class="w-full flex items-center justify-between p-6 space-x-6">
+              <div class="flex-1 truncate">
+                <div class="flex items-center space-x-3">
+                  <p>
+                    Date Format:
+                    <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.dateFormat }}</span>
+                  </p>
                 </div>
-                <div class="text-lg text-gray-500">
-                  {{ vm.item?.updatedAt | date: 'short' }}
+                <p class="mt-1 text-gray-500 text-sm truncate">
+                  Time Format:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.timeFormat }}</span>
+                </p>
+              </div>
+              <p>
+                StartWeek On:
+                <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.startWeekOn }}</span>
+              </p>
+            </div>
+            <div>
+              <div class="-mt-px flex divide-x divide-gray-200">
+                <div class="w-0 flex-1 flex">
+                  <a
+                    routerLink="edit"
+                    class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                  >
+                    <!-- Heroicon name: solid/phone -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    <span class="ml-3">Edit</span>
+                  </a>
+                </div>
+                <div class="-ml-px w-0 flex-1 flex">
+                  <a
+                    href="javascript:void(0)"
+                    (click)="deleteItem(vm.item)"
+                    class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                  >
+                    <!-- Heroicon name: solid/mail -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    <span class="ml-3">Delete</span>
+                  </a>
                 </div>
               </div>
             </div>
-            <div class="flex space-x-2">
-              <ui-button link="edit" label="Edit"></ui-button>
-              <ui-button (handler)="deleteItem(vm.item)" label="Delete"></ui-button>
-            </div>
-          </div>
-        </div>
-        <pre class="mt-6 dark:bg-gray-800 p-4 text-xs shadow rounded-md">{{ vm.item | json }}</pre>
+          </li>
+        </ul>
       </ng-container>
     </ng-container>
   `,

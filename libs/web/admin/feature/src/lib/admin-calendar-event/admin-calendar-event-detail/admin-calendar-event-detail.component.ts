@@ -4,57 +4,107 @@ import { AdminCalendarEventDetailStore } from './admin-calendar-event-detail.sto
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <ui-page-header [title]="'Calendar Event ' + vm.item?.name" linkPath=".." linkTitle="Back"></ui-page-header>
+      <ui-page-header [title]="'Calendar Event ' + vm.item?.title" linkPath=".." linkTitle="Back"></ui-page-header>
       <ng-container *ngIf="vm.item">
-        <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-          <div class="flex flex-row">
-            <div class="flex w-full"></div>
-            <div class="flex-none space-x-2">
-              <ui-button link="edit" label="Edit"></ui-button>
-              <ui-button (handler)="deleteItem(vm.item)" label="Delete"></ui-button>
-            </div>
-          </div>
-          <div class="flex flex-wrap overflow-hidden lg:-mx-1 xl:-mx-2">
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Calendar Id:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.calendar?.name }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Recurring Event Id:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">
-                {{ vm.item?.recurringEvent?.name }}
+        <ul class="grid">
+          <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
+            <div class="w-full flex items-center justify-between p-6 space-x-6">
+              <div class="flex-1 truncate">
+                <div class="flex items-center space-x-3">
+                  <p>
+                    Title: <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.title }}</span>
+                  </p>
+                </div>
+                <p>
+                  Recurring Event:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.recurringEvent }}</span>
+                </p>
+                <p>
+                  Is FirstInstance:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.isFirstInstance }}</span>
+                </p>
+
+                <p>
+                  Description:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.description }}</span>
+                </p>
+
+                <p>
+                  Recurrence:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.recurrence }}</span>
+                </p>
+              </div>
+              <div class="flex flex-col">
+                <p>
+                  All Day: <span class="text-gray-900 text-sm font-medium truncate ml-2">{{ vm.item?.allDay }}</span>
+                </p>
+                <p>
+                  Start:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{
+                    vm.item?.start | date: 'medium'
+                  }}</span>
+                </p>
+                <p>
+                  End:
+                  <span class="text-gray-900 text-sm font-medium truncate ml-2">{{
+                    vm.item?.end | date: 'medium'
+                  }}</span>
+                </p>
               </div>
             </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Is First Instance:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.isFirstInstance }}</div>
+            <div>
+              <div class="-mt-px flex divide-x divide-gray-200">
+                <div class="w-0 flex-1 flex">
+                  <a
+                    routerLink="edit"
+                    class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                  >
+                    <!-- Heroicon name: solid/phone -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    <span class="ml-3">Edit</span>
+                  </a>
+                </div>
+                <div class="-ml-px w-0 flex-1 flex">
+                  <a
+                    href="javascript:void(0)"
+                    (click)="deleteItem(vm.item)"
+                    class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                  >
+                    <!-- Heroicon name: solid/mail -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    <span class="ml-3">Delete</span>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Title:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.title }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Description:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.description }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Start:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.start }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">End:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.end }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">All Day:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.allDay }}</div>
-            </div>
-            <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-full xl:my-2 xl:px-2 xl:w-1/2">
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">Recurrence:</div>
-              <div class="text-lg font-medium text-gray-900 dark:text-gray-200">{{ vm.item?.recurrence }}</div>
-            </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </ng-container>
     </ng-container>
   `,

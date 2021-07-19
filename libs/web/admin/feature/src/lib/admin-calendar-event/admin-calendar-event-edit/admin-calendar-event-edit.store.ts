@@ -52,7 +52,10 @@ export class AdminCalendarEventEditStore extends ComponentStore<CalendarEventUpd
         this.data.adminCalendars({ input: { name: term } }).pipe(
           tapResponse(
             (res: any) => {
-              let calendars = res.data.items
+              let calendars = res.data.items.map((item) => {
+                item.name = item.title
+                return item
+              })
               return this.patchState({ calendars: calendars })
             },
             (errors: any) =>

@@ -39,7 +39,11 @@ export class ApiSettingDataAccessAdminService {
     await this.data.ensureAdminUser(adminId)
 
     return this.data.setting.create({
-      data: {},
+      data: {
+        dateFormat: input.dateFormat,
+        timeFormat: input.timeFormat,
+        startWeekOn: input.startWeekOn,
+      },
     })
   }
 
@@ -48,7 +52,11 @@ export class ApiSettingDataAccessAdminService {
 
     return this.data.setting.update({
       where: { id: settingId },
-      data: {},
+      data: {
+        dateFormat: input.dateFormat,
+        timeFormat: input.timeFormat,
+        startWeekOn: input.startWeekOn,
+      },
     })
   }
 

@@ -9,13 +9,13 @@ import { AdminCalendarEventEditStore } from './admin-calendar-event-edit.store'
     <ng-container *ngIf="vm$ | async as vm">
       <ng-container *ngIf="vm.item">
         <ui-page-header
-          [title]="'Edit Calendar Event ' + vm.item?.name"
+          [title]="'Edit Calendar Event ' + vm.item?.title"
           linkPath=".."
           linkTitle="Back"
         ></ui-page-header>
         <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
           <ui-form [form]="form" [fields]="fields" [model]="vm.item" (submitForm)="updateCalendarEvent($event)">
-            <ui-button label="Submit" type="submit"></ui-button>
+            <ui-button label="Save" type="submit"></ui-button>
           </ui-form>
         </div>
       </ng-container>
@@ -27,23 +27,25 @@ export class AdminCalendarEventEditComponent {
   readonly vm$ = this.store.vm$
   readonly form = new FormGroup({})
   readonly calendars$ = this.store.calendars$
+  readonly item$ = this.store.item$
+  item: any = {}
 
   fields = [
     WebUiFormField.fieldRow([
       WebUiFormField.input('id', { label: 'Id' }, { className: 'w-1/2  px-1', hide: true }),
       WebUiFormField.input('calendarId', { label: 'Calendar Id' }, { className: 'w-1/2  px-1', hide: true }),
-    ]),
-    WebUiFormField.fieldRow([
       WebUiFormField.input(
         'recurringEventId',
         { label: 'Recurring Event Id' },
         { className: 'w-1/2  px-1', hide: true },
       ),
-      WebUiFormField.input('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
+      WebUiFormField.input('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
-      WebUiFormField.input('description', { label: 'Description' }, { className: 'w-1/2  px-1' }),
+    ]),
+    WebUiFormField.fieldRow([
+      WebUiFormField.input('description', { label: 'Description' }, { className: 'w-full  px-1' }),
     ]),
     WebUiFormField.fieldRow([
       WebUiFormField.input('start', { label: 'Start' }, { className: 'w-1/2  px-1' }),
@@ -61,7 +63,10 @@ export class AdminCalendarEventEditComponent {
       },
     }),
   ]
+
   constructor(private readonly store: AdminCalendarEventEditStore) {}
+
+  ngOnInit() {}
 
   updateCalendarEvent(input: AdminUpdateCalendarEventInput) {
     const { calendarId, recurringEventId, isFirstInstance, title, description, start, end, allDay, recurrence } = input

@@ -69,6 +69,7 @@ export class UiFormTypeaheadComponent extends FieldType implements OnDestroy, On
   public value: any
 
   ngOnInit(): void {
+    console.log(this.selectedItem)
     console.log('initializing')
 
     // this.options$ = this.search$.pipe(

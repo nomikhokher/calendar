@@ -9,13 +9,13 @@ import { AdminCalendarWeekdayEditStore } from './admin-calendar-weekday-edit.sto
     <ng-container *ngIf="vm$ | async as vm">
       <ng-container *ngIf="vm.item">
         <ui-page-header
-          [title]="'Edit Calendar Weekday ' + vm.item?.name"
+          [title]="'Edit Calendar Weekday ' + vm.item?.label"
           linkPath=".."
           linkTitle="Back"
         ></ui-page-header>
         <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
           <ui-form [form]="form" [fields]="fields" [model]="vm.item" (submitForm)="updateCalendarWeekday($event)">
-            <ui-button label="Submit" type="submit"></ui-button>
+            <ui-button label="Save" type="submit"></ui-button>
           </ui-form>
         </div>
       </ng-container>

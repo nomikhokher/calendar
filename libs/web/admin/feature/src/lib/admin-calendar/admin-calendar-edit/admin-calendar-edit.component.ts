@@ -8,10 +8,10 @@ import { AdminCalendarEditStore } from './admin-calendar-edit.store'
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <ng-container *ngIf="vm.item">
-        <ui-page-header [title]="'Edit Calendar ' + vm.item?.name" linkPath=".." linkTitle="Back"></ui-page-header>
+        <ui-page-header [title]="'Edit Calendar ' + vm.item?.title" linkPath=".." linkTitle="Back"></ui-page-header>
         <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
           <ui-form [form]="form" [fields]="fields" [model]="vm.item" (submitForm)="updateCalendar($event)">
-            <ui-button label="Submit" type="submit"></ui-button>
+            <ui-button label="Save" type="submit"></ui-button>
           </ui-form>
         </div>
       </ng-container>
@@ -27,10 +27,10 @@ export class AdminCalendarEditComponent {
     WebUiFormField.fieldRow([
       WebUiFormField.input('id', { label: 'Id' }, { className: 'w-1/2  px-1', hide: true }),
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' }),
-      WebUiFormField.input('visible', { label: 'Visible' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.input('visible', { label: 'Visible' }, { className: 'w-1/2  px-1', type: 'checkbox' }),
     ]),
   ]
   constructor(private readonly store: AdminCalendarEditStore) {}

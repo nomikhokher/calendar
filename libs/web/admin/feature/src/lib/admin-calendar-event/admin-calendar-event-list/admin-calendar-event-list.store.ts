@@ -40,7 +40,10 @@ export class AdminCalendarEventListStore extends ComponentStore<CalendarEventLis
       switchMap(([_, input]) =>
         this.data.adminCalendarEvents({ input }).pipe(
           tapResponse(
-            (res) => this.patchState({ items: res.data.items, errors: res.errors, loading: false }),
+            (res) => {
+              console.log(res.data.items)
+              this.patchState({ items: res.data.items, errors: res.errors, loading: false })
+            },
             (errors: any) =>
               this.patchState({
                 loading: false,

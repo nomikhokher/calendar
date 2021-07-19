@@ -7,12 +7,6 @@ import { AdminCalendarCreateStore } from './admin-calendar-create.store'
     <ng-container *ngIf="vm$ | async as vm">
       <ui-page-header title="Create Calendar" linkPath=".." linkTitle="Back"></ui-page-header>
       <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-        <div class="flex flex-row">
-          <div class="flex w-full"></div>
-          <div class="flex-none space-x-2">
-            <ui-button label="Submit" type="submit"></ui-button>
-          </div>
-        </div>
         <ui-form [fields]="fields" [model]="{}" (submitForm)="createCalendar($event)">
           <div class="flex flex-row">
             <div class="flex w-full"></div>
@@ -33,10 +27,10 @@ export class AdminCalendarCreateComponent {
     WebUiFormField.fieldRow([
       WebUiFormField.input('id', { label: 'Id' }, { className: 'w-1/2  px-1', hide: true }),
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('color', { label: 'Color' }, { className: 'w-1/2  px-1' }),
-      WebUiFormField.input('visible', { label: 'Visible' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.input('visible', { label: 'Visible' }, { className: 'w-1/2  px-1', type: 'checkbox' }),
     ]),
   ]
   constructor(private readonly store: AdminCalendarCreateStore) {}

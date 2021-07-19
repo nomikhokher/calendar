@@ -44,7 +44,10 @@ export class AdminCalendarWeekdayListStore extends ComponentStore<CalendarWeekda
       switchMap(([_, input]) =>
         this.data.adminCalendarWeekdays({ input }).pipe(
           tapResponse(
-            (res) => this.patchState({ items: res.data.items, errors: res.errors, loading: false }),
+            (res) => {
+              console.log(res.data.items)
+              this.patchState({ items: res.data.items, errors: res.errors, loading: false })
+            },
             (errors: any) =>
               this.patchState({
                 loading: false,
