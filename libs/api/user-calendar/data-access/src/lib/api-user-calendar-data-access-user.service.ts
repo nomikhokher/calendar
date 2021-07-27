@@ -9,6 +9,7 @@ export class ApiUserCalendarDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userUserCalendars(userId: string, input?: UserListUserCalendarInput) {
+    console.log('jhgf', userId)
     return this.data.userCalendar.findMany({
       where: { userId: userId },
       take: input?.limit,

@@ -3,7 +3,7 @@ import { Component } from '@angular/core'
 @Component({
   template: `
     <ui-sidebar-page pageTitle="Account" [links]="links">
-      <router-outlet></router-outlet>
+      <!-- <router-outlet></router-outlet> -->
     </ui-sidebar-page>
   `,
 })

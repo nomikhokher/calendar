@@ -880,8 +880,8 @@ export type UserListCalendarEventExceptionInput = {
 }
 
 export type UserListCalendarEventInput = {
+  calendarId?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
-  name?: Maybe<Scalars['String']>
   skip?: Maybe<Scalars['Int']>
 }
 

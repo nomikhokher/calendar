@@ -163,7 +163,7 @@ export enum StartWeekOn {
           </div>
         </div>
       </div>
-      <div class="demo-app-main">
+      <div class="demo-app-main" id="fullCalendars">
         <full-calendar *ngIf="calendarVisible" [options]="calendarOptions" #fullCalendar></full-calendar>
       </div>
     </div>
@@ -1229,10 +1229,20 @@ export class WebUiCalendarComponent {
 
     let newSettingsObject = omit(this.fetchSettings[0], ['__typename', 'updatedAt', 'createdAt', 'name'])
     this.settingsForm.patchValue(newSettingsObject)
+
+    let element = this.elementRef.nativeElement.querySelector('.demo-app-main')
+    // add this condition will solve issue
+    if (element) {
+      element.click()
+    }
   }
 
   ngOnChanges() {
+    console.log('changing')
     // initial value of object
+
+    // this.fetchEvent.subscribe((res) => {
+    //console.log(res)
     this.calendarOptions = {
       headerToolbar: {
         left: 'prev,next today',
@@ -1259,6 +1269,7 @@ export class WebUiCalendarComponent {
         eventRemove:
       */
     }
+    //
   }
 
   getCalendar(id): Calendar {
@@ -1398,7 +1409,7 @@ export class WebUiCalendarComponent {
     }
 
     // Find color
-    //let { color } = this.fetchEvent.find((color) => color.id === this.crurentCalendarSelect?.id)
+    let { color } = this.fetchEvent.find((color) => color.id === this.crurentCalendarSelect?.id)
 
     let customId: string
 
@@ -1418,6 +1429,8 @@ export class WebUiCalendarComponent {
       (newEvent.recurringEventId = ''),
       (newEvent.calendarId = customId),
     ) as AdminCreateCalendarEventInput
+
+    console.log(newEvent)
 
     // Send data server
     if (newEvent.calendarId) {

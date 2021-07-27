@@ -474,8 +474,8 @@ input UserListCalendarEventExceptionInput {
 }
 
 input UserListCalendarEventInput {
+  calendarId: String
   limit: Int = 10
-  name: String
   skip: Int = 0
 }
 

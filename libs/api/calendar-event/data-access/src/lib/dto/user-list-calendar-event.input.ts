@@ -4,5 +4,5 @@ import { CorePagingInput } from '@calendar/api/core/data-access'
 @InputType()
 export class UserListCalendarEventInput extends CorePagingInput {
   @Field({ nullable: true })
-  name?: string
+  calendarId?: string
 }

@@ -9,7 +9,9 @@ export class ApiCalendarEventDataAccessUserService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userCalendarEvents(userId: string, input?: UserListCalendarEventInput) {
+    console.log(userId)
     return this.data.calendarEvent.findMany({
+      where: { calendarId: input.calendarId },
       take: input?.limit,
       skip: input?.skip,
     })
@@ -36,6 +38,8 @@ export class ApiCalendarEventDataAccessUserService {
         title: input.title,
         description: input.description,
         allDay: input.allDay,
+        start: input.start,
+        end: input.end,
         recurrence: input.recurrence,
       },
     })
@@ -50,6 +54,8 @@ export class ApiCalendarEventDataAccessUserService {
         title: input.title,
         description: input.description,
         allDay: input.allDay,
+        start: input.start,
+        end: input.end,
         recurrence: input.recurrence,
       },
     })
