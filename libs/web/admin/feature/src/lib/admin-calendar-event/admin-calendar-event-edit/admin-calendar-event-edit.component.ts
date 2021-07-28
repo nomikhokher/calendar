@@ -39,20 +39,19 @@ export class AdminCalendarEventEditComponent {
         { label: 'Recurring Event Id' },
         { className: 'w-1/2  px-1', hide: true },
       ),
+
+      WebUiFormField.checkbox('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
     ]),
+    WebUiFormField.fieldRow([WebUiFormField.checkbox('allDay', { label: 'All Day' }, { className: 'w-1/2  px-1' })]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.input('description', { label: 'Description' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('description', { label: 'Description' }, { className: 'w-full  px-1' }),
+      WebUiFormField.date('start', { label: 'Start' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.date('end', { label: 'End' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('start', { label: 'Start' }, { className: 'w-1/2  px-1' }),
-      WebUiFormField.input('end', { label: 'End' }, { className: 'w-1/2  px-1' }),
-    ]),
-    WebUiFormField.fieldRow([
-      WebUiFormField.input('allDay', { label: 'All Day' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('recurrence', { label: 'Recurrence' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.typeahead('calendarId', {
@@ -66,7 +65,9 @@ export class AdminCalendarEventEditComponent {
 
   constructor(private readonly store: AdminCalendarEventEditStore) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.store.filterCalendars('')
+  }
 
   updateCalendarEvent(input: AdminUpdateCalendarEventInput) {
     const { calendarId, recurringEventId, isFirstInstance, title, description, start, end, allDay, recurrence } = input

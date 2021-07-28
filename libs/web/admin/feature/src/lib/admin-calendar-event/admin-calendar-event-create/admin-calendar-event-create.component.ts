@@ -7,12 +7,6 @@ import { AdminCalendarEventCreateStore } from './admin-calendar-event-create.sto
     <ng-container *ngIf="vm$ | async as vm">
       <ui-page-header title="Create Calendar Event" linkPath=".." linkTitle="Back"></ui-page-header>
       <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-        <div class="flex flex-row">
-          <div class="flex w-full"></div>
-          <div class="flex-none space-x-2">
-            <ui-button label="Submit" type="submit"></ui-button>
-          </div>
-        </div>
         <ui-form [fields]="fields" [model]="{}" (submitForm)="createCalendarEvent($event)">
           <div class="flex flex-row">
             <div class="flex w-full"></div>
@@ -34,6 +28,7 @@ export class AdminCalendarEventCreateComponent {
     WebUiFormField.fieldRow([
       WebUiFormField.input('id', { label: 'Id' }, { className: 'w-1/2  px-1', hide: true }),
       WebUiFormField.input('calendarId', { label: 'Calendar Id' }, { className: 'w-1/2  px-1', hide: true }),
+      WebUiFormField.checkbox('allDay', { label: 'All Day' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
       WebUiFormField.input(
@@ -41,18 +36,17 @@ export class AdminCalendarEventCreateComponent {
         { label: 'Recurring Event Id' },
         { className: 'w-1/2  px-1', hide: true },
       ),
-      WebUiFormField.input('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.checkbox('isFirstInstance', { label: 'Is First Instance' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
       WebUiFormField.input('title', { label: 'Title' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('description', { label: 'Description' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('start', { label: 'Start' }, { className: 'w-1/2  px-1' }),
-      WebUiFormField.input('end', { label: 'End' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.date('start', { label: 'Start' }, { className: 'w-1/2  px-1' }),
+      WebUiFormField.date('end', { label: 'End' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.fieldRow([
-      WebUiFormField.input('allDay', { label: 'All Day' }, { className: 'w-1/2  px-1' }),
       WebUiFormField.input('recurrence', { label: 'Recurrence' }, { className: 'w-1/2  px-1' }),
     ]),
     WebUiFormField.typeahead('calendarId', {
@@ -64,6 +58,10 @@ export class AdminCalendarEventCreateComponent {
     }),
   ]
   constructor(private readonly store: AdminCalendarEventCreateStore) {}
+
+  ngOnInit(): void {
+    this.store.filterCalendars('')
+  }
 
   createCalendarEvent(input) {
     this.store.createCalendarEventEffect(input)

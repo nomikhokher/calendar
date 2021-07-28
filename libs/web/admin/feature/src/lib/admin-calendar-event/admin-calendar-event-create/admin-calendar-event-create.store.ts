@@ -46,7 +46,10 @@ export class AdminCalendarEventCreateStore extends ComponentStore<CalendarEventC
         this.data.adminCalendars({ input: { name: term } }).pipe(
           tapResponse(
             (res: any) => {
-              let calendars = res.data.items
+              let calendars = res.data.items.map((calendar) => {
+                calendar.name = calendar.title
+                return calendar
+              })
               return this.patchState({ calendars: calendars })
             },
             (errors: any) =>

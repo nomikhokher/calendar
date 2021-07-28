@@ -69,31 +69,6 @@ b {
     outline: none !important;
   }
 }
-
-.calender svg.only-show-on-hover {
-  visibility: hidden;
-}
-.calender:hover svg.only-show-on-hover {
-  visibility: visible;
-}
-.personal svg.personal-show-icon {
-  visibility: hidden;
-}
-.personal:hover svg.personal-show-icon {
-  visibility: visible;
-}
-.work svg.work-show-icon {
-  visibility: hidden;
-}
-.work:hover svg.work-show-icon {
-  visibility: visible;
-}
-.appointment svg.appointment-show-icon {
-  visibility: hidden;
-}
-.appointment:hover svg.appointment-show-icon {
-  visibility: visible;
-}
 .setting:hover {
   background-color: rgb(230, 230, 230);
   border: none;

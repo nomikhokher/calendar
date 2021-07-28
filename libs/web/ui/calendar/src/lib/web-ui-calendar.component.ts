@@ -21,6 +21,7 @@ import {
   AdminUpdateCalendarEventInput,
   AdminUpdateCalendarInput,
   CalendarWeekday,
+  UserUpdateCalendarInput,
 } from '@calendar/web/core/data-access'
 import { calendarColors } from './calendar-colors'
 import { RRule } from 'rrule'
@@ -50,37 +51,6 @@ export enum StartWeekOn {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="demo-app border dark:border-gray-800" *ngIf="isCalendar">
-      <!-- <div class="demo-app-sidebar">
-        <div class="demo-app-sidebar-section">
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div>
-        <div class="demo-app-sidebar-section">
-          <label>
-            <input type="checkbox" [checked]="calendarVisible" (change)="handleCalendarToggle()" />
-            toggle whole calendar
-          </label>
-        </div>
-        <div class="demo-app-sidebar-section">
-          <label>
-            <input type="checkbox" [checked]="calendarOptions.weekends" (change)="handleWeekendsToggle()" />
-            toggle weekends
-          </label>
-        </div>
-        <div class="demo-app-sidebar-section">
-          <h2>All Events ({{ currentEvents.length }})</h2>
-          <ul>
-            <li *ngFor="let event of currentEvents">
-              <b>{{ event.startStr }}</b>
-              <i>{{ event.title }}</i>
-            </li>
-          </ul>
-        </div>
-      </div> -->
       <div class="demo-app-sidebar border-r">
         <div class="flex flex-col  min-h-full p-8">
           <div class="pb-6 text-3xl font-extrabold tracking-tight">Calendar</div>
@@ -136,7 +106,7 @@ export enum StartWeekOn {
             </svg>
           </div>
 
-          <div class="-mx-4 mt-auto setting dark:hover:text-gray-900" (click)="onSetting()">
+          <!-- <div class="-mx-4 mt-auto setting dark:hover:text-gray-900" (click)="onSetting()">
             <a class="flex items-center w-full py-3 px-4 rounded-full hover:bg-hover" href="javascript:void(0)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -160,10 +130,10 @@ export enum StartWeekOn {
               </svg>
               <span class="ml-2 font-medium leading-none">Settings</span></a
             >
-          </div>
+          </div> -->
         </div>
       </div>
-      <div class="demo-app-main" id="fullCalendars">
+      <div class="demo-app-main">
         <full-calendar *ngIf="calendarVisible" [options]="calendarOptions" #fullCalendar></full-calendar>
       </div>
     </div>
@@ -1029,6 +999,7 @@ export class WebUiCalendarComponent {
   @Output() updateEventInServserSide = new EventEmitter<any>()
   @Output() addCalendarInServserSide = new EventEmitter<any>()
   @Output() updateCalendarInServserSide = new EventEmitter<any>()
+  @Output() updateCalendarVisibleInServserSide = new EventEmitter<any>()
   @Output() deleteCalendarInServserSide = new EventEmitter<any>()
   @Output() settingsUpdateCalendarInServserSide = new EventEmitter<any>()
 
@@ -1229,20 +1200,10 @@ export class WebUiCalendarComponent {
 
     let newSettingsObject = omit(this.fetchSettings[0], ['__typename', 'updatedAt', 'createdAt', 'name'])
     this.settingsForm.patchValue(newSettingsObject)
-
-    let element = this.elementRef.nativeElement.querySelector('.demo-app-main')
-    // add this condition will solve issue
-    if (element) {
-      element.click()
-    }
   }
 
   ngOnChanges() {
-    console.log('changing')
     // initial value of object
-
-    // this.fetchEvent.subscribe((res) => {
-    //console.log(res)
     this.calendarOptions = {
       headerToolbar: {
         left: 'prev,next today',
@@ -1430,8 +1391,6 @@ export class WebUiCalendarComponent {
       (newEvent.calendarId = customId),
     ) as AdminCreateCalendarEventInput
 
-    console.log(newEvent)
-
     // Send data server
     if (newEvent.calendarId) {
       //this.calendarApi.addEvent({ ...newEvent, color, rrule: newEvent.recurrence })
@@ -1449,9 +1408,20 @@ export class WebUiCalendarComponent {
     // Get the clone of the event form value
     let newEvent = clone(this.eventForm.value)
 
+    let start
+    let end
+
     // Date formate
-    let start = moment(newEvent.range.start.$d).format()
-    let end = moment(newEvent.range.end.$d).format()
+    if (
+      moment(this.selected.startDate).format() === moment(newEvent.range.start.$d).format() &&
+      moment(this.selected.endDate).format() === moment(newEvent.range.end.$d).format()
+    ) {
+      start = newEvent.range.start
+      end = newEvent.range.end
+    } else {
+      start = moment(newEvent.range.start.$d).format()
+      end = moment(newEvent.range.end.$d).format()
+    }
 
     // If the event is a recurring event...
     if (newEvent.recurrence) {
@@ -1631,10 +1601,11 @@ export class WebUiCalendarComponent {
     // Toggle the visibility
     calendar.visible = !calendar.visible
 
-    let calendarData = omit(calendar, ['__typename']) as AdminUpdateCalendarInput
+    // Dodify object of update
+    let calendarData = omit(calendar, ['__typename']) as UserUpdateCalendarInput
 
     // Send data server
-    this.updateCalendarInServserSide.emit({ calendarId: calendarData.id, input: calendarData })
+    this.updateCalendarVisibleInServserSide.emit({ calendarId: calendarData.id, input: calendarData })
   }
 
   openEditPanel(calendar) {
