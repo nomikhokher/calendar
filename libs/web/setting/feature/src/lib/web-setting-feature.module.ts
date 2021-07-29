@@ -8,9 +8,29 @@ import { WebSettingFeatureComponent } from './web-setting-feature.component'
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', component: WebSettingFeatureComponent }]),
-    WebUiPageModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        loadChildren: () => import('./setting-list/setting-list.module').then((m) => m.SettingListModule),
+      },
+      {
+        path: 'create',
+        loadChildren: () => import('./setting-create/setting-create.module').then((m) => m.SettingCreateModule),
+      },
+      {
+        path: ':settingId',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./setting-detail/setting-detail.module').then((m) => m.SettingDetailModule),
+          },
+          {
+            path: 'edit',
+            loadChildren: () => import('./setting-edit/setting-edit.module').then((m) => m.SettingEditModule),
+          },
+        ],
+      },
+    ]),
   ],
-  declarations: [WebSettingFeatureComponent],
 })
 export class WebSettingFeatureModule {}
