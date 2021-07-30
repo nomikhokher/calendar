@@ -5,13 +5,11 @@ import { UserCalendarCreateStore } from './user-calendar-create.store'
 @Component({
   template: `
     <ng-container *ngIf="vm$ | async as vm">
-      <div class="flex items-center justify-center h-full bg-white">
-        <div class="bg-gray-200 text-white font-bold rounded-lg border shadow-lg p-10">
-          <ui-page-header title="Create User Calendar" linkPath=".." linkTitle="Back"></ui-page-header>
-          <ui-form [fields]="fields" [model]="{}" (submitForm)="createUserCalendar($event)">
-            <ui-button label="Submit" type="submit"></ui-button>
-          </ui-form>
-        </div>
+      <div class="container px-16 mt-10 mx-auto">
+        <ui-page-header title="Create User Calendar" linkPath=".." linkTitle="Back"></ui-page-header>
+        <ui-form [fields]="fields" [model]="{}" (submitForm)="createUserCalendar($event)">
+          <ui-button label="Submit" type="submit"></ui-button>
+        </ui-form>
       </div>
     </ng-container>
   `,

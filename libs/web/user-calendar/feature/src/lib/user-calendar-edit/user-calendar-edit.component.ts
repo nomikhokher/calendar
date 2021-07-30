@@ -8,19 +8,15 @@ import { UserCalendarEditStore } from './user-calendar-edit.store'
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <ng-container *ngIf="vm.item">
-        <div class="flex items-center justify-center h-full bg-gray-100 ">
-          <div class="bg-gray-200 text-white font-bold rounded-lg border shadow-lg p-10">
-            <ui-page-header
-              [title]="'Edit User Calendar ' + vm.item?.name"
-              linkPath=".."
-              linkTitle="Back"
-            ></ui-page-header>
-            <div class="dark:bg-gray-800 px-6 py-4 rounded-md">
-              <ui-form [form]="form" [fields]="fields" [model]="vm.item" (submitForm)="updateUserCalendar($event)">
-                <ui-button label="Save" type="submit"></ui-button>
-              </ui-form>
-            </div>
-          </div>
+        <div class="container px-16 mt-10 mx-auto">
+          <ui-page-header
+            [title]="'Edit User Calendar ' + vm.item?.name"
+            linkPath=".."
+            linkTitle="Back"
+          ></ui-page-header>
+          <ui-form [form]="form" [fields]="fields" [model]="vm.item" (submitForm)="updateUserCalendar($event)">
+            <ui-button label="Save" type="submit"></ui-button>
+          </ui-form>
         </div>
       </ng-container>
     </ng-container>

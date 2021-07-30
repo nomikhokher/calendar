@@ -8,7 +8,33 @@ import { WebCalendarEventFeatureComponent } from './web-calendar-event-feature.c
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', component: WebCalendarEventFeatureComponent }]),
+    RouterModule.forChild([
+      {
+        path: '',
+        loadChildren: () =>
+          import('./calendar-event-list/calendar-event-list.module').then((m) => m.CalendarEventListModule),
+      },
+      {
+        path: 'create',
+        loadChildren: () =>
+          import('./calendar-event-create/calendar-event-create.module').then((m) => m.CalendarEventCreateModule),
+      },
+      {
+        path: ':calendarEventId',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('./calendar-event-detail/calendar-event-detail.module').then((m) => m.CalendarEventDetailModule),
+          },
+          {
+            path: 'edit',
+            loadChildren: () =>
+              import('./calendar-event-edit/calendar-event-edit.module').then((m) => m.CalendarEventEditModule),
+          },
+        ],
+      },
+    ]),
     WebUiPageModule,
   ],
   declarations: [WebCalendarEventFeatureComponent],
