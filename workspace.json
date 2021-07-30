@@ -1939,6 +1939,78 @@
         }
       }
     },
+    "web-full-calendar-data-access": {
+      "projectType": "library",
+      "root": "libs/web/full-calendar/data-access",
+      "sourceRoot": "libs/web/full-calendar/data-access/src",
+      "prefix": "calendar",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/full-calendar/data-access/src/**/*.ts",
+              "libs/web/full-calendar/data-access/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/full-calendar/data-access"],
+          "options": {
+            "jestConfig": "libs/web/full-calendar/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-full-calendar-feature": {
+      "projectType": "library",
+      "root": "libs/web/full-calendar/feature",
+      "sourceRoot": "libs/web/full-calendar/feature/src",
+      "prefix": "calendar",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web/full-calendar/feature/src/**/*.ts",
+              "libs/web/full-calendar/feature/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/full-calendar/feature"],
+          "options": {
+            "jestConfig": "libs/web/full-calendar/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-full-calendar-ui": {
+      "projectType": "library",
+      "root": "libs/web/full-calendar/ui",
+      "sourceRoot": "libs/web/full-calendar/ui/src",
+      "prefix": "calendar",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/full-calendar/ui/src/**/*.ts", "libs/web/full-calendar/ui/src/**/*.html"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/full-calendar/ui"],
+          "options": {
+            "jestConfig": "libs/web/full-calendar/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "web-investment-feature": {
       "projectType": "library",
       "root": "libs/web/investment/feature",

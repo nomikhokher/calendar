@@ -33,6 +33,7 @@ export class WebLayoutStore extends ComponentStore<WebLayoutState> {
         // { label: 'Calendar-event-exceptions', route: 'calendar-event-exceptions' },
         { label: 'Calendar-events', route: 'calendar-events' },
         { label: 'Calendars', route: 'calendars' },
+        { label: 'Full-calendars', route: 'full-calendars' },
         // { label: 'Transactions', route: 'transactions' },
         // { label: 'Transactionss', route: 'transactionss' },
         // { label: 'Investments', route: 'investments' },

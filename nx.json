@@ -255,6 +255,15 @@
       "tags": [],
       "implicitDependencies": ["web"]
     },
+    "web-full-calendar-data-access": {
+      "tags": ["scope:web", "type:data-access"]
+    },
+    "web-full-calendar-feature": {
+      "tags": ["scope:web", "type:feature"]
+    },
+    "web-full-calendar-ui": {
+      "tags": ["scope:web", "type:feature"]
+    },
     "web-investment-feature": {
       "tags": ["scope:web", "type:feature"]
     },

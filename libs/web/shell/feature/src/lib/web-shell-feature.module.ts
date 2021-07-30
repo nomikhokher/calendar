@@ -70,6 +70,10 @@ const routes: Routes = [
         loadChildren: () => import('@calendar/web/dashboard/feature').then((m) => m.WebDashboardFeatureModule),
       },
       {
+        path: 'full-calendars',
+        loadChildren: () => import('@calendar/web/full-calendar/feature').then((m) => m.WebFullCalendarFeatureModule),
+      },
+      {
         path: 'not-found',
         loadChildren: () => import('./not-found/not-found.module').then((m) => m.NotFoundModule),
       },

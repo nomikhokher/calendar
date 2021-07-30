@@ -144,5 +144,8 @@ module.exports = {
     '<rootDir>/libs/web/setting/feature',
     '<rootDir>/libs/web/setting/ui',
     '<rootDir>/libs/web/ui/calendar',
+    '<rootDir>/libs/web/full-calendar/data-access',
+    '<rootDir>/libs/web/full-calendar/feature',
+    '<rootDir>/libs/web/full-calendar/ui',
   ],
 }
