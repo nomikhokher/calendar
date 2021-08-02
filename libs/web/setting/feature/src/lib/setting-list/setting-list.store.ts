@@ -38,7 +38,7 @@ export class SettingListStore extends ComponentStore<SettingListState> {
       tap(() => this.patchState({ loading: true })),
       withLatestFrom(this.input$),
       switchMap(([_, input]) =>
-        this.data.adminSettings({ input }).pipe(
+        this.data.userSettings({ input }).pipe(
           tapResponse(
             (res) => this.patchState({ items: res.data.items, errors: res.errors, loading: false }),
             (errors: any) =>

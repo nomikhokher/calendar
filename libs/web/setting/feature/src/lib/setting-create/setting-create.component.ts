@@ -65,6 +65,7 @@ export class SettingCreateComponent {
   constructor(private readonly store: SettingCreateStore) {}
 
   createSetting(input) {
+    console.log(input)
     this.store.createSettingEffect(input)
   }
 }

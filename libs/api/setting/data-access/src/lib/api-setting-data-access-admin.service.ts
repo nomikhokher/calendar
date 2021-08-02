@@ -62,7 +62,6 @@ export class ApiSettingDataAccessAdminService {
 
   async adminDeleteSetting(adminId: string, settingId) {
     await this.data.ensureAdminUser(adminId)
-
     return this.data.setting.delete({ where: { id: settingId } })
   }
 }

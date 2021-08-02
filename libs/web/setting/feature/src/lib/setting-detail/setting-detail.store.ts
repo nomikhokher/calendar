@@ -30,7 +30,7 @@ export class SettingDetailStore extends ComponentStore<SettingDetailState> {
     settingId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((settingId) =>
-        this.data.adminSetting({ settingId }).pipe(
+        this.data.userSetting({ settingId }).pipe(
           tapResponse(
             (res) => this.patchState({ item: res.data.item, errors: res.errors, loading: false }),
             (errors: any) =>
@@ -47,9 +47,9 @@ export class SettingDetailStore extends ComponentStore<SettingDetailState> {
   readonly deleteSettingEffect = this.effect<Setting>((setting$) =>
     setting$.pipe(
       switchMap((setting) =>
-        this.data.adminDeleteSetting({ settingId: setting.id }).pipe(
+        this.data.userDeleteSetting({ settingId: setting.id }).pipe(
           tapResponse(
-            (res) => this.router.navigate(['/admin/settings']),
+            (res) => this.router.navigate(['/settings']),
             (errors: any) =>
               this.patchState({
                 loading: false,

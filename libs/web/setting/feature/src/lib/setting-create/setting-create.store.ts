@@ -29,11 +29,11 @@ export class SettingCreateStore extends ComponentStore<SettingCreateState> {
     input$.pipe(
       tap(() => this.patchState({ loading: true })),
       switchMap((input) =>
-        this.data.adminCreateSetting({ input }).pipe(
+        this.data.userCreateSetting({ input }).pipe(
           tapResponse(
             (res) => {
               this.patchState({ item: res.data.created, errors: res.errors, loading: false })
-              return this.router.navigate(['/admin/settings', res.data?.created?.id])
+              return this.router.navigate(['/settings', res.data?.created?.id])
             },
             (errors: any) =>
               this.patchState({

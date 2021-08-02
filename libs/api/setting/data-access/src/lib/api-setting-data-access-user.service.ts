@@ -30,14 +30,22 @@ export class ApiSettingDataAccessUserService {
 
   async userCreateSetting(userId: string, input: UserCreateSettingInput) {
     return this.data.setting.create({
-      data: {},
+      data: {
+        dateFormat: input.dateFormat,
+        timeFormat: input.timeFormat,
+        startWeekOn: input.startWeekOn,
+      },
     })
   }
 
   async userUpdateSetting(userId: string, settingId, input: UserUpdateSettingInput) {
     return this.data.setting.update({
       where: { id: settingId },
-      data: {},
+      data: {
+        dateFormat: input.dateFormat,
+        timeFormat: input.timeFormat,
+        startWeekOn: input.startWeekOn,
+      },
     })
   }
 

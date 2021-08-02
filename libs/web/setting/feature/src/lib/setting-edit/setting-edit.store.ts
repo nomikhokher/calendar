@@ -30,7 +30,7 @@ export class SettingEditStore extends ComponentStore<SettingEditState> {
     settingId$.pipe(
       tap(() => this.setState({ loading: true })),
       switchMap((settingId) =>
-        this.data.adminSetting({ settingId }).pipe(
+        this.data.userSetting({ settingId }).pipe(
           tapResponse(
             (res) => this.patchState({ item: res.data.item, errors: res.errors, loading: false }),
             (errors: any) =>
@@ -49,7 +49,7 @@ export class SettingEditStore extends ComponentStore<SettingEditState> {
       tap(() => this.patchState({ loading: true })),
       withLatestFrom(this.item$),
       switchMap(([input, item]) =>
-        this.data.adminUpdateSetting({ input, settingId: item.id }).pipe(
+        this.data.userUpdateSetting({ input, settingId: item.id }).pipe(
           tapResponse(
             (res) => {
               this.patchState({ item: res.data.updated, errors: res.errors, loading: false })
